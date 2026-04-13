@@ -1,0 +1,26 @@
+{
+  "document": "完整科研项目模板",
+  "version": "0.3.0",
+  "workflow_mode": "phased-large-template",
+  "fixed_headings": {
+    "level_1": true,
+    "level_2": true,
+    "deeper_levels": "preserve_when_provided"
+  },
+  "table_count_estimate": 70,
+  "figure_count_estimate": 100,
+  "core_chapters": [
+    "项目背景及必要性",
+    "项目建设方案",
+    "资金筹措及投资估算",
+    "项目综合风险因素分析"
+  ],
+  "recommended_writing_sequence": [
+    "outline",
+    "core_chapters",
+    "supporting_chapters",
+    "task_and_finance_chapters",
+    "tables_and_figures",
+    "review"
+  ]
+}
