@@ -27,11 +27,12 @@ official-doc-writing-skill/
 │  ├─ official-doc-core/
 │  ├─ official-doc-table/
 │  ├─ official-doc-figure/
-│  └─ official-doc-review/
+│  ├─ official-doc-review/
+│  ├─ official-doc-revise/
+│  └─ official-doc-assemble/
 ├─ templates/
 ├─ plan-template/
 ├─ materials/
-├─ examples/
 └─ scripts/
 ```
 
@@ -43,7 +44,7 @@ official-doc-writing-skill/
 - 先判定你要写哪种模板
 - 强制读取模板结构和资料清单
 - 再路由到对应主 Skill
-- 表、图、复核分别用独立 Skill 处理
+- 表、图、复核、修订、总稿装配分别用独立 Skill 处理
 
 ## 本地测试方式
 
@@ -65,7 +66,6 @@ claude --plugin-dir .
 /official-doc-writing-skill:using-official-docs
 当前任务：ZS-项目可行性报告。
 输入材料：materials/test-case-zs/
-参考样稿：materials/reference/ZS-项目可行性报告.docx，仅参考结构和风格，不照抄内容。
 请初始化工作区并开始正文骨架。
 ```
 
@@ -75,17 +75,19 @@ claude --plugin-dir .
 2. `zs-feasibility-report`：跑一版正文初稿
 3. `official-doc-table`：生成表格
 4. `official-doc-figure`：生成图示
-5. `official-doc-review`：做总复核
+5. `official-doc-review`：做结构化复核
+6. `official-doc-revise`：按问题清单回修
+7. `official-doc-assemble`：输出正式总稿
 
 ## materials 目录说明
 
 - `materials/test-case-zs/`：已内置一套用于 ZS 可行性报告的测试材料
-- `materials/reference/`：请放你自己的参考样稿，例如 `ZS-项目可行性报告.docx`
 - `materials/test-case-full/`：预留给完整科研项目模板的测试材料
 
 ## 重要边界
 
-1. 默认产物是 `md`、`mmd`、说明文件，不是最终 `docx`。
+1. 默认产物仍以 `md`、`mmd`、说明文件为主，但现在应继续装配为 `assembled/` 下的正式总稿。
 2. 一级、二级标题默认按模板固定。
 3. 表图不内嵌在正文 Skill 里随手生成。
 4. 预算、时间、单位、成果指标一律不得编造。
+5. `plan/`、`outputs/`、`tables/`、`figures/`、`review/`、`assembled/` 都是运行时目录，其中 `plan/` 应由 `plan-template/` 初始化生成，不作为静态模板目录维护。

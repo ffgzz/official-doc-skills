@@ -1,6 +1,6 @@
 ---
 name: official-doc-review
-description: Use when the current official-document workflow reaches a review point or the user asks to check the draft - reviews ZS-项目可行性报告 or 完整科研项目模板 for headings, numbering, terminology, tables, figures, schedule, budget, and unresolved placeholders
+description: Use when the current official-document workflow reaches a review point or the user asks to check the draft - reviews ZS-项目可行性报告 or 完整科研项目模板 for headings, numbering, terminology, tables, figures, schedule, budget, unresolved placeholders, and revise readiness
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -16,6 +16,27 @@ allowed-tools: Read Write Edit Bash
 ## 核心目标
 
 对已经生成的骨架、正文、表格、图示做结构化体检，输出可执行的问题清单，而不是只给一句泛泛评价。
+`review` 不是终点，它要为下一步 `revise` 提供明确输入。
+
+## 使用前必读
+
+开始复核前，至少读取以下文件：
+- `templates/<template>/outline.md`
+- `templates/<template>/writing-playbook.md`
+- `templates/<template>/table-catalog.md`
+- `templates/<template>/figure-catalog.md`
+- `plan/progress.md`
+- 已生成的 `outputs/`、`tables/`、`figures/` 对应文件
+
+如果当前模板是 `zs-feasibility-report`，还要特别对照：
+- 第2章、第3章、第6章是否为正文重心
+- 第3章是否已经展开到子课题 / 子任务级别
+- 第7章到第9章是否保持“短正文 + 表”为主
+
+如果当前模板是 `full-research-template`，还要特别对照：
+- 第4章是否为全书最重章节
+- 第1章到第3章是否明显重于第5章、第6章、第8章、第9章
+- 第8章是否已形成资金类主表
 
 ## 检查维度
 
@@ -44,6 +65,43 @@ allowed-tools: Read Write Edit Bash
 - 是否存在“图表已有但正文未引用”
 - 是否存在“正文提到表图但文件未生成”
 
+### 5. 章节配比
+- 重章节是否写得足够厚，轻章节是否被写得过长
+- 是否出现“应该展开的章节只有骨架，应该简写的章节反而堆叠大段正文”
+- 是否存在章节内部层级失衡，例如 ZS 第3章没有下钻到子课题级别
+
+### 6. 高优先表图完备性
+- 是否已生成 `table-catalog.md` / `figure-catalog.md` 中标记为“必出”或“高优先”的表图
+- 是否按主 skill 约定顺序完成高优先表图
+- 是否存在“正文已稳定但高优先表图还没补”
+
+### 7. 装配就绪度
+- 当前产物是否已经达到 `review -> revise -> assemble` 的装配前状态
+- 是否仍有 Must Fix 会阻断正式装配
+- 是否仍缺少支撑重章节的关键表图
+
+## 模板专项判定
+
+### ZS-项目可行性报告
+
+必须专项检查：
+- 第4章是否已经稳定输出 `图1` 与 `表1`
+- 第5章是否已有 `表2`
+- 第7章是否已有 `表3`、`表4`
+- 第8章是否已有 `表5`
+- 第9章是否已有 `表6`
+
+若上述任一高优先表图缺失，默认记入 Must Fix，而不是只记为建议项。
+
+### 完整科研项目模板
+
+必须专项检查：
+- 第3章稳定后是否已有团队类高优先表
+- 第4章稳定后是否已有目标 / 路线 / 建设方案类高优先图表
+- 第8章稳定后是否已有资金结构、年度投资、主要投资估算类表
+
+若第3章、第4章、第8章正文已经成形，但对应高优先表图仍缺失，默认记入 Must Fix。
+
 ## 输出格式
 
 输出到：
@@ -51,9 +109,25 @@ allowed-tools: Read Write Edit Bash
 
 建议结构：
 1. 已通过项
-2. 问题项
-3. 建议修复顺序
-4. 仍需补充材料清单
+2. 必修问题（Must Fix）
+3. 可优化问题（Should Fix）
+4. 章节配比结论
+5. 高优先表图完备性结论
+6. 建议修复顺序
+7. 仍需补充材料清单
+8. 当前是否允许进入 assemble
+
+每个问题尽量写明：
+- 严重级别
+- 对应文件
+- 对应章节 / 表图编号
+- 修复动作
+
+Must Fix 问题应尽量写成：
+- `问题`
+- `影响文件`
+- `修复动作`
+- `完成判定`
 
 ## 表达要求
 
@@ -63,7 +137,15 @@ allowed-tools: Read Write Edit Bash
 - 不写：`预算有问题`
 - 要写：`第9章预算说明中的总预算为120万元，而表6合计为110万元，建议先统一总预算口径，再修订分项。`
 
+对于“章节配比”问题，不要只写“第4章偏短”，要写成类似：
+- `第4章“建设方案”只有2个短节，未承接模板要求的任务拆解和路线展开；建议先补齐4.2~4.4三个子节，再回填图4-1、图4-2。`
+
+对于“高优先表图缺失”问题，不要只写“缺表”，要写成类似：
+- `第8章资金安排正文已写到投资结构，但 tables/ 中仍未生成资金结构表；应先调用 official-doc-table 生成该表，再统一第8章正文引用。`
+
 ## 交付后动作
 
 - 更新 `plan/progress.md`
 - 若发现大量共性问题，回写 `plan/facts-ledger.md` 或 `plan/source-materials.md`
+- 若存在可修复问题，默认下一步应调用 `official-doc-revise`
+- 若判断“不可装配”，必须明确写出阻断装配的 Must Fix 列表

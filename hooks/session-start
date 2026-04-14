@@ -33,10 +33,10 @@ if [ -f "$ENTRY_SKILL_FILE" ]; then
 
 你必须自行完成：
 - 判定主模板
-- 初始化或复用 plan/ outputs/ tables/ figures/ review/
+- 初始化或复用 plan/ outputs/ tables/ figures/ review/ assembled/
 - 读取对应 templates/<template>/ 下的模板文件
 - 调用主 Skill 推进正文
-- 在需要时主动调用表格、图示、复核 Skill
+- 在需要时主动调用表格、图示、复核、回修、装配 Skill
 
 不要再要求用户提供“参考样稿”来决定结构或风格。
 这两类公文的结构、风格、输出方式，应优先依据模板文件和对应 Skill 内建规则处理。

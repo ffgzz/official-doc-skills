@@ -1,7 +1,7 @@
 {
   "document": "完整科研项目模板",
   "version": "0.3.0",
-  "workflow_mode": "phased-large-template",
+  "workflow_mode": "phased-large-template -> review -> revise -> assemble",
   "fixed_headings": {
     "level_1": true,
     "level_2": true,
@@ -15,12 +15,34 @@
     "资金筹措及投资估算",
     "项目综合风险因素分析"
   ],
+  "chapter_weight_profile": {
+    "heaviest": [
+      "项目建设方案"
+    ],
+    "heavy": [
+      "项目背景及必要性",
+      "项目单位基本情况",
+      "项目团队工作基础"
+    ],
+    "medium": [
+      "项目组织及实施管理",
+      "项目综合风险因素分析"
+    ],
+    "lighter": [
+      "项目任务设置",
+      "联合体成员单位任务分工情况",
+      "资金筹措及投资估算",
+      "财务经济效益测算"
+    ]
+  },
   "recommended_writing_sequence": [
     "outline",
     "core_chapters",
     "supporting_chapters",
     "task_and_finance_chapters",
     "tables_and_figures",
-    "review"
+    "review",
+    "revise",
+    "assemble"
   ]
 }

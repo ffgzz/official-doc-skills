@@ -1,6 +1,6 @@
 ---
 name: using-official-docs
-description: Use when the user asks to write, continue, revise, expand, add tables, add figures, or review either ZS-项目可行性报告 or 完整科研项目模板, even if the user only gives the document type and a materials path
+description: Use when the user asks to write, continue, revise, expand, add tables, add figures, review, assemble, or deliver either ZS-项目可行性报告 or 完整科研项目模板, even if the user only gives the document type and a materials path
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -24,7 +24,7 @@ allowed-tools: Read Write Edit Bash
 用户通常只需要提供：
 - 文档类型
 - 材料目录或材料文件
-- 当前诉求（例如：开始写、继续推进、补表、补图、复核）
+- 当前诉求（例如：开始写、继续推进、补表、补图、复核、合稿）
 
 你要负责把这三个输入自动展开成完整流程。
 
@@ -53,7 +53,7 @@ allowed-tools: Read Write Edit Bash
 
 你要自动完成：
 1. 识别已有工作区状态
-2. 读取已生成的 outputs/tables/figures/review/plan
+2. 读取已生成的 outputs/tables/figures/review/assembled/plan
 3. 选择下一阶段最合理的子任务继续做
 
 ### 模式 C：单点需求但仍属于这两类公文
@@ -62,6 +62,7 @@ allowed-tools: Read Write Edit Bash
 - `给 ZS-项目可行性报告补表`
 - `给完整科研项目模板补图`
 - `检查这份 ZS-项目可行性报告`
+- `把这份 ZS-项目可行性报告合成正式总稿`
 
 你仍然要先判定当前模板和当前阶段，然后路由到对应公共 Skill。
 
@@ -96,6 +97,16 @@ allowed-tools: Read Write Edit Bash
 - 当前批次正文/表图已生成，需要做一致性检查
 - 你准备声称“这一轮已完成”
 
+满足任一条件，主动调用 `official-doc-revise`：
+- `official-doc-review` 已识别出需要修复的问题
+- 用户要求“修改”“回修”“按复核意见调整”
+- 你准备进入正式总稿装配，但当前草稿仍存在未处理问题
+
+满足任一条件，主动调用 `official-doc-assemble`：
+- 用户要求“合稿”“总稿”“正式稿”“交付稿”
+- 当前正文、表格、图示已经齐备，且复核/回修已完成
+- 你准备交付本轮正式成稿，而不是继续停留在中间产物
+
 ## 强制流程
 
 ### 第一步：读取当前任务最小信息
@@ -117,6 +128,7 @@ outputs/
 tables/
 figures/
 review/
+assembled/
 ```
 
 确保以下文件存在：
@@ -152,6 +164,7 @@ review/
 - 缺失信息写 `【待补】`
 - 台账必须回写
 - 表图独立生成
+- 正式交付前必须经过 `review -> revise -> assemble`
 
 ### 第五步：调用主 Skill
 
@@ -165,8 +178,38 @@ review/
 - “现在去生成表格”
 - “现在去画图”
 - “现在去复核”
+- “现在去修改”
+- “现在去合总稿”
 
 如果当前阶段已经明显需要这些动作，你应主动继续。
+
+默认闭环为：
+1. 正文与表图成型后，先调用 `official-doc-review`
+2. 如果 review 中存在可修复问题，继续调用 `official-doc-revise`
+3. 需要对外提交或形成完整成稿时，再调用 `official-doc-assemble`
+
+不要停在 `review/` 目录里就声称任务已经完成。
+
+### 默认补表补图顺序
+
+#### 对 ZS-项目可行性报告
+
+正文推进时默认按以下顺序衔接公共 Skill：
+1. 第4章稳定后：`official-doc-figure` 先补 `图1`，`official-doc-table` 再补 `表1`
+2. 第5章稳定后：补 `表2`
+3. 第7章稳定后：补 `表3`、`表4`
+4. 第8章稳定后：补 `表5`
+5. 第9章稳定后：补 `表6`
+
+#### 对 完整科研项目模板
+
+正文推进时默认按以下顺序衔接公共 Skill：
+1. 第3章稳定后：先补团队类高优先表，并补 `图3-2 项目组织架构图`
+2. 第4章稳定后：优先补 `图4-1`、`图4-2`、`图4-5` 以及第4章高优先成果/任务类表
+3. 第8章稳定后：补资金来源结构表、分年度投资安排表、主要投资估算表
+4. 只有当第4章下钻到专题层级时，再补扩展验证类图表
+
+不要把“补表补图”理解成最后统一做一次；它应跟随正文阶段逐步推进。
 
 ## 用户无需再提供的内容
 
@@ -175,6 +218,7 @@ review/
 - “请告诉我先初始化工作区”
 - “请告诉我先读 outline”
 - “请告诉我是否要先生成骨架”
+- “请告诉我是否要先合稿”
 
 这些都属于本 Skill 内部流程。
 
@@ -196,4 +240,5 @@ review/
 | “既然已经有材料目录，就不用读取模板文件” | 模板文件是强制读取项 |
 | “用户没提表图，那我不管” | 需要时要主动调用表图 Skill |
 | “用户没提复核，那我不做检查” | 准备交付时必须主动复核 |
+| “复核做完就算结束了” | 还要继续 `revise -> assemble` 才算到交付 |
 | “没有参考样稿我就不知道风格” | 风格和结构优先来自模板与对应主 Skill |

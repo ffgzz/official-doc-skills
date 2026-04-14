@@ -1,6 +1,6 @@
 ---
 name: official-doc-core
-description: Use when writing any supported official project document - enforces fixed headings, fact discipline, no-reference-sample workflow, ledger updates, and stage gating across body, tables, figures, and review
+description: Use when writing any supported official project document - enforces fixed headings, fact discipline, no-reference-sample workflow, ledger updates, and stage gating across body, tables, figures, review, revise, and assemble
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -90,6 +90,7 @@ outputs/
 tables/
 figures/
 review/
+assembled/
 ```
 
 必须维护以下文件：
@@ -110,9 +111,11 @@ review/
 7. 补表格
 8. 补图示
 9. 复核
+10. 回修
+11. 装配正式总稿
 
 ### 对继续推进任务，默认执行顺序为：
-1. 读取已有 outputs/tables/figures/review/plan
+1. 读取已有 outputs/tables/figures/review/assembled/plan
 2. 判断当前最合理的下一步
 3. 继续推进缺失环节
 
@@ -141,10 +144,39 @@ review/
 - 若章节已出现表格引用位，应主动推进 `official-doc-table`
 - 若章节已出现图示引用位，应主动推进 `official-doc-figure`
 - 若这一轮产出准备交付，应主动推进 `official-doc-review`
+- 若 review 已产出明确问题，应主动推进 `official-doc-revise`
+- 若表图和回修已完成，应主动推进 `official-doc-assemble`
 
-## 九、完成判定
+## 九、自动补表补图顺序
+
+### 对 ZS-项目可行性报告
+
+正文推进后的默认补充顺序为：
+1. 写完第4章后，先补 `图1`，再补 `表1`
+2. 写完第5章后，补 `表2`
+3. 写完第7章后，连续补 `表3`、`表4`
+4. 写完第8章后，补 `表5`
+5. 写完第9章后，补 `表6`
+6. 表图齐备后进入 `review -> revise -> assemble`
+
+不要跳过前序关键表图直接去补后面的表。
+
+### 对 完整科研项目模板
+
+正文推进后的默认补充顺序为：
+1. 当第3章已稳定时，优先补团队类高优先表和 `图3-2 项目组织架构图`
+2. 当第4章已稳定时，优先补 `图4-1`、`图4-2`、`图4-5` 和第4章高优先成果/任务类表
+3. 当第8章已稳定时，优先补资金来源结构表、分年度投资安排表、主要投资估算表
+4. 当第1章或第2章存在明显图示需求时，再补功能模块图、体系版图、单位组织图等中优先图
+5. 当第4章已经下钻到专题层级时，再补测试验证、流程图、专题路线图等扩展图表
+6. 高优先表图齐备后进入 `review -> revise -> assemble`
+
+对大模板，优先保证第3章、第4章、第8章的高优先表图，不要平均补全所有章节。
+
+## 十、完成判定
 
 你准备声称“这一轮已完成”之前，至少要确认：
 - 输出文件已写入目标目录
 - `plan/progress.md` 已更新
 - 当前阶段未处理的 `【待补】` 已在台账中记录
+- 若用户目标是交付正式稿，`assembled/<template>/` 下已生成装配后的总稿

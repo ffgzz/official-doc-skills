@@ -15,4 +15,4 @@
 
 - 入口 Skill：`using-official-docs`
 - 主 Skill：`zs-feasibility-report`、`full-research-template`
-- 公共 Skill：`official-doc-core`、`official-doc-table`、`official-doc-figure`、`official-doc-review`
+- 公共 Skill：`official-doc-core`、`official-doc-table`、`official-doc-figure`、`official-doc-review`、`official-doc-revise`、`official-doc-assemble`

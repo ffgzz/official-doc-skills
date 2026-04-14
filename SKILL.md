@@ -1,6 +1,6 @@
 ---
 name: official-doc-writing-skill
-description: Use when drafting formal Chinese project materials based on fixed templates - routes between entry workflow, template-specific writing, tables, figures, and review
+description: Use when drafting formal Chinese project materials based on fixed templates - routes between entry workflow, template-specific writing, tables, figures, review, revise, and assemble
 allowed-tools: Read Write Edit Bash
 version: 0.3.0
 ---
@@ -30,7 +30,9 @@ version: 0.3.0
 - `official-doc-core`：通用公文规则、标题约束、事实纪律、台账规则
 - `official-doc-table`：表格生成与口径说明
 - `official-doc-figure`：图示生成与说明
-- `official-doc-review`：一致性检查与最终复核
+- `official-doc-review`：一致性检查与修订清单输出
+- `official-doc-revise`：按复核清单回修正文、表格、图示
+- `official-doc-assemble`：把正文、表格、图示装配为正式总稿
 
 ## 核心原则
 
@@ -38,8 +40,9 @@ version: 0.3.0
 - **一级标题优先于语言润色**：不擅自改模板固定标题。
 - **事实优先于修辞**：无依据内容统一写 `【待补】`。
 - **表图独立生成**：正文只保留引用位，表图由独立 Skill 产出。
-- **先骨架后填充**：先生成结构，再逐章推进，再补表图，最后复核。
-- **可回写、可追踪**：所有阶段都要回写 `plan/`、`outputs/`、`tables/`、`figures/`、`review/`。
+- **先骨架后填充**：先生成结构，再逐章推进，再补表图，再复核、修订、装配。
+- **交付必须装配**：`outputs/`、`tables/`、`figures/` 只是中间产物，最终还要产出 `assembled/` 正式总稿。
+- **可回写、可追踪**：所有阶段都要回写 `plan/`、`outputs/`、`tables/`、`figures/`、`review/`、`assembled/`。
 
 ## 标准流程
 
@@ -47,7 +50,9 @@ version: 0.3.0
 2. 通用规则对齐 → `official-doc-core`
 3. 模板正文推进 → `zs-feasibility-report` 或 `full-research-template`
 4. 表图补全 → `official-doc-table` / `official-doc-figure`
-5. 最终体检 → `official-doc-review`
+5. 结构化复核 → `official-doc-review`
+6. 定向修订 → `official-doc-revise`
+7. 正式装配 → `official-doc-assemble`
 
 ## Red Flags（出现就停下检查）
 
@@ -68,9 +73,14 @@ outputs/
 tables/
 figures/
 review/
+assembled/
 templates/
 materials/
 ```
+
+其中：
+- `templates/` 是静态模板来源
+- `plan/` 及其它产出目录是运行时工作区，应在执行时动态创建
 
 ## 会话启动机制
 
