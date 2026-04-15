@@ -35,7 +35,7 @@ allowed-tools: Read Write Edit Bash
 
 若 `workspace/plan/project-overview.md` 或 `workspace/plan/progress.md` 中记录了目标总字数，本轮 review 还必须检查：
 - 当前稿件总字数是否落在用户要求范围内
-- 若未落在范围内，是否已在 Must Fix / Should Fix 中明确记录
+- 若未落在范围内，必须直接记入 Must Fix，并阻断进入 assemble
 
 ## 统计口径（强制统一）
 
@@ -152,7 +152,7 @@ allowed-tools: Read Write Edit Bash
 - 若图1改成通用 pipeline 且无说明，默认记入 Should Fix；若导致与第3章结构明显脱节，记入 Must Fix
 - 若正式稿中的表格 / 图示内容与 `workspace/tables/`、`workspace/figures/` 的最新文件不一致，默认记入 Must Fix
 - 若 review 或 assembly notes 继续引用已经过期的章节字数、比例或结论，默认记入 Must Fix
-- 若用户给出总字数硬约束且当前稿件明显超出/低于目标范围，默认至少记入 Should Fix；若偏差过大导致章节结构失真，记入 Must Fix
+- 若用户给出总字数硬约束且当前稿件超出/低于目标范围，直接记入 Must Fix，不得进入 assemble
 
 若本次是装配后 final review，对 ZS 还必须执行以下硬阻断：
 - 第3章正文 `< 40%`：直接记入 Must Fix，不得通过 final review
@@ -186,7 +186,7 @@ allowed-tools: Read Write Edit Bash
 - 第6章正文建议控制在正文总量的 `2%` 至 `6%`
 - 第7章正文建议控制在正文总量的 `6%` 至 `12%`
 - 若正式稿中已知单位、成员、任务、投资口径被回退成 `【待补】`，默认记入 Must Fix
-- 若用户给出总字数硬约束且当前稿件明显超出/低于目标范围，默认至少记入 Should Fix；若偏差过大导致章节结构失真，记入 Must Fix
+- 若用户给出总字数硬约束且当前稿件超出/低于目标范围，直接记入 Must Fix，不得进入 assemble
 
 对于章节级 review，默认检查对象应是“当前章节 + 该章必要表图”，不要因为全书尚未写完就把阶段稿误判为失败。
 对于全书总 review 或 final review，才按整本比例与装配就绪度做总判定。

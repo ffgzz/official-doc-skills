@@ -19,7 +19,8 @@
       "Skill(official-doc-writing-skill:full-research-template)",
       "Skill(official-doc-review)",
       "Skill(official-doc-revise)",
-      "mcp__filesystem__read_file"
+      "mcp__filesystem__read_file",
+      "Bash(wc:*)"
     ]
   }
 }

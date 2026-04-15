@@ -34,6 +34,12 @@ allowed-tools: Read Write Edit Bash
 - `workspace/assembled/<template>/<template>-formal-draft.md`
 - `workspace/assembled/<template>/<template>-assembly-notes.md`
 
+这是唯一允许的正式装配路径。
+不要写到以下位置：
+- `workspace/outputs/<template>/assembled/`
+- `workspace/outputs/<template>/assembled/full-document.md`
+- 任何未位于 `workspace/assembled/<template>/` 下的“总稿”或“final”文件
+
 `assembly-notes` 至少要写清：
 - 本次装配纳入了哪些正文文件
 - 本次装配纳入了哪些表格 / 图示
@@ -57,6 +63,7 @@ allowed-tools: Read Write Edit Bash
 - 装配完成后，不得直接结束流程；必须再对当前 `formal-draft` 执行一轮 final review
 - 如果 review 中仍有未修复的 Must Fix，不能直接宣称“最终定稿”
 - 如果高优先表图尚未齐备，不得进入装配
+- 如果用户给出了总字数硬约束且当前稿件未满足，不得进入装配
 - 装配时要优先纳入 `table-catalog.md` / `figure-catalog.md` 中标为“必出”或“高优先”的项目
 - 若正式稿中的任一表图内容与对应散件文件不一致，必须视为装配失败并回到 revise / assemble 修复
 
@@ -68,7 +75,7 @@ allowed-tools: Read Write Edit Bash
 
 判定口径如下：
 - 若全书必需章节已齐、Must Fix 已清、高优先表图已齐、review / revise 已完成，可装配正式稿
-- 若仍缺必需章节正文、高优先表图、存在未修复 Must Fix，或 review / revise 尚未完成，则暂不可装配
+- 若仍缺必需章节正文、高优先表图、存在未修复 Must Fix、review / revise 尚未完成，或总字数未满足用户要求，则暂不可装配
 - 若当前 `assembly-notes` 的字数、比例、`【待补】` 数与当前 `formal-draft` 不一致，也不得判为正式稿
 
 ## 装配后强制动作
