@@ -1,18 +1,25 @@
 # 设计备注
 
-## 为什么这次改成 plugin + hooks
+## 当前设计
 
-之前仅有 `skills/` 和根级 `SKILL.md`，Claude Code 并不会稳定把入口 Skill 自动读进当前会话，导致：
+插件已从“按公文模板拆分”改为“按共性章节能力拆分”。
 
-- 明明存在多个 Skill，却常常只用到一个叶子 Skill
-- 模型不容易先读入口路由规则
-- “主 Skill + 公共 Skill”的协同效果不稳定
+当前主链路为：
+- `using-official-docs`：解析用户提示词、初始化项目工作区、统筹推进
+- `official-doc-core`：通用规则与事实纪律
+- 五个共性章节 skill：负责背景、研究内容、创新点、技术成果、技术指标
+- `official-doc-table` / `official-doc-figure` / `official-doc-review` / `official-doc-revise` / `official-doc-assemble`：负责公共流程
 
-现在参考 `research-writing-skill`，增加了 `SessionStart` hook：
-会话开始时自动注入 `using-official-docs` 的完整内容，从而把“先走入口、再走子 Skill”的门禁规则前置。
+## 为什么这样改
 
-## 当前架构
+不同公文模板不同，但很多正式项目材料都会重复出现以下章节能力：
+- 项目背景
+- 研究内容
+- 创新点
+- 主要技术成果
+- 主要技术指标
 
-- 入口 Skill：`using-official-docs`
-- 主 Skill：`zs-feasibility-report`、`full-research-template`
-- 公共 Skill：`official-doc-core`、`official-doc-table`、`official-doc-figure`、`official-doc-review`、`official-doc-revise`、`official-doc-assemble`
+把这些能力拆出来后：
+- 可以跨不同公文复用
+- 不再依赖固定模板目录
+- 更适合“主题 + 章节要求 + 表图要求 + 字数要求”的提示词输入方式

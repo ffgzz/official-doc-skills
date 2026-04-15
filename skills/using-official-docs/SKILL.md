@@ -1,6 +1,6 @@
 ---
 name: using-official-docs
-description: Trigger this entry skill when the user says things like “我要写 ZS-项目可行性报告，材料在 materials/.../”, “我要写 完整科研项目模板”, or asks to continue, revise, add tables, add figures, review, or assemble either supported document type. This skill is the mandatory first step for those requests.
+description: Use as the mandatory entry skill when the user wants to draft or continue a formal Chinese project document from a prompt-only brief. The brief usually gives a topic, which chapters to write, what each chapter must contain, required tables or figures, and word counts. This skill parses the brief, initializes the project workspace, applies official-doc-core, routes the five common section types to their dedicated skills, drafts all other sections directly, and then coordinates table, figure, review, revise, and assemble steps.
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -9,66 +9,71 @@ allowed-tools: Read Write Edit Bash
 </SUBAGENT-STOP>
 
 <EXTREMELY-IMPORTANT>
-对以下两类文档，入口流程是强制的：
-1. `ZS-项目可行性报告`
-2. `完整科研项目模板`
+2026-04 架构更新：以下规则覆盖全文，凡与下文旧模板规则冲突者，一律忽略旧规则。
 
-只要用户的任务与这两类文档相关，你就必须先使用本技能做模板判定、状态判断和路由，再进入对应主 Skill 或公共 Skill。
+1. 当前工作方式是“提示词驱动写作”，不是“材料目录 + 固定模板”。
+2. 不再按 `ZS` 或 `完整科研项目模板` 做路由。
+3. 不再依赖 `templates/` 目录，也不再要求用户先给 `materials/...`。
+4. 你仍然是主统筹 skill，需要先解析：
+   - 项目主题
+   - project-slug
+   - 章节顺序
+   - 每章要写什么
+   - 每章所需表格和图示
+   - 每章或全文字数
+5. 初始化或复用的目录改为：
+   - `workspace/plan/<project-slug>/`
+   - `workspace/outputs/<project-slug>/`
+   - `workspace/tables/<project-slug>/`
+   - `workspace/figures/<project-slug>/`
+   - `workspace/review/<project-slug>/`
+   - `workspace/assembled/<project-slug>/`
+6. 必须维护的新计划文件为：
+   - `project-overview.md`
+   - `project-brief.md`
+   - `research-sources.md`
+   - `facts-ledger.md`
+   - `progress.md`
+   - `workspace/outputs/<project-slug>/00-section-plan.md`
+7. 在任何正文写作前，仍必须单独执行一次 `official-doc-core`。
+8. 只有以下五类共性章节才调用专项 skill：
+   - `official-doc-project-background`
+   - `official-doc-research-content`
+   - `official-doc-innovation`
+   - `official-doc-technical-achievements`
+   - `official-doc-technical-indicators`
+9. 其他章节不需要额外 skill，直接按用户 brief 写作。
+10. 上述五类章节必须先做网络搜索并登记来源，不能瞎编。
+11. 下文若继续出现旧模板、旧 materials、旧 templates、旧主 Skill 规则，全部仅作归档，不得执行。
 </EXTREMELY-IMPORTANT>
 
 ## 触发样例
 
 以下输入都应直接触发本技能：
-- `我要写 ZS-项目可行性报告，材料在 materials/test-case-zs/`
-- `我要写 ZS-项目可行性报告`
-- `继续推进 ZS-项目可行性报告`
-- `给 ZS-项目可行性报告补表`
-- `给 ZS-项目可行性报告补图`
-- `检查这份 ZS-项目可行性报告`
-- `把这份 ZS-项目可行性报告合成正式总稿`
-- `我要写 完整科研项目模板，材料在 materials/test-case-full/`
-- `我要写 完整科研项目模板`
-- `继续推进 完整科研项目模板`
-- `给 完整科研项目模板补表`
-- `给 完整科研项目模板补图`
-- `检查这份 完整科研项目模板`
-- `把这份 完整科研项目模板合成正式总稿`
-
-只要用户说的是“支持范围内的公文类型 + 材料路径 / 当前诉求”，就不要自由发挥，先走本入口技能。
+- `围绕船舶智能设计平台，写项目背景、研究内容、创新点、主要技术成果和主要技术指标；背景要写建设背景、国内外现状、痛点和必要性，第2章要带技术路线图，总字数 8000 字。`
+- `主题是 AI 原生船舶 PLM，写第1章项目背景、第2章研究内容、第5章技术指标，每章给出字数和表图建议。`
+- `继续推进 current-project，把还没写完的章节、表图、review 接着做完。`
 
 ## 强制调度协议
 
-本 Skill 是“入口路由器”，不是“正文生成器”。
+本 Skill 仍然是“统筹入口”，但不再是旧模板路由器。
 
-一旦本 Skill 被触发，你必须先完成：
-1. 判定模板
-2. 识别任务模式
-3. 初始化或复用 `workspace/`
-4. 读取最少必要模板文件
-5. 读取 `official-doc-core`
-6. 判定下一步应进入哪个主 Skill 或公共 Skill
+当前强制顺序改为：
+1. 解析用户 brief
+2. 生成或复用 `project-slug`
+3. 初始化 `workspace/<kind>/<project-slug>/`
+4. 写 `project-overview.md`、`project-brief.md`、`research-sources.md`、`facts-ledger.md`、`progress.md`
+5. 写 `workspace/outputs/<project-slug>/00-section-plan.md`
+6. 单独执行 `official-doc-core`
+7. 判断每章是否命中五类共性章节 skill
+8. 命中则调用专项 skill，未命中则直接按 brief 写
+9. 再按需推进 table / figure / review / revise / assemble
 
-在完成上述 6 步之前，不得直接开始写正文、表格、图示、review、revise 或 assemble 成稿。
-其中第 5 步不是“随便看看 `official-doc-core` 文件”，而是必须把 `official-doc-core` 作为独立 Skill 执行一次。
+本 Skill 允许直接做两类事：
+- 统筹与计划文件写入
+- 对“不属于五类共性章节”的章节直接写正文
 
-本 Skill 自身允许做的落盘动作仅限：
-- 创建或复用 `workspace/plan/ workspace/outputs/ workspace/tables/ workspace/figures/ workspace/review/ workspace/assembled/`
-- 创建或更新 `workspace/plan/project-overview.md`
-- 创建或更新 `workspace/plan/source-materials.md`
-- 创建或更新 `workspace/plan/facts-ledger.md`
-- 创建或更新 `workspace/plan/progress.md`
-
-本 Skill 自身不得直接生成：
-- `workspace/outputs/<template>/chapter-*.md`
-- `workspace/outputs/<template>/01-outline.md`
-- `workspace/tables/<template>/*.md`
-- `workspace/figures/<template>/*`
-- `workspace/review/*.md`
-- `workspace/assembled/<template>/*`
-
-当你完成模板判定和状态判断后，必须立即切换到下一目标 Skill，再由那个 Skill 负责实际正文/表图/review/revise/assemble 的生成。
-标准顺序必须是：
-`using-official-docs -> official-doc-core -> 对应主 Skill / 公共 Skill`
+本 Skill 不应继续执行下文任何旧的“模板判定”“模板必读文件”“固定模板顺序”规则。
 
 # 入口 Skill 的职责边界
 

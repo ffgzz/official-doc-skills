@@ -1,10 +1,18 @@
 ---
 name: official-doc-revise
-description: Use after review for ZS-项目可行性报告 or 完整科研项目模板 - fixes review findings in body chapters, tables, figures, and ledgers without inventing facts, then prepares the draft for assembly
+description: Use after official-doc-review for the current project slug. This skill fixes concrete chapter, table, figure, source, and dependency issues without inventing facts, then updates progress and determines whether assembly can proceed.
 allowed-tools: Read Write Edit Bash
 ---
 
 # 公文回修 Skill
+
+> 2026-04 架构更新：以下规则优先于全文旧内容。回修不再围绕旧模板章节，而是围绕当前 `project-slug` 的 review 结果。
+>
+> 当前回修重点：
+> - 先修 Must Fix
+> - 先补搜索和依赖关系，再修措辞
+> - `技术成果` 必须由研究内容回推
+> - `技术指标` 必须补齐阈值、单位、验证口径
 
 ## 适用时机
 
@@ -15,26 +23,24 @@ allowed-tools: Read Write Edit Bash
 
 ## 核心目标
 
-依据 `workspace/review/<template>-review.md` 的问题清单，定向修复正文、表格、图示和台账中的问题。
+依据 `workspace/review/<project-slug>/review.md` 的问题清单，定向修复正文、表格、图示和台账中的问题。
 本 Skill 解决的是“把诊断结果落实到文件”，不是重新写一份新稿。
 
 ## 使用前必读
 
 开始回修前，至少读取以下文件：
-- `workspace/review/<template>-review.md`
-- `templates/<template>/outline.md`
-- `templates/<template>/writing-playbook.md`
-- `templates/<template>/table-catalog.md`
-- `templates/<template>/figure-catalog.md`
-- `workspace/plan/facts-ledger.md`
-- 当前受影响的 `workspace/outputs/`、`workspace/tables/`、`workspace/figures/` 文件
+- `workspace/review/<project-slug>/review.md`
+- `workspace/plan/<project-slug>/project-brief.md`
+- `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/facts-ledger.md`
+- 当前受影响的 `workspace/outputs/<project-slug>/`、`workspace/tables/<project-slug>/`、`workspace/figures/<project-slug>/` 文件
 
 ## 使用前必做
 
-1. 读取对应 `workspace/review/<template>-review.md`
+1. 读取对应 `workspace/review/<project-slug>/review.md`
 2. 按严重级别区分 Must Fix / Should Fix
 3. 逐项定位受影响文件
-4. 核对 `workspace/plan/facts-ledger.md` 中相关事实口径
+4. 核对 `workspace/plan/<project-slug>/facts-ledger.md` 中相关事实口径
 
 ## 强制规则
 

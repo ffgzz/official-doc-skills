@@ -1,8 +1,8 @@
 {
   "name": "official-doc-writing-skill",
   "displayName": "公文项目写作助手",
-  "description": "面向 Claude Code 的正式项目材料写作插件：自动识别并推进 ZS-项目可行性报告、完整科研项目模板，以及配套表格、图示和复核流程。",
-  "version": "0.4.0",
+  "description": "面向提示词驱动的正式项目材料写作插件：按共性章节能力拆分，统筹背景、研究内容、创新点、技术成果、技术指标以及表图和复核流程。",
+  "version": "0.5.0",
   "author": {
     "name": "OpenAI + user customization"
   },

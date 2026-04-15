@@ -1,36 +1,33 @@
 # 进度记录
 
-## 当前阶段
-- 状态：
+## 当前状态
+
+- 当前阶段：
 - 当前章节：
 - 已完成章节：
-- 下一章节：
+- 待补表格：
+- 待补图示：
 
-## 目标约束
-- 模板：
-- 材料目录：
-- 目标总字数：
-- 字数要求类型：硬约束 / 软约束 / 未指定
-- 当前统计总字数：
-- 当前是否满足字数要求：
+## 技能留痕
 
-## 技能执行留痕
 - using-official-docs：
 - official-doc-core：
-- 当前主 Skill / 公共 Skill：
-- 是否已完成装配后 final review：
-- final review 结论：
+- 当前章节 skill：
+- official-doc-table：
+- official-doc-figure：
+- official-doc-review：
+- official-doc-revise：
+- official-doc-assemble：
 
-## 完成事项
-- [ ] 工作区创建
-- [ ] plan 文件写入
-- [ ] 材料读取完毕
-- [ ] 模板结构读取完毕
-- [ ] official-doc-core 执行完毕
-- [ ] 当前章节正文完成
-- [ ] 当前章节必要表图完成
-- [ ] 当前章节 review 完成
+## 完成情况
 
-## 阶段门禁确认
-- 当前状态：
-- 输出路径：
+- [ ] brief 解析完成
+- [ ] 搜索来源登记完成
+- [ ] 章节计划完成
+- [ ] 当前章节完成
+- [ ] 当前章节表图完成
+- [ ] review 完成
+- [ ] revise 完成
+- [ ] assemble 完成
+
+## 下一步

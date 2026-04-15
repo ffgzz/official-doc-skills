@@ -1,22 +1,22 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-TEMPLATE="${1:-zs-feasibility-report}"
+PROJECT_SLUG="${1:-current-project}"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 WORKSPACE_ROOT="${PLUGIN_ROOT}/workspace"
 
 mkdir -p \
-  "${WORKSPACE_ROOT}/plan" \
-  "${WORKSPACE_ROOT}/outputs/${TEMPLATE}" \
-  "${WORKSPACE_ROOT}/tables/${TEMPLATE}" \
-  "${WORKSPACE_ROOT}/figures/${TEMPLATE}" \
-  "${WORKSPACE_ROOT}/assembled/${TEMPLATE}" \
-  "${WORKSPACE_ROOT}/review"
-for f in project-overview.md source-materials.md facts-ledger.md progress.md; do
-  if [ ! -f "${WORKSPACE_ROOT}/plan/${f}" ]; then
-    cp "${PLUGIN_ROOT}/plan-template/${f}" "${WORKSPACE_ROOT}/plan/${f}"
+  "${WORKSPACE_ROOT}/plan/${PROJECT_SLUG}" \
+  "${WORKSPACE_ROOT}/outputs/${PROJECT_SLUG}" \
+  "${WORKSPACE_ROOT}/tables/${PROJECT_SLUG}" \
+  "${WORKSPACE_ROOT}/figures/${PROJECT_SLUG}" \
+  "${WORKSPACE_ROOT}/review/${PROJECT_SLUG}" \
+  "${WORKSPACE_ROOT}/assembled/${PROJECT_SLUG}"
+for f in project-overview.md project-brief.md research-sources.md facts-ledger.md progress.md; do
+  if [ ! -f "${WORKSPACE_ROOT}/plan/${PROJECT_SLUG}/${f}" ]; then
+    cp "${PLUGIN_ROOT}/plan-template/${f}" "${WORKSPACE_ROOT}/plan/${PROJECT_SLUG}/${f}"
   fi
 done
 
-echo "Workspace initialized at ${WORKSPACE_ROOT} for ${TEMPLATE}"
+echo "Workspace initialized at ${WORKSPACE_ROOT} for ${PROJECT_SLUG}"

@@ -1,10 +1,17 @@
 ---
 name: official-doc-assemble
-description: Use when ZS-项目可行性报告 or 完整科研项目模板 needs a formal assembled draft - merges outputs, tables, and figures into a single deliverable draft after review and revise
+description: Use when the current project slug is ready for a formal assembled draft. This skill merges the requested prompt-driven chapters, tables, and figures into one deliverable, writes assembly notes, and then triggers final review.
 allowed-tools: Read Write Edit Bash
 ---
 
 # 公文装配 Skill
+
+> 2026-04 架构更新：以下规则优先于全文旧内容。装配不再按固定模板章次，而是按 `workspace/outputs/<project-slug>/00-section-plan.md` 的章节顺序装配。
+>
+> 当前装配规则：
+> - 只装配用户要求的章节、表格、图示
+> - 输出到 `workspace/assembled/<project-slug>/`
+> - 装配后必须再做 final review
 
 ## 适用时机
 
@@ -21,18 +28,17 @@ allowed-tools: Read Write Edit Bash
 ## 使用前必读
 
 开始装配前，至少读取以下文件：
-- `templates/<template>/outline.md`
-- `templates/<template>/table-catalog.md`
-- `templates/<template>/figure-catalog.md`
-- `workspace/review/<template>-review.md`
+- `workspace/plan/<project-slug>/project-brief.md`
+- `workspace/outputs/<project-slug>/00-section-plan.md`
+- `workspace/review/<project-slug>/review.md`
 - 最近一轮 `revise` 结果说明
-- 当前要纳入装配的 `workspace/outputs/`、`workspace/tables/`、`workspace/figures/` 文件
+- 当前要纳入装配的 `workspace/outputs/<project-slug>/`、`workspace/tables/<project-slug>/`、`workspace/figures/<project-slug>/` 文件
 
 ## 输出目录
 
 输出到：
-- `workspace/assembled/<template>/<template>-formal-draft.md`
-- `workspace/assembled/<template>/<template>-assembly-notes.md`
+- `workspace/assembled/<project-slug>/formal-draft.md`
+- `workspace/assembled/<project-slug>/assembly-notes.md`
 
 这是唯一允许的正式装配路径。
 不要写到以下位置：

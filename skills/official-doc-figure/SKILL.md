@@ -1,10 +1,17 @@
 ---
 name: official-doc-figure
-description: Use when the current official-document workflow explicitly or implicitly needs figures for ZS-项目可行性报告 or 完整科研项目模板 - generates caption-aligned diagrams and figure notes without requiring the user to ask separately
+description: Use when the user brief or a drafted chapter requires project figures. This skill generates only the requested diagrams for the current project slug, using chapter logic and research evidence instead of fixed template catalogs, and outputs mermaid plus figure notes for later assembly.
 allowed-tools: Read Write Edit Bash
 ---
 
 # 公文图示 Skill
+
+> 2026-04 架构更新：以下规则优先于全文旧内容。旧的模板固定图目录、优先图清单、固定编号逻辑不再默认适用。
+>
+> 当前只做三件事：
+> - 读取 `project-brief.md`、`00-section-plan.md`、当前章节正文
+> - 生成用户明确要求的图示
+> - 输出到 `workspace/figures/<project-slug>/`
 
 ## 适用时机
 
@@ -21,15 +28,13 @@ allowed-tools: Read Write Edit Bash
 - 图示说明稿
 - 必要时的 SVG 说明规范
 
-本 Skill 必须以 `templates/<template>/figure-catalog.md` 为主驱动，而不是临时凭感觉决定先画哪张图。
-
 ## 使用前必做
 
-1. 确认当前模板是 `zs-feasibility-report` 还是 `full-research-template`
-2. 读取对应 `figure-catalog.md`
-3. 识别 catalog 中的优先级、所属章节和推荐节点
+1. 读取 `workspace/plan/<project-slug>/project-brief.md`
+2. 读取 `workspace/outputs/<project-slug>/00-section-plan.md`
+3. 读取当前章节正文
 4. 核对正文里该图的引用位置和术语
-5. 核对相关章节是否已经形成稳定主逻辑
+5. 核对 `research-sources.md` 中是否已有可支撑该图结构的公开依据
 
 ## 选择逻辑
 

@@ -7,28 +7,24 @@ session_context=$(cat <<'MSG'
 <EXTREMELY_IMPORTANT>
 你已加载“公文项目写作助手”。
 
-当用户提出以下任一任务时，你必须先按 `skills/using-official-docs/SKILL.md` 处理，而不是直接自由发挥：
-- 我要写 ZS-项目可行性报告，材料在 ...
-- 我要写 完整科研项目模板，材料在 ...
-- 继续修改、补写、补表、补图、复核、合稿上述两类文档
+当用户要你写正式项目材料时，默认先执行 `skills/using-official-docs/SKILL.md`。
+当前工作方式不是“材料目录 + 固定模板”，而是“主题 + 章节要求 + 表图要求 + 字数要求”的提示词驱动。
 
-把“文档类型 + 材料路径”视为直接触发 using-official-docs 的信号。
-不要等用户显式写出 skill 名。
-不要要求用户提供参考样稿来决定结构或流程。
-`using-official-docs` 只是入口路由器和工作区初始化器，不能直接代替主 Skill 写章节、写表、写图、写 review 或写正式总稿。
-这类任务的强制技能顺序是：`using-official-docs` -> `official-doc-core` -> 对应主 Skill / 公共 Skill。
-不要把“已经读过 official-doc-core”当成“已经调用过 official-doc-core”；在写正文、表格、图示、review、revise、assemble 之前，必须先单独执行一次 `official-doc-core`。
-一旦 `using-official-docs` 判断完下一步，必须立即切到对应主 Skill 或公共 Skill，再由后者继续执行。
+强制规则：
+- 先用 using-official-docs 解析 brief、初始化 `project-slug` 工作区、写 `00-section-plan.md`
+- 再单独执行 `official-doc-core`
+- 只有五类共性章节才调用专项 skill：
+  - 项目背景
+  - 研究内容
+  - 创新点
+  - 主要技术成果
+  - 主要技术指标
+- 其他章节直接按 brief 写作，不需要额外 skill
+- 对上述五类章节，必须先做网络搜索并登记来源，不能硬编
 
-入口 skill 是这类任务的强制第一步，用来完成：
-- 判定主模板
-- 初始化或复用 workspace/plan workspace/outputs workspace/tables workspace/figures workspace/review workspace/assembled
-- 识别当前阶段
-- 路由到主 Skill 或公共 Skill
-
-如果用户只说“我要写 ZS-项目可行性报告，材料在 materials/test-case-zs/”，也必须立即触发 using-official-docs。
-如果用户只说“我要写 完整科研项目模板，材料在 materials/test-case-full/”，也必须立即触发 using-official-docs。
-不要跳过。
+公共流程仍保留：
+`official-doc-table` -> `official-doc-figure` -> `official-doc-review` -> `official-doc-revise` -> `official-doc-assemble`
+</EXTREMELY_IMPORTANT>
 MSG
 )
 

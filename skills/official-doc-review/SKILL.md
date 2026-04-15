@@ -1,10 +1,19 @@
 ---
 name: official-doc-review
-description: Use when the current official-document workflow reaches a review point or the user asks to check the draft - reviews ZS-项目可行性报告 or 完整科研项目模板 for headings, numbering, terminology, tables, figures, schedule, budget, unresolved placeholders, and revise readiness
+description: Use when a prompt-driven project document needs review. This skill checks the requested chapters, tables, figures, source grounding, section dependencies, word counts, and assemble readiness for the current project slug, then writes an actionable issue list for revise.
 allowed-tools: Read Write Edit Bash
 ---
 
 # 公文复核 Skill
+
+> 2026-04 架构更新：以下规则优先于全文旧内容。旧的模板专项验收阈值、固定章节配比与固定高优先表图列表不再默认适用。
+>
+> 当前 review 核心检查点是：
+> - 用户要求的章节是否写完
+> - 五类共性章节是否完成搜索留痕
+> - `创新点 / 技术成果 / 技术指标` 是否与研究内容闭环
+> - 用户要求的表图是否齐
+> - 字数是否满足 brief
 
 ## 适用时机
 
@@ -22,18 +31,18 @@ allowed-tools: Read Write Edit Bash
 ## 使用前必读
 
 开始复核前，至少读取以下文件：
-- `templates/<template>/outline.md`
-- `templates/<template>/writing-playbook.md`
-- `templates/<template>/table-catalog.md`
-- `templates/<template>/figure-catalog.md`
-- `workspace/plan/progress.md`
-- 已生成的 `workspace/outputs/`、`workspace/tables/`、`workspace/figures/` 对应文件
+- `workspace/plan/<project-slug>/project-overview.md`
+- `workspace/plan/<project-slug>/project-brief.md`
+- `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/facts-ledger.md`
+- `workspace/plan/<project-slug>/progress.md`
+- 已生成的 `workspace/outputs/<project-slug>/`、`workspace/tables/<project-slug>/`、`workspace/figures/<project-slug>/` 文件
 
-如果 `workspace/assembled/<template>/<template>-formal-draft.md` 已存在，复核时也必须读取它，并把它视为“当前对外版本”。
+如果 `workspace/assembled/<project-slug>/formal-draft.md` 已存在，复核时也必须读取它，并把它视为“当前对外版本”。
 不要只根据旧 review、旧装配说明或记忆中的字节数下结论。
 若本轮 review 是由 `official-doc-assemble` 触发的 final review，应以 `formal-draft` 为主检查对象，而不是只看散件文件。
 
-若 `workspace/plan/project-overview.md` 或 `workspace/plan/progress.md` 中记录了目标总字数，本轮 review 还必须检查：
+若 `project-overview.md` 或 `progress.md` 中记录了目标总字数，本轮 review 还必须检查：
 - 当前稿件总字数是否落在用户要求范围内
 - 若未落在范围内，必须直接记入 Must Fix，并阻断进入 assemble
 

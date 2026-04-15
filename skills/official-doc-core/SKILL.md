@@ -1,17 +1,27 @@
 ---
 name: official-doc-core
-description: Use when writing any supported official project document - enforces fixed headings, fact discipline, no-reference-sample workflow, ledger updates, and stage gating across body, tables, figures, review, revise, and assemble
+description: Use before writing any formal Chinese project document in this plugin. It enforces prompt-driven workflow, fact discipline, project-slug workspace conventions, source logging, section dependency checks, and the rule that the five shared chapter types must be grounded in web research instead of fabrication.
 allowed-tools: Read Write Edit Bash
 ---
 
 # 公文写作通用规则
 
-这是 `ZS-项目可行性报告` 和 `完整科研项目模板` 的公共规则层。
+> 2026-04 架构更新：以下规则优先于全文旧内容。凡提到 `ZS`、`完整科研项目模板`、`templates/`、固定 catalog、固定模板结构的旧规则，一律忽略。
+>
+> 当前通用规则改为：
+> - 以用户提示词为主，不再以固定模板为主
+> - 工作区按 `workspace/<kind>/<project-slug>/` 隔离
+> - 五类共性章节必须先做网络搜索，并把来源登记到 `workspace/plan/<project-slug>/research-sources.md`
+> - `创新点` 必须能回指现状与研究内容
+> - `技术成果` 必须由研究内容推出
+> - `技术指标` 必须可量化、可测试
+
+这是当前提示词驱动项目写作流程的公共规则层。
 
 ## 一、最重要的执行原则
 
-### 1. 模板先于措辞
-必须先服从对应模板的结构，再考虑语言润色。
+### 1. brief 先于措辞
+必须先服从用户提示词拆出的章节要求，再考虑语言润色。
 
 ### 1.5 流程先于提问
 当下一步可以根据当前文件状态、模板规则和台账自动判断时，不要把流程分支问题再抛回给用户。

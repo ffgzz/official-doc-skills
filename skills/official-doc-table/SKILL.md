@@ -1,10 +1,17 @@
 ---
 name: official-doc-table
-description: Use when the current official-document workflow explicitly or implicitly needs tables for ZS-项目可行性报告 or 完整科研项目模板 - generates caption-locked tables, notes, and source-gap tracking without requiring the user to ask separately
+description: Use when the user brief or a drafted chapter requires project tables. This skill reads the parsed chapter plan, generates only the requested tables for the current project slug, keeps table contents consistent with the chapter text and search evidence, and writes table notes without relying on any fixed template catalog.
 allowed-tools: Read Write Edit Bash
 ---
 
 # 公文表格 Skill
+
+> 2026-04 架构更新：以下规则优先于全文旧内容。旧的模板化 table catalog 规则不再默认适用。
+>
+> 当前只做三件事：
+> - 读取 `project-brief.md`、`00-section-plan.md`、当前章节正文
+> - 生成用户明确要求的表格
+> - 输出到 `workspace/tables/<project-slug>/`，并同步 notes
 
 ## 适用时机
 
@@ -17,16 +24,14 @@ allowed-tools: Read Write Edit Bash
 ## 核心目标
 
 把“表标题 + 字段定义 + 数据来源 + 待补项”生成标准表，而不是继续塞回正文段落。
-本 Skill 必须以 `templates/<template>/table-catalog.md` 为主驱动，而不是临时凭感觉决定先补哪张表。
 
 ## 使用前必做
 
-1. 确认当前模板是 `zs-feasibility-report` 还是 `full-research-template`
-2. 读取对应 `table-catalog.md`
-3. 识别 catalog 中的优先级与章节绑定关系
-4. 锁定表 caption
-5. 核对正文中该表的引用位置
-6. 核对 `workspace/plan/facts-ledger.md` 中相关口径
+1. 读取 `workspace/plan/<project-slug>/project-brief.md`
+2. 读取 `workspace/outputs/<project-slug>/00-section-plan.md`
+3. 读取当前章节正文
+4. 核对 `workspace/plan/<project-slug>/facts-ledger.md`
+5. 如表格涉及行业对比或公开指标，再核对 `research-sources.md`
 
 ## 选择逻辑
 
