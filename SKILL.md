@@ -7,7 +7,7 @@ version: 0.3.0
 
 # 公文项目写作助手
 
-把“写公文”从一次性聊天，升级成**有入口、有路由、有主技能、有公共技能、有台账记录**的工程化协作流程。
+把“写公文”从一次性聊天，升级成**有入口、有路由、有主技能、有公共技能、有台账记录**的工程化协作流程。 
 
 ## 当前优先支持
 
@@ -41,8 +41,8 @@ version: 0.3.0
 - **事实优先于修辞**：无依据内容统一写 `【待补】`。
 - **表图独立生成**：正文只保留引用位，表图由独立 Skill 产出。
 - **先骨架后填充**：先生成结构，再逐章推进，再补表图，再复核、修订、装配。
-- **交付必须装配**：`outputs/`、`tables/`、`figures/` 只是中间产物，最终还要产出 `assembled/` 正式总稿。
-- **可回写、可追踪**：所有阶段都要回写 `plan/`、`outputs/`、`tables/`、`figures/`、`review/`、`assembled/`。
+- **交付必须装配**：`workspace/outputs/`、`workspace/tables/`、`workspace/figures/` 只是中间产物，最终还要产出 `workspace/assembled/` 正式总稿。
+- **可回写、可追踪**：所有阶段都要回写 `workspace/plan/`、`workspace/outputs/`、`workspace/tables/`、`workspace/figures/`、`workspace/review/`、`workspace/assembled/`。
 
 ## 标准流程
 
@@ -63,24 +63,25 @@ version: 0.3.0
 | “材料缺一点，我先补个数字” | 没有依据就写 `【待补】` |
 | “完整科研项目模板太大，先一口气写完” | 只能按阶段、按章节推进 |
 | “既然是可行性报告，章节名我帮他改顺一点” | 一级、二级标题默认不改 |
-| “台账后面再补” | 任何缺口、口径冲突都要立即回写 `plan/` |
+| “台账后面再补” | 任何缺口、口径冲突都要立即回写 `workspace/plan/` |
 
 ## 目录约定
 
 ```text
-plan/
-outputs/
-tables/
-figures/
-review/
-assembled/
+workspace/
+  plan/
+  outputs/
+  tables/
+  figures/
+  review/
+  assembled/
 templates/
 materials/
 ```
 
 其中：
 - `templates/` 是静态模板来源
-- `plan/` 及其它产出目录是运行时工作区，应在执行时动态创建
+- `workspace/` 及其子目录是运行时工作区，应在执行时动态创建
 
 ## 会话启动机制
 

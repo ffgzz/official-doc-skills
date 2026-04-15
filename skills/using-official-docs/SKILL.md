@@ -1,6 +1,6 @@
 ---
 name: using-official-docs
-description: Use when the user asks to write, continue, revise, expand, add tables, add figures, review, assemble, or deliver either ZS-项目可行性报告 or 完整科研项目模板, even if the user only gives the document type and a materials path
+description: Trigger this entry skill when the user says things like “我要写 ZS-项目可行性报告，材料在 materials/.../”, “我要写 完整科研项目模板”, or asks to continue, revise, add tables, add figures, review, or assemble either supported document type. This skill is the mandatory first step for those requests.
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -13,232 +13,251 @@ allowed-tools: Read Write Edit Bash
 1. `ZS-项目可行性报告`
 2. `完整科研项目模板`
 
-只要用户的任务与这两类文档相关，你就必须优先遵循本技能。
-即使用户只说“我要写 ZS-项目可行性报告，材料在 materials/test-case-zs/”，你也不能直接自由发挥；必须先按本技能完成路由和初始化。
+只要用户的任务与这两类文档相关，你就必须先使用本技能做模板判定、状态判断和路由，再进入对应主 Skill 或公共 Skill。
 </EXTREMELY-IMPORTANT>
 
-## 这个入口技能解决什么问题
+## 触发样例
 
-用户不需要再写很长的流程提示词。
-
-用户通常只需要提供：
-- 文档类型
-- 材料目录或材料文件
-- 当前诉求（例如：开始写、继续推进、补表、补图、复核、合稿）
-
-你要负责把这三个输入自动展开成完整流程。
-
-## 默认用户输入模式
-
-### 模式 A：开始新写作
-
-例如：
+以下输入都应直接触发本技能：
 - `我要写 ZS-项目可行性报告，材料在 materials/test-case-zs/`
-- `我要写 完整科研项目模板，材料在 materials/test-case-full/`
-
-你要自动完成：
-1. 判定模板
-2. 初始化或复用工作区
-3. 读取对应模板文件
-4. 加载通用规则
-5. 路由到对应主 Skill
-6. 生成骨架和正文初稿
-7. 在合适阶段主动衔接表格、图示、复核
-
-### 模式 B：继续推进已有任务
-
-例如：
-- `继续推进 ZS-项目可行性报告，材料还是 materials/test-case-zs/`
-- `继续写完整科研项目模板，还是用 materials/test-case-full/`
-
-你要自动完成：
-1. 识别已有工作区状态
-2. 读取已生成的 outputs/tables/figures/review/assembled/plan
-3. 选择下一阶段最合理的子任务继续做
-
-### 模式 C：单点需求但仍属于这两类公文
-
-例如：
+- `我要写 ZS-项目可行性报告`
+- `继续推进 ZS-项目可行性报告`
 - `给 ZS-项目可行性报告补表`
-- `给完整科研项目模板补图`
+- `给 ZS-项目可行性报告补图`
 - `检查这份 ZS-项目可行性报告`
 - `把这份 ZS-项目可行性报告合成正式总稿`
+- `我要写 完整科研项目模板，材料在 materials/test-case-full/`
+- `我要写 完整科研项目模板`
+- `继续推进 完整科研项目模板`
+- `给 完整科研项目模板补表`
+- `给 完整科研项目模板补图`
+- `检查这份 完整科研项目模板`
+- `把这份 完整科研项目模板合成正式总稿`
 
-你仍然要先判定当前模板和当前阶段，然后路由到对应公共 Skill。
+只要用户说的是“支持范围内的公文类型 + 材料路径 / 当前诉求”，就不要自由发挥，先走本入口技能。
 
-## 路由规则
+## 强制调度协议
 
-### 1. 判定主模板
+本 Skill 是“入口路由器”，不是“正文生成器”。
 
-满足任一条件，路由到 `zs-feasibility-report`：
-- 用户明确提到 `ZS-项目可行性报告`
-- 用户明确提到 `ZS`
-- 当前任务明显是围绕 10 个固定一级章节的中型项目可行性报告
+一旦本 Skill 被触发，你必须先完成：
+1. 判定模板
+2. 识别任务模式
+3. 初始化或复用 `workspace/`
+4. 读取最少必要模板文件
+5. 读取 `official-doc-core`
+6. 判定下一步应进入哪个主 Skill 或公共 Skill
 
-满足任一条件，路由到 `full-research-template`：
-- 用户明确提到 `完整科研项目模板`
-- 用户明确提到“大模板”或“完整模板”且上下文对应当前插件支持的那一套模板
-- 当前任务是大体量项目申报材料，需要按章节批次推进
+在完成上述 6 步之前，不得直接开始写正文、表格、图示、review、revise 或 assemble 成稿。
+其中第 5 步不是“随便看看 `official-doc-core` 文件”，而是必须把 `official-doc-core` 作为独立 Skill 执行一次。
 
-### 2. 判定是否需要公共 Skill
+本 Skill 自身允许做的落盘动作仅限：
+- 创建或复用 `workspace/plan/ workspace/outputs/ workspace/tables/ workspace/figures/ workspace/review/ workspace/assembled/`
+- 创建或更新 `workspace/plan/project-overview.md`
+- 创建或更新 `workspace/plan/source-materials.md`
+- 创建或更新 `workspace/plan/facts-ledger.md`
+- 创建或更新 `workspace/plan/progress.md`
 
-满足任一条件，主动调用 `official-doc-table`：
-- 当前阶段要补表
-- 正文中已出现表格引用位但表文件未生成
-- 当前章节明显依赖任务表、成员表、预算表、成果表等
+本 Skill 自身不得直接生成：
+- `workspace/outputs/<template>/chapter-*.md`
+- `workspace/outputs/<template>/01-outline.md`
+- `workspace/tables/<template>/*.md`
+- `workspace/figures/<template>/*`
+- `workspace/review/*.md`
+- `workspace/assembled/<template>/*`
 
-满足任一条件，主动调用 `official-doc-figure`：
-- 当前阶段要补图
-- 正文中已出现图示引用位但图文件未生成
-- 技术路线、组织架构、任务分解、进度逻辑需要图示承载
+当你完成模板判定和状态判断后，必须立即切换到下一目标 Skill，再由那个 Skill 负责实际正文/表图/review/revise/assemble 的生成。
+标准顺序必须是：
+`using-official-docs -> official-doc-core -> 对应主 Skill / 公共 Skill`
 
-满足任一条件，主动调用 `official-doc-review`：
-- 用户要求检查、复核、定稿前核验
-- 当前批次正文/表图已生成，需要做一致性检查
-- 你准备声称“这一轮已完成”
+# 入口 Skill 的职责边界
 
-满足任一条件，主动调用 `official-doc-revise`：
-- `official-doc-review` 已识别出需要修复的问题
-- 用户要求“修改”“回修”“按复核意见调整”
-- 你准备进入正式总稿装配，但当前草稿仍存在未处理问题
+本 Skill 是调度层，不是正文规则层。
 
-满足任一条件，主动调用 `official-doc-assemble`：
-- 用户要求“合稿”“总稿”“正式稿”“交付稿”
-- 当前正文、表格、图示已经齐备，且复核/回修已完成
-- 你准备交付本轮正式成稿，而不是继续停留在中间产物
+它只负责：
+- 判定当前文档模板
+- 识别当前任务模式
+- 初始化或复用 `workspace/` 工作区
+- 读取最少必要模板文件
+- 判断当前阶段最合理的下一步
+- 路由到主 Skill 或公共 Skill
 
-## 强制流程
+它不负责：
+- 重复主 Skill 的章节写法
+- 重复 catalog 的表图细则
+- 重复 review 的验收阈值
 
-### 第一步：读取当前任务最小信息
+这些内容分别由以下文件负责：
+- 正文规则：对应主 Skill 与 `templates/<template>/writing-playbook.md`
+- 表格规则：`official-doc-table` 与 `table-catalog.md`
+- 图示规则：`official-doc-figure` 与 `figure-catalog.md`
+- 验收规则：`official-doc-review`
 
-至少锁定：
+## 一、输入识别
+
+至少锁定三件事：
 - 文档类型
 - 材料位置
 - 当前诉求
 
-如果用户没说当前诉求，默认按“开始新写作”处理。
+若用户明确提到以下任一信息，也必须锁定并写入台账：
+- 总字数
+- 篇幅上限 / 下限
+- “控制在 X 字左右”
+- “不少于 X 字”
+- “不超过 X 字”
 
-### 第二步：初始化或复用工作区
+若用户未说明当前诉求，默认按“开始新写作”处理。
 
-确保以下目录存在：
+## 二、任务模式
+
+### 模式 A：开始新写作
+
+本 Skill 应：
+1. 判定模板
+2. 初始化或复用工作区
+3. 读取模板文件
+4. 单独调用 `official-doc-core`
+5. 路由到对应主 Skill
+6. 停止以入口 Skill 身份继续扩写正文
+
+### 模式 B：继续推进
+
+本 Skill 应：
+1. 读取已有 `workspace/plan/ workspace/outputs/ workspace/tables/ workspace/figures/ workspace/review/ workspace/assembled/`
+2. 判断当前已到哪个阶段
+3. 选择下一步最合理的 Skill
+
+### 模式 C：单点动作
+
+例如补表、补图、复核、回修、合稿。
+
+本 Skill 应：
+1. 先判定当前模板
+2. 再判定当前阶段
+3. 单独调用 `official-doc-core`
+4. 路由到对应公共 Skill
+5. 停止以入口 Skill 身份继续执行该公共 Skill 的正文/表图内容
+
+## 三、模板判定
+
+满足任一条件，路由到 `zs-feasibility-report`：
+- 用户明确提到 `ZS-项目可行性报告`
+- 用户明确提到 `ZS`
+- 当前任务明显围绕 10 个固定一级章节的中型可研报告
+
+满足任一条件，路由到 `full-research-template`：
+- 用户明确提到 `完整科研项目模板`
+- 用户明确提到“大模板”或“完整模板”，且上下文对应本插件支持的那一套模板
+- 当前任务是大体量项目申报材料，需要按单章顺序推进
+
+## 四、工作区职责
+
+必须确保以下目录存在：
 
 ```text
-plan/
-outputs/
-tables/
-figures/
-review/
-assembled/
+workspace/
+  plan/
+  outputs/
+  tables/
+  figures/
+  review/
+  assembled/
 ```
 
-确保以下文件存在：
-- `plan/project-overview.md`
-- `plan/source-materials.md`
-- `plan/facts-ledger.md`
-- `plan/progress.md`
+必须确保以下文件存在：
+- `workspace/plan/project-overview.md`
+- `workspace/plan/source-materials.md`
+- `workspace/plan/facts-ledger.md`
+- `workspace/plan/progress.md`
 
 如果不存在，就创建；如果已存在，就复用并更新。
 
-### 第三步：读取模板文件
+若用户提供了字数要求，必须在以下位置同步记录：
+- `workspace/plan/project-overview.md`：记录“目标总字数 / 上下限 / 是否为硬约束”
+- `workspace/plan/progress.md`：记录“当前目标总字数”和“当前阶段是否仍在目标范围内”
 
-#### ZS-项目可行性报告 必读
+## 五、最少必读文件
+
+### 对 ZS-项目可行性报告
 - `templates/zs-feasibility-report/outline.md`
-- `templates/zs-feasibility-report/source-checklist.md`
 - `templates/zs-feasibility-report/writing-playbook.md`
 - `templates/zs-feasibility-report/table-catalog.md`
 - `templates/zs-feasibility-report/figure-catalog.md`
 
-#### 完整科研项目模板 必读
+### 对 完整科研项目模板
 - `templates/full-research-template/outline.md`
-- `templates/full-research-template/source-checklist.md`
 - `templates/full-research-template/writing-playbook.md`
 - `templates/full-research-template/chapter-splitting-plan.md`
 - `templates/full-research-template/table-catalog.md`
 - `templates/full-research-template/figure-catalog.md`
 
-### 第四步：加载通用规则
+正文细则不要在入口层重复解释。
 
-在推进正文之前，你必须调用 `official-doc-core` 这一 skill 。绝不能跳过此调用自行脑补：
-- 固定标题不乱改
-- 事实不编造
-- 缺失信息写 `【待补】`
-- 台账必须回写
-- 表图独立生成
-- 正式交付前必须经过 `review -> revise -> assemble`
+## 六、强制调度顺序
 
-### 第五步：调用主 Skill
+### 新任务默认顺序
+1. 判定模板
+2. 初始化或复用工作区
+3. 读取模板最少必要文件
+4. 单独调用 `official-doc-core`
+5. 调用对应主 Skill
+6. 只有在主 Skill 已接管后，才允许生成 `workspace/outputs/...`
 
-本入口技能不负责生成正文！你必须使用 Skill 工具调用对应的主 Skill，将正文生成的控制权交接出去：
-- 写 `ZS-项目可行性报告` → `zs-feasibility-report`
-- 写 `完整科研项目模板` → `full-research-template`
+### 已有任务默认顺序
+1. 读取当前状态
+2. 判断最合理的下一步
+3. 单独调用 `official-doc-core`
+4. 路由到对应 Skill
+5. 只有在对应 Skill 已接管后，才允许生成该阶段文件
 
-### 第六步：阶段完成后主动推进后续 Skill
+## 七、下一步判断规则
 
-不要等用户显式说：
-- “现在去生成表格”
-- “现在去画图”
-- “现在去复核”
-- “现在去修改”
-- “现在去合总稿”
+入口层只判断“下一步做什么”，不重复“具体怎么做”。
 
-如果当前阶段已经明显需要这些动作，你应主动继续。
+默认判断如下：
+- 若尚未形成正文骨架，进入对应主 Skill
+- 若正文已成形但缺表，进入 `official-doc-table`
+- 若正文已成形但缺图，进入 `official-doc-figure`
+- 若当前章节正文和该章必要表图已齐，进入 `official-doc-review`
+- 若 review 已给出问题，进入 `official-doc-revise`
+- 若全书必需章节、必需表图、review / revise 均已完成且用户目标是交付，进入 `official-doc-assemble`
 
-默认闭环为：
-1. 正文与表图成型后，先调用 `official-doc-review`
-2. 如果 review 中存在可修复问题，继续调用 `official-doc-revise`
-3. 需要对外提交或形成完整成稿时，再调用 `official-doc-assemble`
+对 `完整科研项目模板`，若用户只是说“继续推进”，默认含义应是：
+- 识别下一个未完成章节
+- 路由到 `full-research-template`
+- 只推进该章节，而不是跨多章连续生成
 
-不要停在 `review/` 目录里就声称任务已经完成。
+## 八、对用户的默认响应方式
 
-### 默认补表补图顺序
+当用户只给出“文档类型 + 材料目录”时：
+- 简短确认模板和材料位置
+- 直接开始执行
+- 不要先输出长篇流程说明
 
-#### 对 ZS-项目可行性报告
+当用户同时给出字数要求时：
+- 把字数要求视为硬约束
+- 后续正文、表图和正式稿都按该总字数目标控制
+- 不要口头答应后又按默认篇幅生成
 
-正文推进时默认按以下顺序衔接公共 Skill：
-1. 第4章稳定后：`official-doc-figure` 先补 `图1`，`official-doc-table` 再补 `表1`
-2. 第5章稳定后：补 `表2`
-3. 第7章稳定后：补 `表3`、`表4`
-4. 第8章稳定后：补 `表5`
-5. 第9章稳定后：补 `表6`
+## 九、入口层不要做的事
 
-#### 对 完整科研项目模板
+- 不要在这里重复主 Skill 的章节写法
+- 不要在这里重复表图 catalog 的字段和节点细则
+- 不要在这里重复 review 的验收阈值
+- 不要把入口层写成第二份 `writing-playbook`
+- 不要一边要求路由，一边自己接管正文生成
+- 不要在尚未切换到目标 Skill 前直接写 `chapter-*.md`、表格、图示、review 或 assembled 正稿
+- 不要跳过 `official-doc-core` 直接进入主 Skill 或公共 Skill
 
-正文推进时默认按以下顺序衔接公共 Skill：
-1. 第3章稳定后：先补团队类高优先表，并补 `图3-2 项目组织架构图`
-2. 第4章稳定后：优先补 `图4-1`、`图4-2`、`图4-5` 以及第4章高优先成果/任务类表
-3. 第8章稳定后：补资金来源结构表、分年度投资安排表、主要投资估算表
-4. 只有当第4章下钻到专题层级时，再补扩展验证类图表
-
-不要把“补表补图”理解成最后统一做一次；它应跟随正文阶段逐步推进。
-
-## 用户无需再提供的内容
-
-以下内容不应再作为默认追问：
-- “请提供参考样稿让我学习风格”
-- “请告诉我先初始化工作区”
-- “请告诉我先读 outline”
-- “请告诉我是否要先生成骨架”
-- “请告诉我是否要先合稿”
-
-这些都属于本 Skill 内部流程。
-
-## 你对用户的默认响应方式
-
-当用户只给出“文档类型 + 材料目录”时，你应直接进入执行，不要先讲一大段流程说明。
-
-更好的响应方式是：
-1. 简短确认已锁定的模板和材料位置
-2. 直接开始创建或更新工作区
-3. 读取模板文件
-4. 开始产出第一批结果
-
-## Red Flags
+## 十、Red Flags
 
 | 错误想法 | 正确做法 |
 |---|---|
-| “用户没说流程，我就直接自由写一篇” | 先按本入口技能完成路由 |
-| “既然已经有材料目录，就不用读取模板文件” | 模板文件是强制读取项 |
-| “用户没提表图，那我不管” | 需要时要主动调用表图 Skill |
-| “用户没提复核，那我不做检查” | 准备交付时必须主动复核 |
-| “复核做完就算结束了” | 还要继续 `revise -> assemble` 才算到交付 |
-| “没有参考样稿我就不知道风格” | 风格和结构优先来自模板与对应主 Skill |
+| “用户没说流程，我就直接自由写一篇” | 先做模板判定和状态判断 |
+| “入口层顺便把正文规则也讲一遍” | 正文规则交给主 Skill 和 playbook |
+| “入口层顺便把表图怎么画怎么列表头都写了” | 表图细则交给 catalog 和公共 Skill |
+| “入口层看到 review 就自己判定通过” | 验收标准交给 `official-doc-review` |
+| “入口层可以替代主 Skill” | 入口层只负责调度，不负责正文细化 |
+| “入口层已经知道下一步了，就顺手把正文写了” | 入口层只做状态判断，实际生成必须交给下一个 Skill |
+| “我已经读过 core 规则，所以可以直接写正文” | 必须先单独调用 `official-doc-core`，再进入目标 Skill |

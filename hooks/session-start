@@ -3,51 +3,34 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
-ENTRY_SKILL_FILE="${PLUGIN_ROOT}/skills/using-official-docs/SKILL.md"
-
-escape_for_json() {
-  local s="$1"
-  s="${s//\\/\\\\}"
-  s="${s//\"/\\\"}"
-  s="${s//$'\n'/\\n}"
-  s="${s//$'\r'/\\r}"
-  s="${s//$'\t'/\\t}"
-  printf '%s' "$s"
-}
-
-if [ -f "$ENTRY_SKILL_FILE" ]; then
-  entry_skill_content=$(cat "$ENTRY_SKILL_FILE")
-  session_context=$(cat <<'MSG'
+session_context=$(cat <<'MSG'
 <EXTREMELY_IMPORTANT>
 你已加载“公文项目写作助手”。
 
-当用户提出以下任一任务时，你必须优先按入口技能 using-official-docs 的规则处理，而不是直接自由发挥：
-1. 写 ZS-项目可行性报告
-2. 写 完整科研项目模板
-3. 继续修改、补写、扩写、补表、补图、复核上述两类文档
+当用户提出以下任一任务时，你必须先按 `skills/using-official-docs/SKILL.md` 处理，而不是直接自由发挥：
+- 我要写 ZS-项目可行性报告，材料在 ...
+- 我要写 完整科研项目模板，材料在 ...
+- 继续修改、补写、补表、补图、复核、合稿上述两类文档
 
-用户通常只会提供：
-- 文档类型
-- 材料目录或材料文件
-- 当前诉求（可省略）
+把“文档类型 + 材料路径”视为直接触发 using-official-docs 的信号。
+不要等用户显式写出 skill 名。
+不要要求用户提供参考样稿来决定结构或流程。
+`using-official-docs` 只是入口路由器和工作区初始化器，不能直接代替主 Skill 写章节、写表、写图、写 review 或写正式总稿。
+这类任务的强制技能顺序是：`using-official-docs` -> `official-doc-core` -> 对应主 Skill / 公共 Skill。
+不要把“已经读过 official-doc-core”当成“已经调用过 official-doc-core”；在写正文、表格、图示、review、revise、assemble 之前，必须先单独执行一次 `official-doc-core`。
+一旦 `using-official-docs` 判断完下一步，必须立即切到对应主 Skill 或公共 Skill，再由后者继续执行。
 
-你必须自行完成：
+入口 skill 是这类任务的强制第一步，用来完成：
 - 判定主模板
-- 初始化或复用 plan/ outputs/ tables/ figures/ review/ assembled/
-- 读取对应 templates/<template>/ 下的模板文件
-- 调用主 Skill 推进正文
-- 在需要时主动调用表格、图示、复核、回修、装配 Skill
+- 初始化或复用 workspace/plan workspace/outputs workspace/tables workspace/figures workspace/review workspace/assembled
+- 识别当前阶段
+- 路由到主 Skill 或公共 Skill
 
-不要再要求用户提供“参考样稿”来决定结构或风格。
-这两类公文的结构、风格、输出方式，应优先依据模板文件和对应 Skill 内建规则处理。
-
-以下是入口技能完整内容：
+如果用户只说“我要写 ZS-项目可行性报告，材料在 materials/test-case-zs/”，也必须立即触发 using-official-docs。
+如果用户只说“我要写 完整科研项目模板，材料在 materials/test-case-full/”，也必须立即触发 using-official-docs。
+不要跳过。
 MSG
 )
-  session_context+="\n\n$(escape_for_json "$entry_skill_content")\n</EXTREMELY_IMPORTANT>"
-else
-  session_context="公文项目写作助手已加载，但未找到入口技能文件。请优先使用 official-doc-writing-skill:using-official-docs。"
-fi
 
 if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then
   printf '{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"%s"}}\n' "$session_context"

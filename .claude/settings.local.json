@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__filesystem__create_directory",
+      "mcp__filesystem__read_text_file",
+      "mcp__filesystem__list_directory",
+      "mcp__filesystem__directory_tree",
+      "Skill(official-doc-writing-skill:using-official-docs)",
+      "Skill(official-doc-writing-skill:zs-feasibility-report)",
+      "Skill(official-doc-writing-skill:official-doc-figure)",
+      "Skill(official-doc-writing-skill:official-doc-table)",
+      "Skill(official-doc-writing-skill:official-doc-review)",
+      "mcp__filesystem__read_multiple_files",
+      "mcp__filesystem__write_file",
+      "Skill(official-doc-writing-skill:official-doc-revise)",
+      "Skill(official-doc-writing-skill:official-doc-assemble)",
+      "Skill(official-doc-writing-skill:official-doc-core)",
+      "mcp__filesystem__edit_file",
+      "Skill(official-doc-writing-skill:full-research-template)",
+      "Skill(official-doc-review)",
+      "Skill(official-doc-revise)",
+      "mcp__filesystem__read_file"
+    ]
+  }
+}

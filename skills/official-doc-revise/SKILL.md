@@ -15,26 +15,26 @@ allowed-tools: Read Write Edit Bash
 
 ## 核心目标
 
-依据 `review/<template>-review.md` 的问题清单，定向修复正文、表格、图示和台账中的问题。
+依据 `workspace/review/<template>-review.md` 的问题清单，定向修复正文、表格、图示和台账中的问题。
 本 Skill 解决的是“把诊断结果落实到文件”，不是重新写一份新稿。
 
 ## 使用前必读
 
 开始回修前，至少读取以下文件：
-- `review/<template>-review.md`
+- `workspace/review/<template>-review.md`
 - `templates/<template>/outline.md`
 - `templates/<template>/writing-playbook.md`
 - `templates/<template>/table-catalog.md`
 - `templates/<template>/figure-catalog.md`
-- `plan/facts-ledger.md`
-- 当前受影响的 `outputs/`、`tables/`、`figures/` 文件
+- `workspace/plan/facts-ledger.md`
+- 当前受影响的 `workspace/outputs/`、`workspace/tables/`、`workspace/figures/` 文件
 
 ## 使用前必做
 
-1. 读取对应 `review/<template>-review.md`
+1. 读取对应 `workspace/review/<template>-review.md`
 2. 按严重级别区分 Must Fix / Should Fix
 3. 逐项定位受影响文件
-4. 核对 `plan/facts-ledger.md` 中相关事实口径
+4. 核对 `workspace/plan/facts-ledger.md` 中相关事实口径
 
 ## 强制规则
 
@@ -42,9 +42,11 @@ allowed-tools: Read Write Edit Bash
 - 不得绕过 review 清单直接大改全文
 - 不得为了“修完”而补造事实
 - 无法确认的事实继续保留 `【待补】`
-- 修订后要同步更新 `plan/progress.md`
+- 修订后要同步更新 `workspace/plan/progress.md`
 - 若 Must Fix 包含高优先表图缺失，必须优先补表 / 补图，再回修正文引用
 - 若 Must Fix 包含章节配比失衡，必须优先修正章节展开深度，再处理措辞润色
+- 若 review 指出“正式稿中的信息比散件文件更空”或“已知事实被回退成 `【待补】`”，必须优先修复该回退问题，再做其他润色
+- 若 review 指出总字数不达标，必须先判断是整体过长还是过短，再按章节轻重规则定向压缩或补足
 
 ## 回修顺序
 
@@ -78,10 +80,14 @@ allowed-tools: Read Write Edit Bash
 ### 完整科研项目模板
 
 若 review 指出以下问题，应按此顺序修：
-1. 第4章偏薄：优先补建设方案正文，再补第4章高优先图表
-2. 第3章团队类支撑不足：先补团队类高优先表，再统一正文引用
-3. 第8章资金口径缺支撑：先补资金结构、年度投资、主要投资估算类表
-4. 第5章、第6章、第8章、第9章过长：压缩为“结论 + 关键表”结构，不扩写成长章
+1. 错误写回旧第2章、第3章、第6章：先删掉旧结构，并把有效信息吸收到第1章、第3章、第4章
+2. 第2章偏薄：优先补建设方案正文，再补第2章高优先图表
+3. 第4章管理机制不完整：先补组织架构、责任制度、里程碑与保障机制，再补组织管理图
+4. 第3章任务落位不足：先补任务清单与任务成果对应表，再统一正文引用
+5. 第5章资金口径缺支撑：先补资金结构、年度投资、主要投资估算类表
+6. 第3章、第5章、第6章过长：压缩为“结论 + 关键表”结构，不扩写成长章
+7. 正式稿中已知单位、成员、任务、投资口径被回退成 `【待补】`：优先以最新散件文件回填，不得保留回退版本
+8. 若未获用户明确要求却默认跨多章并写：回到“当前章节”口径，只保留当前章必要改动，后续章节顺延到下一轮推进
 
 ## 与 table / figure skill 的协同
 
@@ -89,6 +95,13 @@ allowed-tools: Read Write Edit Bash
 - 缺高优先表时，应主动调用 `official-doc-table`
 - 缺高优先图时，应主动调用 `official-doc-figure`
 - 表图补齐后，必须回修正文中的引用句、编号和说明文字
+- 若当前模板是 `full-research-template`，还要特别检查第2章图表、第3章任务表、第5章资金表是否在回修后同步反映到正文与正式稿中
+
+对 `full-research-template`，回修默认以“当前章节”为单位推进：
+- 先修当前章节正文
+- 再修当前章节高优先表图
+- 再修当前章节引用、术语和口径
+- 不要在一次回修里顺手扩写多个未计划章节
 
 `revise` 的职责不是回避补件，而是把 review 发现的问题真正落到文件上。
 
@@ -99,6 +112,10 @@ allowed-tools: Read Write Edit Bash
 - 哪些问题因材料缺失仍保留 `【待补】`
 - 当前是否可以进入 `official-doc-assemble`
 
+若这些问题来自装配后 final review，还要明确说明：
+- 是否需要重新装配
+- 哪些修订会直接影响当前 `formal-draft`
+
 如果仍不能进入 `official-doc-assemble`，要明确列出剩余阻断项：
 - 未修复的 Must Fix
 - 未补齐的高优先表图
@@ -106,5 +123,5 @@ allowed-tools: Read Write Edit Bash
 
 ## 交付后动作
 
-- 更新 `plan/progress.md`
+- 更新 `workspace/plan/progress.md`
 - 若 Must Fix 已处理完，默认下一步进入 `official-doc-assemble`

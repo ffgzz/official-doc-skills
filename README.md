@@ -66,12 +66,12 @@ claude --plugin-dir .
 /official-doc-writing-skill:using-official-docs
 当前任务：ZS-项目可行性报告。
 输入材料：materials/test-case-zs/
-请初始化工作区并开始正文骨架。
+请初始化 `workspace/` 工作区并开始正文骨架。
 ```
 
 ## 推荐测试顺序
 
-1. `using-official-docs`：初始化、判定模板、建立工作区
+1. `using-official-docs`：初始化、判定模板、建立 `workspace/` 工作区
 2. `zs-feasibility-report`：跑一版正文初稿
 3. `official-doc-table`：生成表格
 4. `official-doc-figure`：生成图示
@@ -86,8 +86,8 @@ claude --plugin-dir .
 
 ## 重要边界
 
-1. 默认产物仍以 `md`、`mmd`、说明文件为主，但现在应继续装配为 `assembled/` 下的正式总稿。
+1. 默认产物仍以 `md`、`mmd`、说明文件为主，但现在应继续装配为 `workspace/assembled/` 下的正式总稿。
 2. 一级、二级标题默认按模板固定。
 3. 表图不内嵌在正文 Skill 里随手生成。
 4. 预算、时间、单位、成果指标一律不得编造。
-5. `plan/`、`outputs/`、`tables/`、`figures/`、`review/`、`assembled/` 都是运行时目录，其中 `plan/` 应由 `plan-template/` 初始化生成，不作为静态模板目录维护。
+5. 运行时目录统一收纳在 `workspace/` 下，即 `workspace/plan/`、`workspace/outputs/`、`workspace/tables/`、`workspace/figures/`、`workspace/review/`、`workspace/assembled/`。其中 `workspace/plan/` 应由 `plan-template/` 初始化生成，不作为静态模板目录维护。

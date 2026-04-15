@@ -5,44 +5,34 @@ param(
 $ErrorActionPreference = "Stop"
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $pluginRoot = Split-Path -Parent $scriptDir
-$entrySkillFile = Join-Path $pluginRoot "skills\using-official-docs\SKILL.md"
-
-if (Test-Path $entrySkillFile) {
-  $entrySkillContent = Get-Content -Raw -Encoding UTF8 $entrySkillFile
-  $contextLines = @(
-    "<EXTREMELY_IMPORTANT>",
-    "The official-doc-writing-skill plugin is loaded.",
-    "",
-    "For any request about these supported document types, you must follow the using-official-docs entry skill before free-form drafting:",
-    "1. ZS feasibility report",
-    "2. Full research project template",
-    "3. Continue / revise / add tables / add figures / review / assemble for either of the above",
-    "",
-    "Users may only provide:",
-    "- document type",
-    "- materials path or files",
-    "- current request",
-    "",
-    "You must handle:",
-    "- choose the main template",
-    "- initialize or reuse plan/ outputs/ tables/ figures/ review/ assembled/",
-    "- read the template files under templates/<template>/",
-    "- hand off body drafting to the proper main skill",
-    "- proactively call table / figure / review / revise / assemble skills when needed",
-    "",
-    "Do not require a reference sample just to decide structure or style.",
-    "Prefer template files and built-in skill rules.",
-    "",
-    "Full entry skill content follows:",
-    "",
-    $entrySkillContent,
-    "</EXTREMELY_IMPORTANT>"
-  )
-  $context = $contextLines -join [Environment]::NewLine
-}
-else {
-  $context = "official-doc-writing-skill loaded, but entry skill file is missing. Prefer official-doc-writing-skill:using-official-docs."
-}
+$contextLines = @(
+  "<EXTREMELY_IMPORTANT>",
+  "The official-doc-writing-skill plugin is loaded.",
+  "",
+  "For the following requests, you must first follow skills/using-official-docs/SKILL.md before any free-form drafting:",
+  "- 我要写 ZS-项目可行性报告，材料在 ...",
+  "- 我要写 完整科研项目模板，材料在 ...",
+  "- 继续推进 / 修改 / 补表 / 补图 / 复核 / 合稿 for either of those document types",
+  "",
+  "Treat document-type + materials-path requests as a direct trigger for using-official-docs.",
+  "Do not wait for the user to mention the skill name.",
+  "Do not ask for a reference sample just to decide structure or workflow.",
+  "using-official-docs is a router and workspace initializer only. It must not directly draft chapter files, tables, figures, review files, or assembled final drafts.",
+  "The required skill order is: using-official-docs -> official-doc-core -> target main/public skill.",
+  "Do not treat merely reading official-doc-core as sufficient. You must explicitly apply official-doc-core as a separate step before body/table/figure/review/revise/assemble work.",
+  "After using-official-docs determines the next step, immediately switch to the proper main/public skill before generating those artifacts.",
+  "",
+  "The entry skill is the mandatory first step for:",
+  "1. template selection",
+  "2. workspace initialization or reuse",
+  "3. state detection",
+  "4. routing to the proper main/public skill",
+  "",
+  "If the user says only '我要写 ZS-项目可行性报告，材料在 materials/test-case-zs/' you should still trigger using-official-docs immediately.",
+  "If the user says only '我要写 完整科研项目模板，材料在 materials/test-case-full/' you should still trigger using-official-docs immediately.",
+  "</EXTREMELY_IMPORTANT>"
+)
+$context = $contextLines -join [Environment]::NewLine
 
 if ($env:CLAUDE_PLUGIN_ROOT) {
   $payload = @{

@@ -17,7 +17,11 @@ allowed-tools: Read Write Edit Bash
 材料不够时，不补造信息；用 `【待补】` 显式占位。
 
 ### 3. 台账先于口头说明
-发现任何缺口、冲突、暂缺数据，都要回写到 `plan/`，不能只在对话里说。
+发现任何缺口、冲突、暂缺数据，都要回写到 `workspace/plan/`，不能只在对话里说。
+
+### 3.5 用户字数要求先于默认篇幅
+如果用户明确给出“总字数 / 篇幅 / 控制在多少字 / 不少于多少字 / 不超过多少字”等要求，必须把它视为硬约束。
+不要继续只按“中等篇幅”或模板默认体量自由发挥。
 
 ### 4. 表图先于长段堆砌
 适合用表表达的，不强行写成一大段；适合用图表达的，不强行塞进正文。
@@ -60,8 +64,12 @@ allowed-tools: Read Write Edit Bash
 
 遇到信息不充分时：
 1. 正文标 `【待补】`
-2. `plan/facts-ledger.md` 记录缺口
-3. `plan/source-materials.md` 记录需要补充的材料来源
+2. `workspace/plan/facts-ledger.md` 记录缺口
+3. `workspace/plan/source-materials.md` 记录需要补充的材料来源
+
+若用户给出字数要求，还应：
+4. 在 `workspace/plan/project-overview.md` 记录目标总字数
+5. 在 `workspace/plan/progress.md` 记录本轮目标总字数与当前适配状态
 
 ## 四、语言风格
 
@@ -85,27 +93,40 @@ allowed-tools: Read Write Edit Bash
 必须维护以下目录：
 
 ```text
-plan/
-outputs/
-tables/
-figures/
-review/
-assembled/
+workspace/
+  plan/
+  outputs/
+  tables/
+  figures/
+  review/
+  assembled/
 ```
 
 必须维护以下文件：
-- `plan/project-overview.md`
-- `plan/source-materials.md`
-- `plan/facts-ledger.md`
-- `plan/progress.md`
+- `workspace/plan/project-overview.md`
+- `workspace/plan/source-materials.md`
+- `workspace/plan/facts-ledger.md`
+- `workspace/plan/progress.md`
 
-## 六、阶段门禁
+## 六、执行留痕
+
+`official-doc-core` 不是隐形背景规则，而是需要显式执行的一步。
+
+当你调用本 Skill 后，必须在 `workspace/plan/progress.md` 留下本轮执行痕迹，至少说明：
+- 本轮已执行 `official-doc-core`
+- 对应模板是什么
+- 用户是否给出了总字数要求；若给出，目标总字数是多少
+- 下一步将进入哪个主 Skill 或公共 Skill
+
+不要把“脑中已经参考了 core 规则”当作已经执行完成。
+
+## 七、阶段门禁
 
 ### 对所有新任务，默认执行顺序为：
 1. 判定模板
 2. 读取模板文件
 3. 创建或复用工作区
-4. 更新 plan 台账
+4. 更新 plan 台账（含目标总字数，如有）
 5. 生成骨架
 6. 生成正文
 7. 补表格
@@ -115,68 +136,71 @@ assembled/
 11. 装配正式总稿
 
 ### 对继续推进任务，默认执行顺序为：
-1. 读取已有 outputs/tables/figures/review/assembled/plan
+1. 读取已有 `workspace/outputs/ workspace/tables/ workspace/figures/ workspace/review/ workspace/assembled/ workspace/plan/`
 2. 判断当前最合理的下一步
 3. 继续推进缺失环节
 
-## 七、表图规则
+### 本层只做通用门禁
+
+`official-doc-core` 只定义跨模板共用的阶段顺序，不定义：
+- 某个模板第几章之后先补哪张表
+- 某个模板图1或图4-1应采用什么拓扑
+- 某个模板哪一章应占多少比例
+
+这些规则分别由以下层负责：
+- 正文与章节配比：对应主 Skill 与 `writing-playbook.md`
+- 表格顺序与字段：`official-doc-table` 与 `table-catalog.md`
+- 图示顺序与图型：`official-doc-figure` 与 `figure-catalog.md`
+- 是否通过验收：`official-doc-review`
+
+## 八、表图规则
 
 ### 表格
 - caption 与模板目录一致
 - 表头尽量遵从模板字段
 - 数值、时间、单位与正文一致
-- 输出到 `tables/<template>/`
+- 输出到 `workspace/tables/<template>/`
 
 ### 图示
 - 图名与正文引用一致
 - 节点术语与正文一致
 - 一张图只回答一个主问题
-- 输出到 `figures/<template>/`
+- 输出到 `workspace/figures/<template>/`
 
 ### 正文中如何处理
 正文只保留：
 - `此处引用表X` 或 `此处引用图X`
 - 不在正文里替代表图硬写一大段说明
 
-## 八、何时默认推进下一步
+## 九、何时默认推进下一步
 
-当你完成当前批次正文后：
+当你完成当前阶段或当前章节正文后：
 - 若章节已出现表格引用位，应主动推进 `official-doc-table`
 - 若章节已出现图示引用位，应主动推进 `official-doc-figure`
 - 若这一轮产出准备交付，应主动推进 `official-doc-review`
 - 若 review 已产出明确问题，应主动推进 `official-doc-revise`
-- 若表图和回修已完成，应主动推进 `official-doc-assemble`
+- 只有在全书必需章节、必需表图和回修均已完成时，才应主动推进 `official-doc-assemble`
 
-## 九、自动补表补图顺序
+## 十、关于顺序的职责划分
 
-### 对 ZS-项目可行性报告
+若需要判断“下一张先补哪张表 / 图”，不要在本层自行决定。
 
-正文推进后的默认补充顺序为：
-1. 写完第4章后，先补 `图1`，再补 `表1`
-2. 写完第5章后，补 `表2`
-3. 写完第7章后，连续补 `表3`、`表4`
-4. 写完第8章后，补 `表5`
-5. 写完第9章后，补 `表6`
-6. 表图齐备后进入 `review -> revise -> assemble`
+应按以下顺序取规则：
+1. 对应主 Skill
+2. 对应 `table-catalog.md` / `figure-catalog.md`
+3. `official-doc-table` / `official-doc-figure`
+4. `official-doc-review` 的验收结果
 
-不要跳过前序关键表图直接去补后面的表。
+本层只要求：
+- 不要跳过明显缺失的关键表图
+- 不要在 review 前跳过当前阶段应完成的核心散件
+- 不要在 revise 未完成时直接宣称最终交付
 
-### 对 完整科研项目模板
-
-正文推进后的默认补充顺序为：
-1. 当第3章已稳定时，优先补团队类高优先表和 `图3-2 项目组织架构图`
-2. 当第4章已稳定时，优先补 `图4-1`、`图4-2`、`图4-5` 和第4章高优先成果/任务类表
-3. 当第8章已稳定时，优先补资金来源结构表、分年度投资安排表、主要投资估算表
-4. 当第1章或第2章存在明显图示需求时，再补功能模块图、体系版图、单位组织图等中优先图
-5. 当第4章已经下钻到专题层级时，再补测试验证、流程图、专题路线图等扩展图表
-6. 高优先表图齐备后进入 `review -> revise -> assemble`
-
-对大模板，优先保证第3章、第4章、第8章的高优先表图，不要平均补全所有章节。
-
-## 十、完成判定
+## 十一、完成判定
 
 你准备声称“这一轮已完成”之前，至少要确认：
 - 输出文件已写入目标目录
-- `plan/progress.md` 已更新
+- `workspace/plan/progress.md` 已更新
 - 当前阶段未处理的 `【待补】` 已在台账中记录
-- 若用户目标是交付正式稿，`assembled/<template>/` 下已生成装配后的总稿
+- 若用户目标是交付正式稿，`workspace/assembled/<template>/` 下已生成装配后的总稿
+- 若用户给出了总字数要求，当前成稿总字数与目标偏差已被检查并记录
