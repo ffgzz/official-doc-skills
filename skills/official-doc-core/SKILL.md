@@ -1,6 +1,6 @@
 ---
 name: official-doc-core
-description: Use before writing any formal Chinese project document in this plugin. It enforces prompt-driven workflow, fact discipline, project-slug workspace conventions, source logging, section dependency checks, and the rule that the five shared chapter types must be grounded in web research instead of fabrication.
+description: Shared validation layer for this project-writing plugin. Use only after using-official-docs has already parsed the brief and initialized workspace plus plan files. This skill checks common constraints, facts discipline, section dependency rules, and workflow order. It does not create workspace directories, does not write initial plan files, and does not start web searches for the five specialized chapter types.
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -50,6 +50,68 @@ allowed-tools: Read Write Edit Bash
 - 当前公共 Skill
 
 默认不向用户追问参考样稿。
+
+### 6. core 先于搜索，但 core 不代替专项 skill
+
+`official-doc-core` 只负责公共门禁、工作区、台账、阶段顺序。
+
+它不得代替以下专项 skill 的职责：
+- `official-doc-project-background`
+- `official-doc-research-content`
+- `official-doc-innovation`
+- `official-doc-technical-achievements`
+- `official-doc-technical-indicators`
+
+尤其是：
+- 不得在识别出背景类内容后，由 core 自己发起背景搜索
+- 不得在识别出研究内容类内容后，由 core 自己起草研究任务
+- 不得在识别出成果或指标类内容后，由 core 自己先写一版
+
+若当前章命中上述五类之一，core 执行完成后，下一步必须是显式加载对应专项 skill，而不是直接开始搜索或写作。
+
+### 7. core 校验工作区与 plan，不负责初始化
+新任务开始时，工作区初始化和 plan 台账创建属于 `using-official-docs` 的职责，不属于：
+- `official-doc-core`
+- 任一专项章节 skill
+
+因此 core 在进入时只做两件事：
+- 校验 `workspace/plan/<project-slug>/` 与各类工作区目录是否已存在
+- 校验以下文件是否已存在并可读：
+  - `project-overview.md`
+  - `project-brief.md`
+  - `research-sources.md`
+  - `facts-ledger.md`
+  - `progress.md`
+  - `source-materials.md`
+  - `workspace/outputs/<project-slug>/00-section-plan.md`
+
+若上述目录或文件缺失，说明主入口流程执行不完整，应返回 `using-official-docs` 先补初始化，而不是由 core 自己代建。
+
+core 明确不得首次写入以下文件：
+- `project-overview.md`
+- `project-brief.md`
+- `research-sources.md`
+- `facts-ledger.md`
+- `progress.md`
+- `source-materials.md`
+- `workspace/outputs/<project-slug>/00-section-plan.md`
+
+### 8. core 不得先搜索
+
+即使用户请求中已经出现了：
+- `背景`
+- `国内外现状`
+- `研究内容`
+- `创新点`
+- `技术成果`
+- `技术指标`
+
+core 也不得在自己这一步直接发起网络搜索。
+
+它只能：
+- 校验前置文件
+- 校验流程顺序
+- 把后续动作交回主入口或专项 skill
 
 ## 二、标题规则
 
@@ -121,9 +183,14 @@ workspace/
 
 必须维护以下文件：
 - `workspace/plan/project-overview.md`
+- `workspace/plan/project-brief.md`
+- `workspace/plan/research-sources.md`
 - `workspace/plan/source-materials.md`
 - `workspace/plan/facts-ledger.md`
 - `workspace/plan/progress.md`
+- `workspace/outputs/00-section-plan.md`
+
+对提示词驱动工作流，`project-brief.md` 是必需文件，不能省略。
 
 ## 六、执行留痕
 
@@ -133,24 +200,29 @@ workspace/
 - 本轮已执行 `official-doc-core`
 - 对应模板是什么
 - 用户是否给出了总字数要求；若给出，目标总字数是多少
+- 工作区与 plan 校验是否通过
 - 下一步将进入哪个主 Skill 或公共 Skill
 
 不要把“脑中已经参考了 core 规则”当作已经执行完成。
 
+此外，`已执行 official-doc-core` 不等于 `已执行专项章节 skill`。
+二者不能合并。
+
 ## 七、阶段门禁
 
 ### 对所有新任务，默认执行顺序为：
-1. 判定模板
-2. 读取模板文件
-3. 创建或复用工作区
-4. 更新 plan 台账（含目标总字数，如有）
-5. 生成骨架
-6. 生成正文
-7. 补表格
-8. 补图示
-9. 复核
-10. 回修
-11. 装配正式总稿
+1. `using-official-docs` 判定模板并初始化工作区
+2. `using-official-docs` 初始化 plan 台账
+3. `official-doc-core` 校验前置条件
+4. 读取模板文件
+5. 识别本章是否命中五类专项章节
+6. 若命中，显式加载对应专项 skill
+7. 再生成骨架与正文
+8. 补表格
+9. 补图示
+10. 复核
+11. 回修
+12. 装配正式总稿
 
 ### 对继续推进任务，默认执行顺序为：
 1. 读取已有 `workspace/outputs/ workspace/tables/ workspace/figures/ workspace/review/ workspace/assembled/ workspace/plan/`

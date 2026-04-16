@@ -25,6 +25,9 @@ allowed-tools: Read Write Edit Bash
 把分散在 `workspace/outputs/`、`workspace/tables/`、`workspace/figures/` 的中间产物装配为一份正式总稿。
 没有这一步，项目只能得到“工作区产物包”，不能得到完整交付稿。
 
+正式装配的目标不是“把所有散件简单拼在一起”，而是得到一份阅读流与模板一致的连续成稿。
+因此，文末统一附上“附图 / 附表”不能替代章节内装配。
+
 ## 使用前必读
 
 开始装配前，至少读取以下文件：
@@ -63,15 +66,19 @@ allowed-tools: Read Write Edit Bash
 - 装配顺序必须与模板章节顺序一致
 - 以正文章节文件为主线进行拼装
 - 在正文引用位附近插入对应表格 / 图示内容，不要只保留孤立文件路径
+- 不要把所有图表统一堆到文末“附图 / 附表”区来代替章节内插入；如需保留文末目录，只能作为补充，不得替代正文附近装配
+- 若正文中仍有 `此处引用表X`、`此处插入图X`、`待插图表` 之类占位，装配时必须消除，占位未清零不得视为完成
 - `workspace/outputs/`、`workspace/tables/`、`workspace/figures/` 中的最新文件是装配唯一数据源；装配时不得凭记忆重写正文、表格或图示
 - 已生成的表格在装配时应直接纳入其最新 `.md` 文件内容，不得在 `formal-draft` 中再手写一版简化表或回退成更多 `【待补】`
 - 图表 caption、编号、术语必须与正文一致
+- 若某章 brief 已指定“图1 / 表1 应出现在本章”，装配时必须按该章节要求落位，不能只在文末追加一次
 - 装配完成后，不得直接结束流程；必须再对当前 `formal-draft` 执行一轮 final review
 - 如果 review 中仍有未修复的 Must Fix，不能直接宣称“最终定稿”
 - 如果高优先表图尚未齐备，不得进入装配
 - 如果用户给出了总字数硬约束且当前稿件未满足，不得进入装配
 - 装配时要优先纳入 `table-catalog.md` / `figure-catalog.md` 中标为“必出”或“高优先”的项目
 - 若正式稿中的任一表图内容与对应散件文件不一致，必须视为装配失败并回到 revise / assemble 修复
+- 若正式稿仍包含未核验的高风险具体事实，不能用 assemble 掩盖该问题，必须回到 revise / review 修复
 
 ## 装配前判定
 
@@ -83,15 +90,17 @@ allowed-tools: Read Write Edit Bash
 - 若全书必需章节已齐、Must Fix 已清、高优先表图已齐、review / revise 已完成，可装配正式稿
 - 若仍缺必需章节正文、高优先表图、存在未修复 Must Fix、review / revise 尚未完成，或总字数未满足用户要求，则暂不可装配
 - 若当前 `assembly-notes` 的字数、比例、`【待补】` 数与当前 `formal-draft` 不一致，也不得判为正式稿
+- 若表图尚未装配到对应章节附近、正文仍保留引图引表占位，暂不可装配
 
 ## 装配后强制动作
 
 装配完成后，必须立即执行以下动作：
 1. 重新读取当前 `workspace/assembled/<template>/<template>-formal-draft.md`
 2. 基于当前 `formal-draft` 重新计算章节比例与 `【待补】` 数
-3. 立即调用 `official-doc-review` 做一轮 final review
-4. 生成 `workspace/review/<template>-final-review.md`
-5. 仅当 final review 未发现新的 Must Fix 时，才允许把装配结果标记为“可装配正式稿”
+3. 检查是否仍残留 `此处引用表X`、`此处插入图X`、文末统一附图附表替代章节装配等问题
+4. 立即调用 `official-doc-review` 做一轮 final review
+5. 生成 `workspace/review/<template>-final-review.md`
+6. 仅当 final review 未发现新的 Must Fix 时，才允许把装配结果标记为“可装配正式稿”
 
 不要把装配前的 review 直接沿用为装配后的最终判断。
 
@@ -99,11 +108,17 @@ allowed-tools: Read Write Edit Bash
 
 - 按第1章到第10章顺序装配
 - `图1`、`表1` 至 `表6` 应插入对应章节附近
+- 第4章后至少应落入 `图1`、`表1`
+- 第5章后至少应落入 `表2`
+- 第7章后至少应落入 `表3`、`表4`
+- 第8章后至少应落入 `表5`
+- 第9章后至少应落入 `表6`
 - 第7章到第9章保持“短正文 + 表格主体”的版式，不要在装配时又扩写成长段
 - 若第1章到第10章缺任一章，不得进入装配
 - 若 `图1` 或 `表1` 至 `表6` 缺任一项，不得进入装配
 - 只有在 10 章正文完成、表图补齐、review / revise 完成后，才允许装配正式总稿
 - 若 `table-01.md` 至 `table-06.md` 中已有明确牵头单位、成员名单、时间节点或预算口径，装配稿不得退回为更空的占位版本
+- 若 `formal-draft.md` 末尾仅追加一整段“附图 / 附表”，而对应章节附近没有插入图表，默认视为装配不合格
 
 ## 完整科研项目模板装配要求
 

@@ -23,13 +23,26 @@ $planFiles = @(
   "project-brief.md",
   "research-sources.md",
   "facts-ledger.md",
-  "progress.md"
+  "progress.md",
+  "source-materials.md"
 )
 foreach ($file in $planFiles) {
   $target = Join-Path (Join-Path $workspaceRoot "plan\$ProjectSlug") $file
   if (-not (Test-Path $target)) {
     Copy-Item (Join-Path $planTemplate $file) $target
   }
+}
+
+$sectionPlan = Join-Path (Join-Path $workspaceRoot "outputs\$ProjectSlug") "00-section-plan.md"
+if (-not (Test-Path $sectionPlan)) {
+  @"
+# 章节计划
+
+## 章节拆解
+
+| 章节序号 | 章节标题 | 命中 skill | 当前状态 | 备注 |
+|---|---|---|---|---|
+"@ | Set-Content -Path $sectionPlan -Encoding UTF8
 }
 
 Write-Host "Workspace initialized at $workspaceRoot for $ProjectSlug"
