@@ -6,77 +6,53 @@ allowed-tools: Read Write Edit Bash
 
 # 公文写作通用规则
 
-> 2026-04 架构更新：以下规则优先于全文旧内容。凡提到 `ZS`、`完整科研项目模板`、`templates/`、固定 catalog、固定模板结构的旧规则，一律忽略。
+> 当前项目只使用提示词驱动流程。
 >
-> 当前通用规则改为：
-> - 以用户提示词为主，不再以固定模板为主
+> 当前通用规则是：
+> - 以 `project-brief.md` 和 `00-section-plan.md` 为准
 > - 工作区按 `workspace/<kind>/<project-slug>/` 隔离
-> - 五类共性章节必须先做网络搜索，并把来源登记到 `workspace/plan/<project-slug>/research-sources.md`
-> - `创新点` 必须能回指现状与研究内容
-> - `技术成果` 必须由研究内容推出
-> - `技术指标` 必须可量化、可测试
+> - 五类共性章节先搜索、先落账、后写作
+> - `创新点` 回指现状差距与研究内容
+> - `技术成果` 由研究内容推出
+> - `技术指标` 可量化、可测试、可验证
 
-这是当前提示词驱动项目写作流程的公共规则层。
+这是当前写作流程的公共门禁层。
 
-## 一、最重要的执行原则
+## 一、执行原则
 
 ### 1. brief 先于措辞
-必须先服从用户提示词拆出的章节要求，再考虑语言润色。
+先服从用户提示词拆出的章节、图表、字数和风格要求，再考虑润色。
 
-### 1.5 流程先于提问
-当下一步可以根据当前文件状态、模板规则和台账自动判断时，不要把流程分支问题再抛回给用户。
-例如不要询问：
-- 先 review 还是先继续写
-- 先补表还是先补图
-- 是否现在 assemble
+### 2. 流程先于提问
+当下一步可以根据工作区状态自动判断时，不要把流程分支问题抛回给用户。
 
-### 2. 事实先于完整
-材料不够时，不补造信息；用 `【待补】` 显式占位。
+### 3. 事实先于完整
+材料不够时，不补造信息；用 `【待补】` 显式占位，并同步回写台账。
 
-### 3. 台账先于口头说明
-发现任何缺口、冲突、暂缺数据，都要回写到 `workspace/plan/`，不能只在对话里说。
+### 4. 台账先于口头说明
+任何缺口、冲突、阻断原因，都要回写到 `workspace/plan/<project-slug>/`，不能只在对话里说。
 
-### 3.5 用户字数要求先于默认篇幅
-如果用户明确给出“总字数 / 篇幅 / 控制在多少字 / 不少于多少字 / 不超过多少字”等要求，必须把它视为硬约束。
-不要继续只按“中等篇幅”或模板默认体量自由发挥。
+### 5. 用户字数要求是硬约束
+如果用户明确给出总字数、上下限或篇幅要求，必须把它视为硬约束。
 
-### 4. 表图先于长段堆砌
-适合用表表达的，不强行写成一大段；适合用图表达的，不强行塞进正文。
+### 6. 表图服务正文，不替代正文
+适合用表表达的，不硬写成长段；适合用图表达的，不把图的逻辑塞回正文。
 
-### 5. 模板与 Skill 先于参考样稿
-对于本插件支持的两类文档，结构、风格、流程优先来自：
-- 对应 `templates/<template>/` 文件
-- 对应主 Skill
-- 当前公共 Skill
-
-默认不向用户追问参考样稿。
-
-### 6. core 先于搜索，但 core 不代替专项 skill
-
-`official-doc-core` 只负责公共门禁、工作区、台账、阶段顺序。
-
-它不得代替以下专项 skill 的职责：
+### 7. core 不代替专项 skill
+`official-doc-core` 只做公共校验，不代替：
 - `official-doc-project-background`
 - `official-doc-research-content`
 - `official-doc-innovation`
 - `official-doc-technical-achievements`
 - `official-doc-technical-indicators`
 
-尤其是：
-- 不得在识别出背景类内容后，由 core 自己发起背景搜索
-- 不得在识别出研究内容类内容后，由 core 自己起草研究任务
-- 不得在识别出成果或指标类内容后，由 core 自己先写一版
+若当前章节命中上述五类之一，core 执行后下一步必须是显式加载对应专项 skill，而不是由 core 自己搜索或写作。
 
-若当前章命中上述五类之一，core 执行完成后，下一步必须是显式加载对应专项 skill，而不是直接开始搜索或写作。
+## 二、core 的职责边界
 
-### 7. core 校验工作区与 plan，不负责初始化
-新任务开始时，工作区初始化和 plan 台账创建属于 `using-official-docs` 的职责，不属于：
-- `official-doc-core`
-- 任一专项章节 skill
-
-因此 core 在进入时只做两件事：
-- 校验 `workspace/plan/<project-slug>/` 与各类工作区目录是否已存在
-- 校验以下文件是否已存在并可读：
+### core 负责
+- 校验 `workspace/plan/<project-slug>/` 与各类工作区目录是否存在
+- 校验以下文件是否存在且可读：
   - `project-overview.md`
   - `project-brief.md`
   - `research-sources.md`
@@ -84,51 +60,16 @@ allowed-tools: Read Write Edit Bash
   - `progress.md`
   - `source-materials.md`
   - `workspace/outputs/<project-slug>/00-section-plan.md`
+- 校验事实纪律、阶段顺序、文件路径、章节依赖关系
 
-若上述目录或文件缺失，说明主入口流程执行不完整，应返回 `using-official-docs` 先补初始化，而不是由 core 自己代建。
+### core 不负责
+- 初始化工作区
+- 首次写入 plan 台账
+- 直接发起网络搜索
+- 直接起草专项章节正文
+- 决定具体哪张表或哪张图的内容细节
 
-core 明确不得首次写入以下文件：
-- `project-overview.md`
-- `project-brief.md`
-- `research-sources.md`
-- `facts-ledger.md`
-- `progress.md`
-- `source-materials.md`
-- `workspace/outputs/<project-slug>/00-section-plan.md`
-
-### 8. core 不得先搜索
-
-即使用户请求中已经出现了：
-- `背景`
-- `国内外现状`
-- `研究内容`
-- `创新点`
-- `技术成果`
-- `技术指标`
-
-core 也不得在自己这一步直接发起网络搜索。
-
-它只能：
-- 校验前置文件
-- 校验流程顺序
-- 把后续动作交回主入口或专项 skill
-
-## 二、标题规则
-
-### 强固定层
-- 一级标题默认不得修改
-- 二级标题默认不得修改
-- 模板中已明确给出的固定三级标题默认不得修改
-
-### 允许细化层
-- 若模板未固定更深层级，可围绕既有上位标题补充三级或四级小标题
-- 新增小标题必须服务既有章节逻辑，不能替代固定标题
-
-### 材料不足时的处理
-- 不删标题
-- 不改标题
-- 不合并固定章节
-- 在相应位置写 `【待补：缺少什么材料】`
+若目录或文件缺失，应返回 `using-official-docs` 先补初始化，而不是由 core 代建。
 
 ## 三、事实纪律
 
@@ -138,34 +79,27 @@ core 也不得在自己这一步直接发起网络搜索。
 - 负责人姓名与职务
 - 项目起止时间
 - 任务节点
-- 金额、投资、预算、效益数字
+- 金额、预算、效益数字
 - 成果数量与成员构成
 
 遇到信息不充分时：
 1. 正文标 `【待补】`
-2. `workspace/plan/facts-ledger.md` 记录缺口
-3. `workspace/plan/source-materials.md` 记录需要补充的材料来源
+2. `facts-ledger.md` 记录缺口
+3. `source-materials.md` 记录待补来源
 
-若用户给出字数要求，还应：
-4. 在 `workspace/plan/project-overview.md` 记录目标总字数
-5. 在 `workspace/plan/progress.md` 记录本轮目标总字数与当前适配状态
-
-## 四、语言风格
-
-### 适用范围
-本插件默认服务正式中文项目材料。
+## 四、语言与结构
 
 ### 风格要求
 - 正式、克制、书面化
-- 以连续段落为主，不写聊天式口吻
 - 不写口号式、宣传式空话
-- 不夸大项目价值，不把预期写成既成事实
-- 可研/申报阶段优先使用“拟”“计划”“预期”“将”这类表述
+- 不把预期写成既成事实
+- 申报阶段优先使用“拟”“计划”“预期”“将”等表述
 
-### 段落要求
-- 每段围绕一个中心意思展开
-- 不把整章写成要点堆砌
-- 但在计划、任务、风险、检查清单等场景允许使用列表
+### 标题要求
+- 一级标题与用户要求保持一致
+- 二级标题优先服从用户指定的小节结构
+- 若用户未固定更深层级，可补充三级小标题，但必须服务现有逻辑
+- 材料不足时不删标题，只在对应位置补 `【待补】`
 
 ## 五、工作区约定
 
@@ -182,114 +116,72 @@ workspace/
 ```
 
 必须维护以下文件：
-- `workspace/plan/project-overview.md`
-- `workspace/plan/project-brief.md`
-- `workspace/plan/research-sources.md`
-- `workspace/plan/source-materials.md`
-- `workspace/plan/facts-ledger.md`
-- `workspace/plan/progress.md`
-- `workspace/outputs/00-section-plan.md`
-
-对提示词驱动工作流，`project-brief.md` 是必需文件，不能省略。
+- `workspace/plan/<project-slug>/project-overview.md`
+- `workspace/plan/<project-slug>/project-brief.md`
+- `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/source-materials.md`
+- `workspace/plan/<project-slug>/facts-ledger.md`
+- `workspace/plan/<project-slug>/progress.md`
+- `workspace/outputs/<project-slug>/00-section-plan.md`
 
 ## 六、执行留痕
 
-`official-doc-core` 不是隐形背景规则，而是需要显式执行的一步。
-
-当你调用本 Skill 后，必须在 `workspace/plan/progress.md` 留下本轮执行痕迹，至少说明：
+调用本 skill 后，必须在 `workspace/plan/<project-slug>/progress.md` 留痕，至少说明：
 - 本轮已执行 `official-doc-core`
-- 对应模板是什么
-- 用户是否给出了总字数要求；若给出，目标总字数是多少
-- 工作区与 plan 校验是否通过
-- 下一步将进入哪个主 Skill 或公共 Skill
+- 工作区与台账校验是否通过
+- 用户是否给出总字数要求
+- 下一步将进入哪个专项 skill 或公共 skill
 
-不要把“脑中已经参考了 core 规则”当作已经执行完成。
-
-此外，`已执行 official-doc-core` 不等于 `已执行专项章节 skill`。
-二者不能合并。
+`已执行 official-doc-core` 不等于 `已执行专项章节 skill`。
 
 ## 七、阶段门禁
 
-### 对所有新任务，默认执行顺序为：
-1. `using-official-docs` 判定模板并初始化工作区
-2. `using-official-docs` 初始化 plan 台账
+### 新任务顺序
+1. `using-official-docs` 解析 brief 并初始化工作区
+2. `using-official-docs` 初始化台账
 3. `official-doc-core` 校验前置条件
-4. 读取模板文件
-5. 识别本章是否命中五类专项章节
-6. 若命中，显式加载对应专项 skill
-7. 再生成骨架与正文
-8. 补表格
-9. 补图示
-10. 复核
-11. 回修
-12. 装配正式总稿
+4. 识别各章是否命中专项 skill
+5. 命中则加载专项 skill
+6. 生成正文
+7. 补表
+8. 补图
+9. review
+10. revise
+11. assemble
 
-### 对继续推进任务，默认执行顺序为：
-1. 读取已有 `workspace/outputs/ workspace/tables/ workspace/figures/ workspace/review/ workspace/assembled/ workspace/plan/`
+### 继续推进顺序
+1. 读取现有 `workspace/plan/ outputs/ tables/ figures/ review/ assembled/`
 2. 判断当前最合理的下一步
-3. 继续推进缺失环节
+3. 推进缺失环节
 
-### 本层只做通用门禁
-
-`official-doc-core` 只定义跨模板共用的阶段顺序，不定义：
-- 某个模板第几章之后先补哪张表
-- 某个模板图1或图4-1应采用什么拓扑
-- 某个模板哪一章应占多少比例
-
-这些规则分别由以下层负责：
-- 正文与章节配比：对应主 Skill 与 `writing-playbook.md`
-- 表格顺序与字段：`official-doc-table` 与 `table-catalog.md`
-- 图示顺序与图型：`official-doc-figure` 与 `figure-catalog.md`
-- 是否通过验收：`official-doc-review`
-
-## 八、表图规则
+## 八、表图处理
 
 ### 表格
-- caption 与模板目录一致
-- 表头尽量遵从模板字段
-- 数值、时间、单位与正文一致
-- 输出到 `workspace/tables/<template>/`
+- 标题、字段、单位与正文一致
+- 输出到 `workspace/tables/<project-slug>/`
 
 ### 图示
-- 图名与正文引用一致
-- 节点术语与正文一致
+- 图名、节点术语与正文一致
 - 一张图只回答一个主问题
-- 输出到 `workspace/figures/<template>/`
+- 输出到 `workspace/figures/<project-slug>/`
 
-### 正文中如何处理
-正文只保留：
-- `此处引用表X` 或 `此处引用图X`
-- 不在正文里替代表图硬写一大段说明
+### 正文中的处理
+正文只保留正常引表引图语句，不要用大段描述去替代表图。
 
-## 九、何时默认推进下一步
+## 九、默认推进规则
 
-当你完成当前阶段或当前章节正文后：
-- 若章节已出现表格引用位，应主动推进 `official-doc-table`
-- 若章节已出现图示引用位，应主动推进 `official-doc-figure`
-- 若这一轮产出准备交付，应主动推进 `official-doc-review`
-- 若 review 已产出明确问题，应主动推进 `official-doc-revise`
-- 只有在全书必需章节、必需表图和回修均已完成时，才应主动推进 `official-doc-assemble`
+当当前阶段完成后：
+- 若章节已出现表格需求，应推进 `official-doc-table`
+- 若章节已出现图示需求，应推进 `official-doc-figure`
+- 若本轮产出准备交付，应推进 `official-doc-review`
+- 若 review 已产出问题，应推进 `official-doc-revise`
+- 只有在正文、表图、回修都完成后，才推进 `official-doc-assemble`
 
-## 十、关于顺序的职责划分
+## 十、完成判定
 
-若需要判断“下一张先补哪张表 / 图”，不要在本层自行决定。
-
-应按以下顺序取规则：
-1. 对应主 Skill
-2. 对应 `table-catalog.md` / `figure-catalog.md`
-3. `official-doc-table` / `official-doc-figure`
-4. `official-doc-review` 的验收结果
-
-本层只要求：
-- 不要跳过明显缺失的关键表图
-- 不要在 review 前跳过当前阶段应完成的核心散件
-- 不要在 revise 未完成时直接宣称最终交付
-
-## 十一、完成判定
-
-你准备声称“这一轮已完成”之前，至少要确认：
-- 输出文件已写入目标目录
-- `workspace/plan/progress.md` 已更新
-- 当前阶段未处理的 `【待补】` 已在台账中记录
-- 若用户目标是交付正式稿，`workspace/assembled/<template>/` 下已生成装配后的总稿
-- 若用户给出了总字数要求，当前成稿总字数与目标偏差已被检查并记录
+准备声称“这一轮已完成”之前，至少确认：
+- 输出文件已写入正确目录
+- `progress.md` 已更新
+- 未解决的 `【待补】` 已在台账中记录
+- 若用户目标是正式稿，`workspace/assembled/<project-slug>/formal-draft.md` 已生成
+- 若用户给出了总字数要求，当前总字数与目标偏差已被检查并记录

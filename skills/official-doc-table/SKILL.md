@@ -1,17 +1,16 @@
 ---
 name: official-doc-table
-description: Use when the user brief or a drafted chapter requires project tables. This skill reads the parsed chapter plan, generates only the requested tables for the current project slug, keeps table contents consistent with the chapter text and search evidence, and writes table notes without relying on any fixed template catalog.
+description: Use when the user brief or a drafted chapter requires project tables. This skill reads the parsed chapter plan, generates only the requested tables for the current project slug, keeps table contents consistent with the chapter text and search evidence, and writes table notes for later assembly.
 allowed-tools: Read Write Edit Bash
 ---
 
 # 公文表格 Skill
 
-> 2026-04 架构更新：以下规则优先于全文旧内容。旧的模板化 table catalog 规则不再默认适用。
->
-> 当前只做三件事：
-> - 读取 `project-brief.md`、`00-section-plan.md`、当前章节正文
-> - 生成用户明确要求的表格
-> - 输出到 `workspace/tables/<project-slug>/`，并同步 notes
+> 当前表格流程只依据：
+> - `project-brief.md`
+> - `00-section-plan.md`
+> - 当前章节正文
+> - `facts-ledger.md` 与 `research-sources.md`
 
 ## 适用时机
 
@@ -38,33 +37,31 @@ allowed-tools: Read Write Edit Bash
 ### 先决定“补哪张表”
 
 默认按以下顺序判断：
-1. catalog 中标为“必出”或“高优先”的表
-2. 当前正文已经出现引用位的表
-3. 当前阶段对应的重章节所依赖的表
-4. 用户明确点名要求的表
+1. 用户在 brief 中明确要求的表
+2. `00-section-plan.md` 中已登记的表
+3. 当前正文已经出现引用位的表
+4. 当前章节最需要结构化承载的信息
 
 ### 再决定“补到什么粒度”
 
-默认按 catalog 中给出的内容来定：
+默认按以下信息来定：
 - 所属章节
-- 作用
-- 建议表头
-- 可选补充列
-- 主要材料来源
-- 常见待补项
-- 装配要求
+- 当前表的用途
+- 正文已出现或用户明确要求的字段
+- 可支持这些字段的事实与来源
+- 待补项与装配位置
 
-不要跳过这些目录信息，直接凭经验写一个“差不多”的表。
+不要脱离正文，凭经验写一个“差不多”的表。
 
 ## 输出格式
 
 每张表至少输出：
-- `workspace/tables/<template>/<table-file>.md`
-- `workspace/tables/<template>/<table-file>-notes.md`
+- `workspace/tables/<project-slug>/<table-file>.md`
+- `workspace/tables/<project-slug>/<table-file>-notes.md`
 
 其中 `notes` 必须写清：
 - 当前表服务哪个章节
-- 当前表在 catalog 中的优先级
+- 当前表的用途
 - 每列字段来自哪里
 - 哪些值是 `【待补】`
 - 哪些口径已与正文核对
@@ -73,50 +70,19 @@ allowed-tools: Read Write Edit Bash
 ## 强制规则
 
 - caption 不改
-- 表头尽量贴近模板字段
+- 表头尽量贴近用户要求与正文字段
 - 不擅自新增“看起来合理”的指标列
 - 数值、单位、时间必须与正文一致
 - 不知道的字段直接写 `【待补】`
-- 必须优先服从 catalog 中的“位置、作用、建议表头、装配要求”
 - 更新 `workspace/plan/progress.md`
 - 如果材料、facts-ledger、既有正文或既有表文件中已经有明确姓名、单位、牵头单位、时间、成果、预算口径，不得在新表中回退成 `【待补】`
 - 若原始模板或材料中的某个关键单元格本来就是空白，正式导向的表格可保留空单元格；不要为了提醒自己而把正式表整体重写成 `【待补】` 版本
-
-## ZS-项目可行性报告优先表格
-
-- 表1～表6 默认为固定必出表
-- 其中表3～表6属于配比刚性表，应优先服务第7章到第9章的“短正文 + 表”结构
-- 第4章优先补表1，第5章优先补表2，第7章优先补表3和表4，第8章优先补表5，第9章优先补表6
-
-## 完整科研项目模板优先表格
-
-优先处理以下三层：
-1. 第2章成果类高优先表
-2. 第3章任务类高优先表
-3. 第5章资金与投资测算类高优先表
-
-第一轮优先表默认包括：
-- 表2-1 主要报告类成果分布表
-- 表2-2 交付专利及软著成果分布表
-- 表2-3 交付标准成果分布表
-- 表3-1 项目任务清单表
-- 表3-2 任务与成果对应表
-- 表5-1 资金来源结构表
-- 表5-2 分年度投资安排表
-- 表5-3 主要投资估算表
-
-中优先和扩展表只有在正文已经下钻到对应专题层级时再补，不要一上来就把测试用例、缺陷统计、验证统计类表全部生成。
-
-大模板额外要求：
-- 第2章成果类表要优先服务建设方案主链，不要和第3章重复造表
-- 第3章任务类表要承接任务边界与成果落位，不要重新写回旧“分工章节”
-- 第5章资金表应优先保留资金来源、年度安排、主要投资估算三类主表，不要先做边缘财务细表
 
 ## notes 写法建议
 
 每张 `-notes.md` 建议至少包含：
 1. 表 caption 与所属章节
-2. catalog 规定的优先级和用途
+2. 当前表的用途
 3. 当前采用的表头
 4. 各列字段来源
 5. 待补项
@@ -125,19 +91,19 @@ allowed-tools: Read Write Edit Bash
 
 ## 装配前源数据规则
 
-- `workspace/tables/<template>/<table-file>.md` 是该表在后续装配阶段的唯一文字数据源
+- `workspace/tables/<project-slug>/<table-file>.md` 是该表在后续装配阶段的唯一文字数据源
 - `official-doc-assemble` 应直接纳入这份表文件，而不是凭记忆或根据正文重新生成一版“看起来差不多”的表
 - 如果 later stage 发现表格需要修正，应先回写这份表文件，再进入 assemble；不要只在 formal-draft 里局部偷改
 
 ## 与章节配比的关系
 
-- 当章节被模板定义为“偏短章节”时，表格应承担更多信息量，正文保持克制
-- 当章节是“重章节”时，表格主要起结构化补充作用，不要反过来替代正文主论证
-- 对大模板，优先保证第2章、第3章、第5章的高优先表，而不是平均铺开所有章节
+- 当章节本身较短时，表格可以承担更多信息量
+- 当章节本身较重时，表格主要起结构化补充作用
+- 不要为了凑页数扩表
 
 ## 交付前检查
 
 - 表号与正文引用一致
 - 表头与章节语义一致
 - 与正文口径冲突的地方已在 notes 中标出
-- 已遵守 catalog 中的优先级和装配要求
+- notes 已写清来源、待补项和装配位置

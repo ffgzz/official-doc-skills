@@ -45,9 +45,9 @@ allowed-tools: Read Write Edit Bash
 
 这是唯一允许的正式装配路径。
 不要写到以下位置：
-- `workspace/outputs/<template>/assembled/`
-- `workspace/outputs/<template>/assembled/full-document.md`
-- 任何未位于 `workspace/assembled/<template>/` 下的“总稿”或“final”文件
+- `workspace/outputs/<project-slug>/assembled/`
+- `workspace/outputs/<project-slug>/assembled/full-document.md`
+- 任何未位于 `workspace/assembled/<project-slug>/` 下的“总稿”或“final”文件
 
 `assembly-notes` 至少要写清：
 - 本次装配纳入了哪些正文文件
@@ -76,7 +76,7 @@ allowed-tools: Read Write Edit Bash
 - 如果 review 中仍有未修复的 Must Fix，不能直接宣称“最终定稿”
 - 如果高优先表图尚未齐备，不得进入装配
 - 如果用户给出了总字数硬约束且当前稿件未满足，不得进入装配
-- 装配时要优先纳入 `table-catalog.md` / `figure-catalog.md` 中标为“必出”或“高优先”的项目
+- 装配时要优先纳入 brief 与 `00-section-plan.md` 中要求的表图
 - 若正式稿中的任一表图内容与对应散件文件不一致，必须视为装配失败并回到 revise / assemble 修复
 - 若正式稿仍包含未核验的高风险具体事实，不能用 assemble 掩盖该问题，必须回到 revise / review 修复
 
@@ -95,46 +95,29 @@ allowed-tools: Read Write Edit Bash
 ## 装配后强制动作
 
 装配完成后，必须立即执行以下动作：
-1. 重新读取当前 `workspace/assembled/<template>/<template>-formal-draft.md`
+1. 重新读取当前 `workspace/assembled/<project-slug>/formal-draft.md`
 2. 基于当前 `formal-draft` 重新计算章节比例与 `【待补】` 数
 3. 检查是否仍残留 `此处引用表X`、`此处插入图X`、文末统一附图附表替代章节装配等问题
 4. 立即调用 `official-doc-review` 做一轮 final review
-5. 生成 `workspace/review/<template>-final-review.md`
+5. 生成 `workspace/review/<project-slug>-final-review.md`
 6. 仅当 final review 未发现新的 Must Fix 时，才允许把装配结果标记为“可装配正式稿”
 
 不要把装配前的 review 直接沿用为装配后的最终判断。
 
-## ZS-项目可行性报告装配要求
+## 装配定位规则
 
-- 按第1章到第10章顺序装配
-- `图1`、`表1` 至 `表6` 应插入对应章节附近
-- 第4章后至少应落入 `图1`、`表1`
-- 第5章后至少应落入 `表2`
-- 第7章后至少应落入 `表3`、`表4`
-- 第8章后至少应落入 `表5`
-- 第9章后至少应落入 `表6`
-- 第7章到第9章保持“短正文 + 表格主体”的版式，不要在装配时又扩写成长段
-- 若第1章到第10章缺任一章，不得进入装配
-- 若 `图1` 或 `表1` 至 `表6` 缺任一项，不得进入装配
-- 只有在 10 章正文完成、表图补齐、review / revise 完成后，才允许装配正式总稿
-- 若 `table-01.md` 至 `table-06.md` 中已有明确牵头单位、成员名单、时间节点或预算口径，装配稿不得退回为更空的占位版本
+- 按 `00-section-plan.md` 的章节顺序装配
+- 表图按正文引用位置或章节要求就近插入
+- 若 brief 已明确某张表或图属于某一章，必须在该章附近落位
+- 若散件表格或图示已含明确值，装配稿不得回退成更空的占位版本
 - 若 `formal-draft.md` 末尾仅追加一整段“附图 / 附表”，而对应章节附近没有插入图表，默认视为装配不合格
-
-## 完整科研项目模板装配要求
-
-- 只有在 7 章正文全部完成后，才允许进入装配
-- 不允许因为已经完成若干单章，就先输出任何 assembled 阶段稿
-- 若第2章、第3章、第5章的高优先图表未齐，不得进入装配
-- 第2章仍偏薄时，不应用装配动作掩盖正文缺口，应先回到 revise 补正文和高优先图表
-- 若第4章已有更完整的组织管理条目，第3章已有更完整的任务边界，装配稿不得退回为更薄的概述版
-- 若成果类、任务类、资金类表格在 `workspace/tables/full-research-template/` 中已有明确值，装配稿不得回退为大量 `【待补】` 的占位版本
 
 ## 交付后动作
 
 - 更新 `workspace/plan/progress.md`
 - 如果装配稿仍存在明显缺口，回写 `workspace/review/` 或 `workspace/plan/`，不要假装已经完全定稿
-- 更新 `workspace/assembled/<template>/<template>-assembly-notes.md` 时，所有章节比例、`【待补】` 数和装配判定都必须基于当前 `formal-draft` 重新计算，不得沿用旧 review 中已经过期的统计值
-- `assembly-notes` 的章节比例和 `【待补】` 统计方法必须与 `workspace/review/<template>-final-review.md` 完全一致
+- 更新 `workspace/assembled/<project-slug>/assembly-notes.md` 时，所有章节比例、`【待补】` 数和装配判定都必须基于当前 `formal-draft` 重新计算，不得沿用旧 review 中已经过期的统计值
+- `assembly-notes` 的章节比例和 `【待补】` 统计方法必须与 `workspace/review/<project-slug>-final-review.md` 完全一致
 - 在 `workspace/plan/progress.md` 中明确记录：是否已完成装配后 final review，以及 final review 的结论
 - 若用户给出了总字数要求，还必须在 `assembly-notes` 和 `progress.md` 中记录“目标总字数 / 当前总字数 / 是否达标”
-- 在 `workspace/assembled/<template>/<template>-assembly-notes.md` 中写明 final review 文件路径：`workspace/review/<template>-final-review.md`
+- 在 `workspace/assembled/<project-slug>/assembly-notes.md` 中写明 final review 文件路径：`workspace/review/<project-slug>-final-review.md`

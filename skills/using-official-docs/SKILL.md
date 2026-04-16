@@ -18,11 +18,9 @@ allowed-tools: Read Write Edit Bash
 - 统筹后续 `table -> figure -> review -> revise -> assemble`
 
 它不再负责：
-- 按旧模板名路由
-- 读取 `templates/`
-- 依赖 `materials/`
-- 调用 `full-research-template`
-- 调用 `zs-feasibility-report`
+- 读取外部模板目录
+- 依赖材料包驱动流程
+- 走旧的固定模板路由
 
 ## 核心原则
 
@@ -496,10 +494,7 @@ allowed-tools: Read Write Edit Bash
 
 ## 禁止事项
 
-- 不得再按 `ZS`、`完整科研项目模板` 等旧模板名路由
-- 不得再调用 `full-research-template`
-- 不得再调用 `zs-feasibility-report`
-- 不得要求用户提供 `materials/`
+- 不得要求用户提供旧式材料包才能启动流程
 - 不得因为用户章名较泛就跳过专项 skill
 - 不得把专项 skill 理解成“整章固定模板”
 - 不得把 `预期技术成果` 误判成 `研究内容`
