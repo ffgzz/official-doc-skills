@@ -1,6 +1,6 @@
 ---
 name: using-official-docs
-description: 正式中文项目公文写作总入口。Use this skill first when the user asks to write or continue a 项目可行性报告、立项申请书、项目建议书、攻关任务书、技术总结或类似正式项目文稿, and the input is usually only a主题/一段提示词 plus 章节顺序、每章需要写什么、图表要求、字数要求, rather than source materials. Typical trigger prompts look like: “请围绕某主题写一份正式项目可行性报告”“按以下章节顺序生成”“第1章概述/第2章项目现状和发展趋势/第3章研发内容及技术关键”“每章有哪些图表和字数要求”. On trigger, do not search immediately. First parse the brief, derive project-slug, initialize workspace and plan files, then load official-doc-core only for shared validation, and only after that route to specialized skills. Background/research/innovation/achievements/indicators searches must be executed by the specialized skills, not by this entry skill. Prefer session-exposed MCP search/connectors when available; use built-in web search only as fallback.
+description: 正式中文项目公文写作总入口。Use this skill first when the user asks to write or continue a 项目可行性报告、立项申请书、项目建议书、攻关任务书、技术总结或类似正式项目文稿, and the input is usually only a主题/一段提示词 plus 章节顺序、每章需要写什么、图表要求、字数要求, rather than source materials. Typical trigger prompts look like: “请围绕某主题写一份正式项目可行性报告”“按以下章节顺序生成”“第1章概述/第2章项目现状和发展趋势/第3章研发内容及技术关键”“每章有哪些图表和字数要求”. On trigger, do not search immediately. First parse the brief, derive project-slug, initialize workspace and plan files, then load official-doc-core only for shared validation, and only after that route to specialized skills. Background/research/innovation/achievements/indicators searches must be executed by the specialized skills, not by this entry skill. Network search must use session-exposed MCP search/connectors only; do not use built-in web search.
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -111,19 +111,42 @@ allowed-tools: Read Write Edit Bash
 `research-sources.md` 至少记录：
 - 来源标题
 - 来源类型
+- 来源等级：`A主源` / `B辅源` / `C参考`
 - 发布机构 / 作者
 - 发布时间
 - 链接或定位信息
 - 对应支持的章节 / 小节
+- 是否可直接支撑正文断言：`可` / `不可`
 
 `facts-ledger.md` 至少记录：
 - 事实表述
 - 对应章节 / 小节
 - 来源编号
+- 主源编号
+- 辅源编号
 - 事实状态：`已核验` / `待核验` / `仅作趋势参考`
 - 备注：是否允许写入正文
 
 如果某条事实还没有完成登记，就不要先把它写进正文。
+
+来源等级默认按以下口径处理：
+- `A主源`：政府/主管部门/标准发布机构/船级社/论文原文/官方产品页/官方公告
+- `B辅源`：主流行业媒体、研究机构报告、正规行业协会材料
+- `C参考`：百科、博客、论坛、自媒体、聚合资讯、转载稿、问答社区
+
+正文中的确定性事实默认需要：
+- 至少 1 条 `A主源`
+- 或 1 条 `A主源` + 1 条 `B辅源`
+
+以下来源不得单独支撑 `已核验`：
+- 百科
+- 博客
+- 论坛
+- 自媒体
+- 聚合资讯站
+- 问答社区
+
+这类来源最多只能作为 `C参考` 或辅助线索，不能单独把事实状态升为 `已核验`。
 
 ### 5. 专项章节必须“先加载专项 skill，再搜索，再写”
 
@@ -156,15 +179,19 @@ allowed-tools: Read Write Edit Bash
 - 仅作趋势参考的事实：只能写成概括性判断，不写过细数字、文号、发布日期
 - 待核验的事实：不得直接进入正文
 
+若某条事实的来源只包含 `C参考`，即使内容看起来具体，也不得写成“已核验事实”。
+
 ### 5.5 搜索工具优先级
 
 凡需联网搜索时，默认优先级如下：
 1. 当前 session 已暴露的 MCP 搜索 / connector 搜索工具
-2. 其他会话内可用的官方搜索连接器
-3. 内置 `Web Search` / `web search`
+2. 其他会话内可用的 MCP / connector 搜索工具
 
-如果 MCP 搜索工具存在，就不要优先使用内置 `Web Search`。
-只有在 MCP 搜索工具当前不可用、报错、或本会话未暴露时，才允许回退到内置搜索。
+不允许使用内置 `Web Search` / `web search` 作为兜底。
+如果当前会话没有可用的 MCP 搜索工具，或 MCP 搜索报错无法完成，应：
+- 停止该章节的联网搜索
+- 在 `facts-ledger.md` 和 `progress.md` 中记录“搜索阻断：缺少可用 MCP 搜索”
+- 不要偷偷改用内置搜索继续写作
 
 ### 6. 主入口是唯一统筹器
 

@@ -1,6 +1,6 @@
 ---
 name: official-doc-project-background
-description: Use when any chapter or subsection needs 项目背景、行业背景、建设背景、宏观背景、立项意义、建设意义、国内外现状、发展现状、行业发展动向、趋势判断、痛点问题、差距分析、攻关必要性、建设必要性、立项必要性、产业链安全、自主可控等内容. This is a rulebook, not a fixed chapter template: apply only the requested subparts even if they appear inside generic chapters such as 概述, 项目现状和发展趋势, 立项目的, or 研究结论. Use this skill only after using-official-docs has initialized workspace and plan files and official-doc-core has validated them. This skill is the one that should perform the required background web searches. Prefer MCP search/connectors when available; built-in web search is only fallback.
+description: Use when any chapter or subsection needs 项目背景、行业背景、建设背景、宏观背景、立项意义、建设意义、国内外现状、发展现状、行业发展动向、趋势判断、痛点问题、差距分析、攻关必要性、建设必要性、立项必要性、产业链安全、自主可控等内容. This is a rulebook, not a fixed chapter template: apply only the requested subparts even if they appear inside generic chapters such as 概述, 项目现状和发展趋势, 立项目的, or 研究结论. Use this skill only after using-official-docs has initialized workspace and plan files and official-doc-core has validated them. This skill is the one that should perform the required background web searches. Network search must use session-exposed MCP search/connectors only; do not use built-in web search.
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -33,26 +33,59 @@ allowed-tools: Read Write Edit Bash
 这一步必须在本 skill 已显式加载之后执行。
 
 登记时至少补齐以下字段：
-- `research-sources.md`：来源标题、来源类型、发布机构/作者、发布时间、链接、支撑章节
-- `facts-ledger.md`：事实表述、对应章节、来源编号、事实状态、备注
+- `research-sources.md`：来源标题、来源类型、来源等级、发布机构/作者、发布时间、链接、支撑章节、是否可直接支撑正文断言
+- `facts-ledger.md`：事实表述、对应章节、来源编号、主源编号、辅源编号、事实状态、备注
 
 事实状态只允许使用：
 - `已核验`
 - `待核验`
 - `仅作趋势参考`
 
+来源等级只允许使用：
+- `A主源`
+- `B辅源`
+- `C参考`
+
 如果 `using-official-docs` 或 `official-doc-core` 还没有显式加载本 skill，就已经开始搜索背景、现状、痛点、必要性资料，说明流程执行错误，应回到“先加载本 skill，再搜索”的顺序。
 
 默认搜索工具优先级：
 1. 当前 session 已暴露的 MCP 搜索 / connector 搜索工具
-2. 其他会话可用的连接器搜索
-3. 内置 `Web Search`
+2. 其他会话可用的 MCP / connector 搜索工具
 
-若第 1 类工具可用，不要优先调用内置 `Web Search`。
+不允许使用内置 `Web Search`。
+如果当前没有可用的 MCP 搜索工具，或 MCP 搜索报错无法继续：
+- 停止联网搜索
+- 在 `facts-ledger.md` 中记录搜索阻断原因
+- 在 `progress.md` 中记录本章因缺少 MCP 搜索而暂停
+- 不得改用内置搜索继续写正文
 
 政策、文号、发布日期、主管部门表述，优先使用官方来源核验。
 市场规模、增长率、部署占比、行业排名等数字，优先使用研究机构或企业原始报告核验。
 具体平台、模型、产品能力表述，优先使用官方产品页、论文或一手技术资料核验。
+
+背景类事实的默认来源等级口径：
+- `A主源`：国务院/部委/地方主管部门/船级社/标准原文/论文原文/企业官方公告或产品页
+- `B辅源`：主流行业媒体、研究机构报告、行业协会公开材料
+- `C参考`：百科、博客、论坛、自媒体、聚合资讯、转载稿、问答社区
+
+以下来源不得单独支撑 `已核验`：
+- 百度百科等百科词条
+- 知乎、CSDN 等博客/问答社区
+- 资讯转载站、聚合新闻站
+- 单篇营销稿、宣传稿
+
+如果某条背景事实只有 `C参考` 来源：
+- 不能标记为 `已核验`
+- 不能写成具体政策文号、具体发布日期、精确市场数字或明确产品能力断言
+- 只能作为检索线索，继续追到 `A主源` 或 `B辅源`
+
+“已核验”的最低门槛是：
+- 至少 1 条 `A主源`
+- 或 1 条 `A主源` + 1 条 `B辅源`
+
+若只有 `B辅源` 而没有 `A主源`：
+- 原则上只能写成保守概括
+- 不建议写成强断言
 
 如果没有完成核验：
 - 不要写具体文号
@@ -206,6 +239,10 @@ allowed-tools: Read Write Edit Bash
 - `近年来`
 - `头部企业已开始`
 - `行业正在从……走向……`
+
+如果事实来源中没有 `A主源`，默认降一档处理：
+- 原本想写成“强表述”的，改成“弱表述”
+- 原本想写成精确事实的，改成趋势描述或删去
 
 ### 3. 先稳健后丰富
 

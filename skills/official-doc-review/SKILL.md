@@ -16,6 +16,7 @@ allowed-tools: Read Write Edit Bash
 > - 字数是否满足 brief
 > - 正文中的具体事实是否已在 `facts-ledger.md` 中完成核验
 > - 正式稿中的图表是否装配在对应章节附近，而不是仅在文末集中附后
+> - `已核验` 事实所依赖的来源等级是否达标，而不是只靠百科/博客/资讯转载
 
 ## 适用时机
 
@@ -112,6 +113,8 @@ allowed-tools: Read Write Edit Bash
 - 成果数量、预算口径是否冲突
 - 正文中的具体政策、文号、发布日期、市场数字、比例、排名、产品能力表述，是否能在 `facts-ledger.md` 中找到对应 `已核验` 记录
 - 若 `facts-ledger.md` 中状态为 `待核验` 或 `仅作趋势参考`，正式稿是否仍写成了确定性强表述
+- `research-sources.md` 中支撑这些事实的来源，是否包含至少 1 条 `A主源`
+- 是否把 `C参考` 来源单独当成了 `已核验` 的依据
 
 ### 4. 风险项
 - 是否存在大量 `【待补】`
@@ -120,6 +123,7 @@ allowed-tools: Read Write Edit Bash
 - 是否存在“正文提到表图但文件未生成”
 - 是否存在“正文已写具体事实，但 facts-ledger 无对应 `已核验` 记录”
 - 是否存在“应当概括写的趋势性信息，被写成具体文号、具体日期、精确市场数字”
+- 是否存在“facts-ledger 标记为 `已核验`，但 research-sources 里主源只有百科、博客、论坛、自媒体或资讯转载”
 - 是否存在“散件文件已有明确值，但正式稿回退成 `【待补】`”
 - 是否存在“review / assembly notes 中的统计口径明显滞后于当前文件”
 - 是否存在“章节比例或阈值明明不满足，但 review 仍误判为通过”
@@ -171,6 +175,7 @@ allowed-tools: Read Write Edit Bash
 - 若 review 或 assembly notes 继续引用已经过期的章节字数、比例或结论，默认记入 Must Fix
 - 若用户给出总字数硬约束且当前稿件超出/低于目标范围，直接记入 Must Fix，不得进入 assemble
 - 若正式稿把未核验的政策文号、发布日期、市场规模、比例或产品能力写成确定事实，直接记入 Must Fix
+- 若某条“已核验”事实缺少 `A主源`，或仅由 `C参考` 支撑，默认记入 Must Fix
 - 若第4章到第9章要求的表图只在文末统一附后、未在对应章节附近装配，默认记入 Should Fix；若正文仍保留“此处引用表X”之类占位，直接记入 Must Fix
 
 若本次是装配后 final review，对 ZS 还必须执行以下硬阻断：
@@ -180,6 +185,8 @@ allowed-tools: Read Write Edit Bash
 - 若第8章或第9章正文 `> 4%`：直接记入 Must Fix，不得通过 final review
 - 若存在任一“数值已超阈值但状态仍写为通过”的自相矛盾结论，final review 视为失败，必须重算后重写
 - 若正式稿中存在无对应 `已核验` 记录的高风险具体事实，final review 不得通过
+- 若当前总字数仍超出用户上限或低于下限，final review 不得通过
+- 若当前文件仍存在任一 Must Fix，final review 结论不得写成“可交付正式稿”或等价表述
 
 ### 完整科研项目模板
 
@@ -239,6 +246,7 @@ allowed-tools: Read Write Edit Bash
 
 Must Fix 问题优先覆盖以下高风险类型：
 - 未核验具体事实
+- 来源等级不达标却被标记为已核验
 - 章节比例硬阈值不满足
 - 表图缺失或装配位置错误
 - 正文仍留有引图引表占位
@@ -256,6 +264,13 @@ Must Fix 问题优先覆盖以下高风险类型：
 若本次是装配后 final review：
 - `workspace/review/<template>-final-review.md` 必须明确写出“本次为装配后 final review”
 - 不要只复用旧的 `workspace/review/<template>-review.md` 而不生成新的 final review 文件
+- 若仍存在 Must Fix，结论只能是：
+  - `暂不可作为正式交付稿`
+  - 或 `需回退 revise -> assemble`
+- 不得写成：
+  - `可交付正式稿`
+  - `可装配正式稿`
+  - `可保留为正式稿`
 
 Must Fix 问题应尽量写成：
 - `问题`
@@ -279,6 +294,9 @@ Must Fix 问题应尽量写成：
 
 对于“未核验具体事实”问题，要写成类似：
 - `第1章行业背景写入了具体政策文号和发布日期，但 facts-ledger 中无对应已核验记录；应先补官方来源核验，若无法核验则改写为概括性政策背景表述。`
+
+对于“来源等级不达标”问题，要写成类似：
+- `第1章关于船舶行业大模型的具体断言虽然在 facts-ledger 中标记为已核验，但 research-sources 的支撑来源主要是百科和资讯转载，缺少官方公告或一手材料；应补充 A主源后再保留该断言，否则改写为保守趋势表述。`
 
 对于“正式稿与散件不一致”问题，要写成类似：
 - `workspace/assembled/.../formal-draft.md 中的表2仍为大量【待补】版本，但 workspace/tables/.../table-02.md 已包含具体成员名单；应停止在 assemble 阶段重写表2，改为直接纳入最新 table-02.md。`

@@ -1,6 +1,6 @@
 ---
 name: official-doc-technical-indicators
-description: Use when any chapter or subsection needs 主要技术指标、技术指标、考核指标、性能指标、应用指标、效能指标、量化目标、验收指标、预期成效、量化考核等内容, including metric sections inside 预期目标, 项目目标, or 考核指标体系. This is a rulebook rather than a fixed template: derive only the requested metrics from the research content and achievements, then write them after web search and source logging in formal project-report style. Use this skill only after using-official-docs has initialized workspace and plan files and official-doc-core has validated them. Prefer MCP search/connectors when available; built-in web search is only fallback.
+description: Use when any chapter or subsection needs 主要技术指标、技术指标、考核指标、性能指标、应用指标、效能指标、量化目标、验收指标、预期成效、量化考核等内容, including metric sections inside 预期目标, 项目目标, or 考核指标体系. This is a rulebook rather than a fixed template: derive only the requested metrics from the research content and achievements, then write them after web search and source logging in formal project-report style. Use this skill only after using-official-docs has initialized workspace and plan files and official-doc-core has validated them. Network search must use session-exposed MCP search/connectors only; do not use built-in web search.
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -45,8 +45,14 @@ allowed-tools: Read Write Edit Bash
 
 默认搜索工具优先级：
 1. 当前 session 已暴露的 MCP 搜索 / connector 搜索工具
-2. 其他会话可用的连接器搜索
-3. 内置 `Web Search`
+2. 其他会话可用的 MCP / connector 搜索工具
+
+不允许使用内置 `Web Search`。
+如果当前没有可用的 MCP 搜索工具，或 MCP 搜索报错无法继续：
+- 停止联网搜索
+- 在 `facts-ledger.md` 中记录搜索阻断原因
+- 在 `progress.md` 中记录本章因缺少 MCP 搜索而暂停
+- 不得改用内置搜索继续写正文
 
 ## 从附件提炼出的共性写法
 

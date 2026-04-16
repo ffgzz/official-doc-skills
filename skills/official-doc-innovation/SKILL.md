@@ -1,6 +1,6 @@
 ---
 name: official-doc-innovation
-description: Use when any chapter or subsection needs 创新点、项目创新点、主要创新、技术创新、创新性、特色亮点、创新突破、差异化优势等内容, including sections titled 关键技术及创新点 or 预期成果与创新价值. This is a rulebook rather than a fixed template: derive innovation only for the requested parts, based on current-status gaps and research content. Use this skill only after using-official-docs has initialized workspace and plan files and official-doc-core has validated them. This skill should perform its own web searches for comparison baselines. Prefer MCP search/connectors when available; built-in web search is only fallback.
+description: Use when any chapter or subsection needs 创新点、项目创新点、主要创新、技术创新、创新性、特色亮点、创新突破、差异化优势等内容, including sections titled 关键技术及创新点 or 预期成果与创新价值. This is a rulebook rather than a fixed template: derive innovation only for the requested parts, based on current-status gaps and research content. Use this skill only after using-official-docs has initialized workspace and plan files and official-doc-core has validated them. This skill should perform its own web searches for comparison baselines. Network search must use session-exposed MCP search/connectors only; do not use built-in web search.
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -45,8 +45,14 @@ allowed-tools: Read Write Edit Bash
 
 默认搜索工具优先级：
 1. 当前 session 已暴露的 MCP 搜索 / connector 搜索工具
-2. 其他会话可用的连接器搜索
-3. 内置 `Web Search`
+2. 其他会话可用的 MCP / connector 搜索工具
+
+不允许使用内置 `Web Search`。
+如果当前没有可用的 MCP 搜索工具，或 MCP 搜索报错无法继续：
+- 停止联网搜索
+- 在 `facts-ledger.md` 中记录搜索阻断原因
+- 在 `progress.md` 中记录本章因缺少 MCP 搜索而暂停
+- 不得改用内置搜索继续写正文
 
 ## 从附件提炼出的共性写法
 
