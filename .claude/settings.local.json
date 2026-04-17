@@ -30,7 +30,11 @@
       "WebFetch(domain:zhuanlan.zhihu.com)",
       "WebFetch(domain:caeassistant.com)",
       "WebFetch(domain:www.gov.cn)",
-      "WebFetch(domain:www.miit.gov.cn)"
+      "WebFetch(domain:www.miit.gov.cn)",
+      "mcp__filesystem__list_directory_with_sizes",
+      "mcp__exa__web_search_exa",
+      "mcp__filesystem__move_file",
+      "Skill(official-doc-writing-skill:official-doc-research)"
     ]
   }
 }

@@ -21,7 +21,9 @@ $planTemplate = Join-Path $pluginRoot "plan-template"
 $planFiles = @(
   "project-overview.md",
   "project-brief.md",
+  "research-plan.md",
   "research-sources.md",
+  "research-notes.md",
   "facts-ledger.md",
   "progress.md",
   "source-materials.md"

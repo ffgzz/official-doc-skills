@@ -1,6 +1,6 @@
 ---
 name: using-official-docs
-description: 正式中文项目公文写作总入口。Use this skill first when the user asks to write or continue a 项目可行性报告、立项申请书、项目建议书、攻关任务书、技术总结或类似正式项目文稿, and the input is usually only a主题/一段提示词 plus 章节顺序、每章需要写什么、图表要求、字数要求, rather than source materials. Typical trigger prompts look like: “请围绕某主题写一份正式项目可行性报告”“按以下章节顺序生成”“第1章概述/第2章项目现状和发展趋势/第3章研发内容及技术关键”“每章有哪些图表和字数要求”. On trigger, do not search immediately. First parse the brief, derive project-slug, initialize workspace and plan files, then load official-doc-core only for shared validation, and only after that route to specialized skills. Background/research/innovation/achievements/indicators searches must be executed by the specialized skills, not by this entry skill. Network search must use session-exposed MCP search/connectors only; do not use built-in web search.
+description: 正式中文项目公文写作总入口。Use this skill first for prompt-driven 项目可行性报告、立项申请书、项目建议书、攻关任务书、技术总结等正式项目文稿。 Hard rule: this entry skill must never run web/MCP search itself. On trigger, do only four things in order: parse the brief, initialize workspace and plan files, load official-doc-core, then immediately load official-doc-research before any search or chapter drafting. Only after official-doc-research finishes may the specialized chapter skills write background, research content, innovation, technical achievements, or technical indicators. Do not use built-in web search.
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -14,6 +14,7 @@ allowed-tools: Read Write Edit Bash
 - 解析用户给出的提示词 brief
 - 初始化或复用工作区与 plan 台账
 - 先调用 `official-doc-core`
+- 先调用 `official-doc-research` 完成独立调研门禁
 - 按“内容关键词”而不是“固定章名”路由到五个专项章节 skill
 - 统筹后续 `table -> figure -> review -> revise -> assemble`
 
@@ -24,6 +25,24 @@ allowed-tools: Read Write Edit Bash
 
 ## 核心原则
 
+### 0.25 STOP 规则
+
+如果 `using-official-docs` 已经加载，而你下一步想做的是：
+- 搜背景
+- 搜现状
+- 搜技术路线
+- 搜成果或指标口径
+
+那说明顺序错了。
+
+此时必须立即停止搜索，回到以下顺序：
+1. 初始化 plan
+2. 调用 `official-doc-core`
+3. 调用 `official-doc-research`
+4. 等 `official-doc-research` 完成后，再进入章节 skill
+
+`using-official-docs` 自己绝不直接执行网络搜索。
+
 ### 0. 先初始化，后搜索
 
 触发本 skill 后的第一步不是搜索。
@@ -33,8 +52,9 @@ allowed-tools: Read Write Edit Bash
 2. 初始化 workspace
 3. 写入 plan 文件
 4. 调用 `official-doc-core` 做公共校验
-5. 路由专项 skill
-6. 只有专项 skill 才能开始搜索
+5. 调用 `official-doc-research` 做独立调研门禁
+6. 路由专项 skill
+7. 只有通过调研门禁后，专项 skill 才能开始写作
 
 如果刚加载 `using-official-docs` 就直接开始搜索，这属于流程错误。
 
@@ -43,7 +63,9 @@ allowed-tools: Read Write Edit Bash
 以下文件的首次创建与首轮回填，归 `using-official-docs`：
 - `project-overview.md`
 - `project-brief.md`
+- `research-plan.md`
 - `research-sources.md`
+- `research-notes.md`
 - `facts-ledger.md`
 - `progress.md`
 - `source-materials.md`
@@ -93,11 +115,13 @@ allowed-tools: Read Write Edit Bash
 - `official-doc-research-content` + `official-doc-innovation`
 - `official-doc-technical-achievements` + `official-doc-technical-indicators`
 
-### 4. 五个专项 skill 都必须先做网络搜索并登记来源
+### 4. 五个专项 skill 必须先过 `official-doc-research`
 
-凡命中以下五类内容，必须先搜索公开资料，并把来源登记到：
+凡命中以下五类内容，必须先经过独立调研门禁，再进入正文写作：
 - `workspace/plan/<project-slug>/research-sources.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`
+- `workspace/plan/<project-slug>/research-plan.md`
+- `workspace/plan/<project-slug>/research-notes.md`
 
 不得直接凭常识硬编：
 - 项目背景
@@ -105,6 +129,12 @@ allowed-tools: Read Write Edit Bash
 - 创新点
 - 主要技术成果
 - 主要技术指标
+
+`official-doc-research` 必须先做这些事：
+- 按内容拆出激活调研组，而不是只按整章粗搜
+- 默认只保留近 3 年资料；更早资料只能作为 `历史基线` 或 `基础规范`
+- 每个激活调研组至少完成 3 轮检索
+- 每个激活调研组达到最低来源保留量后，才能放行正文写作
 
 `research-sources.md` 至少记录：
 - 来源标题
@@ -127,6 +157,8 @@ allowed-tools: Read Write Edit Bash
 
 如果某条事实还没有完成登记，就不要先把它写进正文。
 
+如果某个激活调研组只有 2 到 3 条来源，或大部分来源都超过 3 年，默认视为“调研未完成”，不得直接进入正文。
+
 来源等级默认按以下口径处理：
 - `A主源`：政府/主管部门/标准发布机构/船级社/论文原文/官方产品页/官方公告
 - `B辅源`：主流行业媒体、研究机构报告、正规行业协会材料
@@ -146,7 +178,7 @@ allowed-tools: Read Write Edit Bash
 
 这类来源最多只能作为 `C参考` 或辅助线索，不能单独把事实状态升为 `已核验`。
 
-### 5. 专项章节必须“先加载专项 skill，再搜索，再写”
+### 5. 专项章节必须“先过 research gate，再加载专项 skill，再写”
 
 这是硬门禁，不是建议顺序。
 
@@ -165,12 +197,12 @@ allowed-tools: Read Write Edit Bash
 正确顺序必须是：
 1. `using-official-docs` 解析 brief
 2. 调用 `official-doc-core`
-3. 判断命中的专项 skill
-4. 立即加载对应专项 skill
-5. 由该专项 skill 按其内部规则发起网络搜索
-6. 由该专项 skill 负责该部分正文规则
+3. 调用 `official-doc-research`
+4. 判断命中的专项 skill
+5. 立即加载对应专项 skill
+6. 由该专项 skill 读取调研台账并负责该部分正文规则
 
-如果已经识别出“背景类内容”，却没有显式加载 `official-doc-project-background` 就开始搜索背景资料，这属于流程错误。
+如果已经识别出“背景类内容”，却没有先完成 `official-doc-research` 就开始搜索或起草背景资料，这属于流程错误。
 
 专项 skill 写正文前，还必须先判断事实能否落正文：
 - 已核验的事实：可进入正文
@@ -240,25 +272,28 @@ allowed-tools: Read Write Edit Bash
 3. 由主入口初始化或更新 plan 台账：
    - `project-overview.md`
    - `project-brief.md`
+   - `research-plan.md`
    - `research-sources.md`
+   - `research-notes.md`
    - `facts-ledger.md`
    - `progress.md`
    - `workspace/outputs/<project-slug>/00-section-plan.md`
 4. 单独调用一次 `official-doc-core`
-5. 对每一章按关键词做路由判断
-6. 命中五类共性章节时，先显式加载专项 skill，再由该 skill 发起搜索和写作，并把正文写入 `workspace/outputs/<project-slug>/`
-7. 未命中五类时，主入口按 brief 直接写该章，并把正文写入 `workspace/outputs/<project-slug>/`
-8. 当所有章节正文完成后，主入口必须自动检查每章要求的表格和图示，并按需调用：
+5. 若命中五类共性章节，先调用一次 `official-doc-research`，建立调研计划、完成多轮检索并落账
+6. 对每一章按关键词做路由判断
+7. 命中五类共性章节时，先显式加载专项 skill，再由该 skill 读取调研台账并写作，并把正文写入 `workspace/outputs/<project-slug>/`
+8. 未命中五类时，主入口按 brief 直接写该章，并把正文写入 `workspace/outputs/<project-slug>/`
+9. 当所有章节正文完成后，主入口必须自动检查每章要求的表格和图示，并按需调用：
    - `official-doc-table`
    - `official-doc-figure`
-9. 当请求的章节、表格、图示齐备后，主入口必须自动调用：
+10. 当请求的章节、表格、图示齐备后，主入口必须自动调用：
    - `official-doc-review`
-10. 若 review 产出 Must Fix 或其他待修问题，主入口必须自动继续调用：
+11. 若 review 产出 Must Fix 或其他待修问题，主入口必须自动继续调用：
    - `official-doc-revise`
-11. revise 完成后，主入口必须再次调用 `official-doc-review` 复核；只有 Must Fix 清零后，才允许继续推进
-12. revise 后复核通过，主入口必须再次判断是否已满足装配条件；满足则继续调用：
+12. revise 完成后，主入口必须再次调用 `official-doc-review` 复核；只有 Must Fix 清零后，才允许继续推进
+13. revise 后复核通过，主入口必须再次判断是否已满足装配条件；满足则继续调用：
    - `official-doc-assemble`
-13. 装配后由 `official-doc-assemble` 触发 final review，主入口只在 final review 完成后才允许把本轮任务视为完成
+14. 装配后由 `official-doc-assemble` 触发 final review，主入口只在 final review 完成后才允许把本轮任务视为完成
 
 只有在以下两种情况下才允许不继续推进：
 - 用户明确只要求单点动作，例如只写某一章、只补某一张表、只做 review
@@ -467,11 +502,13 @@ allowed-tools: Read Write Edit Bash
 
 主入口要做的是：
 1. 把该章拆成若干写作需求点
-2. 判断每个需求点命中哪个专项 skill
-3. 显式加载这些专项 skill
-4. 由这些专项 skill 各自执行搜索和正文规则，并将结果写入 `workspace/outputs/<project-slug>/` 对应章节文件
-5. 主入口读取这些章节文件，继续推进后续表图与 review 流程
-6. 再把结果拼回用户定义的章结构中
+2. 判断这些需求点激活了哪些调研组
+3. 先调用 `official-doc-research`
+4. 再判断每个需求点命中哪个专项 skill
+5. 显式加载这些专项 skill
+6. 由这些专项 skill 读取调研台账并执行正文规则，并将结果写入 `workspace/outputs/<project-slug>/` 对应章节文件
+7. 主入口读取这些章节文件，继续推进后续表图与 review 流程
+8. 再把结果拼回用户定义的章结构中
 
 不要要求用户把章节名改成 skill 名。
 不要在专项 skill 尚未加载前，主入口自己开始搜索该部分资料。
@@ -499,8 +536,8 @@ allowed-tools: Read Write Edit Bash
 - 不得把专项 skill 理解成“整章固定模板”
 - 不得把 `预期技术成果` 误判成 `研究内容`
 - 不得把 `预期成效`、`量化目标` 漏掉 `official-doc-technical-indicators`
-- 不得在识别出专项章节后，由 `using-official-docs` 或 `official-doc-core` 直接启动该章节的搜索
-- 不得在未显式加载 `official-doc-project-background` 时直接搜索背景、现状、痛点、必要性资料
+- 不得在识别出专项章节后，由 `using-official-docs` 或 `official-doc-core` 直接跳过 `official-doc-research`
+- 不得在未先通过 `official-doc-research` 的情况下直接搜索或起草背景、现状、痛点、必要性资料
 - 不得在章节正文写完后就停住，不继续判断表图、review、revise、assemble
 - 不得把长篇正文直接打印到终端替代写文件
 - 不得把“已写出若干章节”误判为“已完成整份报告”
@@ -510,9 +547,10 @@ allowed-tools: Read Write Edit Bash
 完成调度前，至少自查一次：
 - 是否已由主入口初始化工作区和 plan
 - 是否已调用 `official-doc-core`
+- 是否已先调用 `official-doc-research`
 - 是否按小节内容而非章名做了路由
 - 是否允许一章多 skill 叠加
-- 五个专项内容是否都要求先搜索再写
+- 五个专项内容是否都要求先过调研门禁再写
 - 非专项章节是否仍由主入口负责统筹
 - 是否已自动推进请求的表格和图示
 - 是否已自动推进 `review -> revise -> assemble`

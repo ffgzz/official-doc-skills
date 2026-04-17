@@ -1,6 +1,6 @@
 ---
 name: official-doc-innovation
-description: Use when any chapter or subsection needs 创新点、项目创新点、主要创新、技术创新、创新性、特色亮点、创新突破、差异化优势等内容, including sections titled 关键技术及创新点 or 预期成果与创新价值. This is a rulebook rather than a fixed template: derive innovation only for the requested parts, based on current-status gaps and research content. Use this skill only after using-official-docs has initialized workspace and plan files and official-doc-core has validated them. This skill should perform its own web searches for comparison baselines. Network search must use session-exposed MCP search/connectors only; do not use built-in web search.
+description: Use when any chapter or subsection needs 创新点、项目创新点、主要创新、技术创新、创新性、特色亮点、创新突破、差异化优势等内容, including sections titled 关键技术及创新点 or 预期成果与创新价值. This is a rulebook rather than a fixed template: derive innovation only for the requested parts, based on current-status gaps and research content. Use this skill only after using-official-docs has initialized workspace and plan files, official-doc-core has validated them, and official-doc-research has completed or supplemented the relevant comparison-baseline research. Network search must use session-exposed MCP search/connectors only; do not use built-in web search.
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -34,7 +34,20 @@ allowed-tools: Read Write Edit Bash
 
 ## 先做什么
 
-开始写之前必须先搜索并登记来源：
+开始写之前先检查创新点所需的比较基线是否已经由 `official-doc-research` 做扎实。
+
+必须先读取：
+- `workspace/plan/<project-slug>/research-plan.md`
+- `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-notes.md`
+- `workspace/plan/<project-slug>/facts-ledger.md`
+
+如果创新类调研仍存在以下任一情况，应先回到 `official-doc-research` 补调研：
+- 缺少对“传统方案 / 现有路线 / 同类项目”的近年基线
+- 只有本项目视角，没有外部参照系
+- 来源还停留在旧资讯稿或单篇宣传稿
+
+只有在比较基线已形成、但某个创新点仍需补证时，才允许少量补充检索，例如：
 - 同领域已有方案、竞品、论文、专利、白皮书
 - 公开可见的主流技术路线和能力边界
 - 同类项目的创新点写法和口径

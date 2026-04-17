@@ -1,6 +1,6 @@
 ---
 name: official-doc-research-content
-description: Use when any chapter or subsection needs 研究内容、研发内容、主要研究内容、主要攻关内容、建设内容、任务设置、专题设置、课题设置、子课题、子任务、关键技术、技术关键、核心技术、实施内容、实施任务等内容. This is a rulebook rather than a fixed chapter template: apply only the requested parts even if they appear inside chapters such as 研发内容及技术关键, 项目建设方案, 技术路线和实施方案, or 项目任务设置. Use this skill only after using-official-docs has initialized workspace and plan files and official-doc-core has validated them. This skill is the one that should perform the required research-content web searches. Network search must use session-exposed MCP search/connectors only; do not use built-in web search.
+description: Use when any chapter or subsection needs 研究内容、研发内容、主要研究内容、主要攻关内容、建设内容、任务设置、专题设置、课题设置、子课题、子任务、关键技术、技术关键、核心技术、实施内容、实施任务等内容. This is a rulebook rather than a fixed chapter template: apply only the requested parts even if they appear inside chapters such as 研发内容及技术关键, 项目建设方案, 技术路线和实施方案, or 项目任务设置. Use this skill only after using-official-docs has initialized workspace and plan files, official-doc-core has validated them, and official-doc-research has completed or supplemented the relevant research-content gate. Network search must use session-exposed MCP search/connectors only; do not use built-in web search.
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -36,7 +36,21 @@ allowed-tools: Read Write Edit Bash
 
 ## 先做什么
 
-开始写之前，必须先搜索并登记来源：
+开始写之前，先检查研究内容类调研门禁是否完成。
+
+必须先读取：
+- `workspace/plan/<project-slug>/research-plan.md`
+- `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-notes.md`
+- `workspace/plan/<project-slug>/facts-ledger.md`
+
+如果研究内容类调研仍存在以下任一情况，应先回到 `official-doc-research` 补调研：
+- 同类任务拆法还只有一两个零散样例
+- 关键技术命名缺少近 3 年公开资料校准
+- 研究内容边界仍明显拍脑袋
+- `research-notes.md` 尚未沉淀出“问题 -> 方法 -> 输出”的摘记
+
+只有在研究内容大框架已建立、但某个子课题仍需补证时，才允许少量补充检索，例如：
 - 同领域项目指南、攻关任务书、立项书
 - 相关技术路线论文、白皮书、行业报告
 - 头部企业、研究机构公开方案

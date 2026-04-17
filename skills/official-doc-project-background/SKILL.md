@@ -1,6 +1,6 @@
 ---
 name: official-doc-project-background
-description: Use when any chapter or subsection needs 项目背景、行业背景、建设背景、宏观背景、立项意义、建设意义、国内外现状、发展现状、行业发展动向、趋势判断、痛点问题、差距分析、攻关必要性、建设必要性、立项必要性、产业链安全、自主可控等内容. This is a rulebook, not a fixed chapter template: apply only the requested subparts even if they appear inside generic chapters such as 概述, 项目现状和发展趋势, 立项目的, or 研究结论. Use this skill only after using-official-docs has initialized workspace and plan files and official-doc-core has validated them. This skill is the one that should perform the required background web searches. Network search must use session-exposed MCP search/connectors only; do not use built-in web search.
+description: Use when any chapter or subsection needs 项目背景、行业背景、建设背景、宏观背景、立项意义、建设意义、国内外现状、发展现状、行业发展动向、趋势判断、痛点问题、差距分析、攻关必要性、建设必要性、立项必要性、产业链安全、自主可控等内容. This is a rulebook, not a fixed chapter template: apply only the requested subparts even if they appear inside generic chapters such as 概述, 项目现状和发展趋势, 立项目的, or 研究结论. Use this skill only after using-official-docs has initialized workspace and plan files, official-doc-core has validated them, and official-doc-research has completed or supplemented the relevant background research gate. Network search must use session-exposed MCP search/connectors only; do not use built-in web search.
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -26,7 +26,21 @@ allowed-tools: Read Write Edit Bash
 
 ## 先做什么
 
-开始写之前必须先做网络搜索，并把结果登记到：
+开始写之前先检查调研门禁是否完成，而不是从零开始搜索。
+
+必须先读取：
+- `workspace/plan/<project-slug>/research-plan.md`
+- `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-notes.md`
+- `workspace/plan/<project-slug>/facts-ledger.md`
+
+如果背景类调研组仍存在以下任一情况，应先回到 `official-doc-research` 补调研，再回来写：
+- 只有零散 2 到 3 条来源
+- 多数来源早于近 3 年，且没有标记为 `历史基线` / `基础规范`
+- 缺少 `A主源`
+- 还没有形成可写正文的 `research-notes.md`
+
+只有在背景类台账已经基本齐全，但某个小问题仍缺支撑时，才允许做少量补充检索，并把结果登记到：
 - `workspace/plan/<project-slug>/research-sources.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`
 
@@ -46,7 +60,7 @@ allowed-tools: Read Write Edit Bash
 - `B辅源`
 - `C参考`
 
-如果 `using-official-docs` 或 `official-doc-core` 还没有显式加载本 skill，就已经开始搜索背景、现状、痛点、必要性资料，说明流程执行错误，应回到“先加载本 skill，再搜索”的顺序。
+如果 `using-official-docs` 尚未先调用 `official-doc-research`，或背景类调研仍明显过浅、过旧，就直接开始写背景、现状、痛点、必要性，说明流程执行错误，应先回到“先过调研门禁，再写”的顺序。
 
 默认搜索工具优先级：
 1. 当前 session 已暴露的 MCP 搜索 / connector 搜索工具
@@ -133,7 +147,7 @@ allowed-tools: Read Write Edit Bash
 - 行业或企业来源
 - 学术或研究来源
 
-优先搜索：
+优先补充检索：
 - 国家战略、主管部门政策、产业专项指南
 - 行业协会、头部企业、船级社、研究院公开资料
 - 最近 3 年的论文、白皮书、案例、同类项目指南

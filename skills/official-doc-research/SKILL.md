@@ -1,0 +1,247 @@
+---
+name: official-doc-research
+description: Mandatory research gate for prompt-driven formal Chinese project documents. Use this skill immediately after using-official-docs has parsed the brief and official-doc-core has validated the workspace, and before any MCP/web search or any drafting of background, research content, innovation, technical achievements, or technical indicators. This skill builds the research plan, runs multi-round MCP searches, enforces recency and source-count thresholds, logs sources and notes, and only then hands off to the chapter skills. Do not use built-in web search.
+allowed-tools: Read Write Edit Bash
+---
+
+# official-doc-research
+
+## 定位
+
+这是“正式项目公文写作”的独立调研门禁 skill。
+
+它的职责不是写正文，而是先把“能不能写、该怎么写、依据够不够新”这几件事做扎实。
+
+如果你已经准备开始搜索，而本 skill 还没加载，说明流程顺序错误，应先加载本 skill。
+
+它服务于以下五类共性章节：
+- 项目背景
+- 研究内容
+- 创新点
+- 主要技术成果
+- 主要技术指标
+
+如果这些章节还没有经过本 skill 的调研门禁，就不应直接开始写正文。
+
+## 何时必须使用
+
+以下任一情况出现时，必须先用本 skill：
+- 新项目刚完成 brief 解析，准备进入五类共性章节写作
+- 现有 `research-sources.md` 只有零散 2 到 3 条来源
+- 现有来源大多超过 3 年，缺少近年信息
+- 现有来源只有标题堆砌，没有提炼成可写正文的研究摘记
+- 当前章节 skill 发现缺少可支撑断言的最新资料
+- review 指出“调研过浅 / 来源过旧 / 来源分级不足 / facts-ledger 缺少主源”
+
+## 前置条件
+
+默认假定：
+- `using-official-docs` 已完成工作区初始化
+- `official-doc-core` 已完成公共校验
+
+本 skill 不负责：
+- 直接起草章节正文
+- 直接进入 review / revise / assemble
+
+## 必读文件
+
+开始调研前，至少读取：
+- `workspace/plan/<project-slug>/project-brief.md`
+- `workspace/plan/<project-slug>/project-overview.md`
+- `workspace/outputs/<project-slug>/00-section-plan.md`
+- `workspace/plan/<project-slug>/research-plan.md`
+- `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-notes.md`
+- `workspace/plan/<project-slug>/facts-ledger.md`
+- `workspace/plan/<project-slug>/progress.md`
+
+## 工具规则
+
+联网搜索只能使用当前 session 暴露的 MCP / connector 搜索工具。
+
+默认优先级：
+1. 当前 session 已暴露的 MCP 搜索 / connector 搜索工具
+2. 其他会话内可用的 MCP / connector 搜索工具
+
+不允许使用内置 `Web Search`。
+
+如果当前没有可用 MCP 搜索工具，或 MCP 搜索持续报错：
+- 停止联网调研
+- 在 `research-plan.md`、`facts-ledger.md`、`progress.md` 中记录阻断原因
+- 不得偷偷改用内置搜索继续推进
+
+## 调研硬门槛
+
+### 1. 不得只搜两三次就停
+
+每个激活的调研组，默认至少完成 3 轮检索：
+1. `范围确认`：确认主题边界、关键词、同义表述
+2. `重点深挖`：围绕政策、行业、技术、案例或指标做纵深检索
+3. `交叉核验`：补主源、补最新资料、补相互印证
+
+### 2. 默认只看近 3 年
+
+默认时间窗口是“当前年份及前 2 年”。
+
+以当前 2026 年为例，优先使用：
+- 2026
+- 2025
+- 2024
+
+以下情况才允许引用更早来源：
+- 国家标准、国际标准、船级社规范、经典论文
+- 行业基础概念、长期沿用的底层定义
+- 某项技术路线的里程碑原始文献
+
+若来源早于近 3 年，必须在台账中注明：
+- `历史基线`
+- 或 `基础规范`
+
+不得把 3 到 4 年前的旧新闻、旧宣传稿、旧资讯稿，当成当前现状依据。
+
+### 3. 每个调研组必须达到最低保留量
+
+每个激活调研组，在进入正文写作前，默认至少保留：
+- 6 条有效来源
+- 其中至少 4 条在近 3 年内
+- 至少 1 条 `A主源`
+- 至少 2 条 `B辅源`
+
+如果是高风险组，最低要求提升到 8 条有效来源：
+- 背景/现状/政策趋势
+- 技术指标/验收口径
+
+### 4. 来源不能只停留在列表
+
+调研完成不等于“记了几个链接”。
+
+必须同时补齐：
+- `research-plan.md`：调研组、轮次、查询式、覆盖状态
+- `research-sources.md`：来源清单与分级
+- `research-notes.md`：逐条提炼的核心发现
+- `facts-ledger.md`：能入正文的事实和核验状态
+
+## 调研分组方法
+
+不要按“整章”粗暴检索。
+应按用户实际要写的内容拆成若干调研组。
+
+常见调研组包括：
+- `BG`：背景、现状、趋势、痛点、必要性
+- `RC`：研究内容、技术路线、任务拆分、子课题命名
+- `IN`：创新点对比基线、竞品路线、差异化表达
+- `TA`：成果形态、交付件、验收件、知识产权口径
+- `TI`：技术指标、行业基准、验收口径、合理区间
+
+如果用户只要求其中一部分，只激活对应调研组，不要无谓扩大范围。
+
+## 查询式设计
+
+每个调研组至少准备 4 类查询式，不要只换几个词重复搜索：
+
+### A. 政策 / 官方口径
+- 国家战略
+- 部委政策
+- 标准 / 规范 / 船级社要求
+- 官方指南 / 官方公告
+
+### B. 行业 / 企业实践
+- 行业协会
+- 头部企业
+- 工程案例
+- 解决方案白皮书
+
+### C. 学术 / 技术路线
+- 论文
+- 研究机构报告
+- 公开技术文档
+- 关键方法综述
+
+### D. 验收 / 指标 / 对标
+- 常见指标口径
+- 同类项目成果
+- 性能区间
+- 评测或验证方法
+
+## 调研流程
+
+### 第一步：建立调研计划
+
+在 `research-plan.md` 中登记：
+- 激活的调研组
+- 每组要回答的问题
+- 每组默认时间窗口
+- 每组最低来源数和分级要求
+- 每组当前状态
+
+### 第二步：分轮检索并留痕
+
+每做一轮检索，都要在 `research-plan.md` 中追加：
+- 轮次
+- 调研组
+- 查询式
+- 时间过滤条件
+- 检索目标
+- 结果概览
+- 下一步
+
+### 第三步：筛来源
+
+把保留下来的来源登记到 `research-sources.md`，并补齐：
+- 来源编号
+- 调研组
+- 轮次
+- 查询式
+- 来源等级
+- 发布时间
+- 时效标记：`近3年` / `历史基线`
+- 支撑章节 / 小节
+- 是否可直接支撑正文断言
+
+### 第四步：做研究摘记
+
+每条保留来源至少提炼一条“可用于写作”的摘记，写入 `research-notes.md`：
+- 来源编号
+- 核心发现
+- 支撑哪一章 / 哪一小节
+- 可支撑的断言强度
+- 风险提示
+
+### 第五步：升格为事实台账
+
+只有当某条信息完成核验后，才可写入 `facts-ledger.md`，并标注：
+- `已核验`
+- `待核验`
+- `仅作趋势参考`
+
+## 与五个章节 skill 的关系
+
+本 skill 负责“先把资料搜深、筛新、落账”。
+
+五个章节 skill 负责：
+- 读取本 skill 产出的调研台账
+- 按各自规则写成正式公文表述
+
+五个章节 skill 不应从零开始各搜各的。
+如果写作时发现某个子问题仍缺最新资料，应先回到本 skill 补调研，再继续写。
+
+## 完成判定
+
+只有同时满足以下条件，才算本轮调研完成：
+- 已为激活调研组建立 `research-plan.md`
+- 每个激活调研组至少完成 3 轮检索
+- 每个激活调研组达到最低来源保留量
+- 近 3 年来源占主导，旧来源只作为基线或规范
+- `research-notes.md` 不再只是空表
+- `facts-ledger.md` 已沉淀出可入正文的事实
+- `progress.md` 已明确记录“调研门禁完成”
+
+## 终端输出要求
+
+终端里只简要汇报：
+- 完成了哪些调研组
+- 每组保留了多少条来源
+- 是否已满足近 3 年和来源分级门槛
+- 下一步应交给哪个章节 skill
+
+不要把大段网页原文或大段调研正文直接喷到终端。

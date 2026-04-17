@@ -11,7 +11,7 @@ allowed-tools: Read Write Edit Bash
 > 当前通用规则是：
 > - 以 `project-brief.md` 和 `00-section-plan.md` 为准
 > - 工作区按 `workspace/<kind>/<project-slug>/` 隔离
-> - 五类共性章节先搜索、先落账、后写作
+> - 五类共性章节先过 `official-doc-research` 调研门禁、先落账、后写作
 > - `创新点` 回指现状差距与研究内容
 > - `技术成果` 由研究内容推出
 > - `技术指标` 可量化、可测试、可验证
@@ -40,13 +40,14 @@ allowed-tools: Read Write Edit Bash
 
 ### 7. core 不代替专项 skill
 `official-doc-core` 只做公共校验，不代替：
+- `official-doc-research`
 - `official-doc-project-background`
 - `official-doc-research-content`
 - `official-doc-innovation`
 - `official-doc-technical-achievements`
 - `official-doc-technical-indicators`
 
-若当前章节命中上述五类之一，core 执行后下一步必须是显式加载对应专项 skill，而不是由 core 自己搜索或写作。
+若当前章节命中上述五类之一，core 执行后下一步必须先进入 `official-doc-research`，再显式加载对应专项 skill，而不是由 core 自己搜索或写作。
 
 ## 二、core 的职责边界
 
@@ -55,7 +56,9 @@ allowed-tools: Read Write Edit Bash
 - 校验以下文件是否存在且可读：
   - `project-overview.md`
   - `project-brief.md`
+  - `research-plan.md`
   - `research-sources.md`
+  - `research-notes.md`
   - `facts-ledger.md`
   - `progress.md`
   - `source-materials.md`
@@ -118,7 +121,9 @@ workspace/
 必须维护以下文件：
 - `workspace/plan/<project-slug>/project-overview.md`
 - `workspace/plan/<project-slug>/project-brief.md`
+- `workspace/plan/<project-slug>/research-plan.md`
 - `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-notes.md`
 - `workspace/plan/<project-slug>/source-materials.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`
 - `workspace/plan/<project-slug>/progress.md`
@@ -140,14 +145,15 @@ workspace/
 1. `using-official-docs` 解析 brief 并初始化工作区
 2. `using-official-docs` 初始化台账
 3. `official-doc-core` 校验前置条件
-4. 识别各章是否命中专项 skill
-5. 命中则加载专项 skill
-6. 生成正文
-7. 补表
-8. 补图
-9. review
-10. revise
-11. assemble
+4. `official-doc-research` 完成调研门禁
+5. 识别各章是否命中专项 skill
+6. 命中则加载专项 skill
+7. 生成正文
+8. 补表
+9. 补图
+10. review
+11. revise
+12. assemble
 
 ### 继续推进顺序
 1. 读取现有 `workspace/plan/ outputs/ tables/ figures/ review/ assembled/`

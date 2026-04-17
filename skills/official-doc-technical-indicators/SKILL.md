@@ -1,6 +1,6 @@
 ---
 name: official-doc-technical-indicators
-description: Use when any chapter or subsection needs 主要技术指标、技术指标、考核指标、性能指标、应用指标、效能指标、量化目标、验收指标、预期成效、量化考核等内容, including metric sections inside 预期目标, 项目目标, or 考核指标体系. This is a rulebook rather than a fixed template: derive only the requested metrics from the research content and achievements, then write them after web search and source logging in formal project-report style. Use this skill only after using-official-docs has initialized workspace and plan files and official-doc-core has validated them. Network search must use session-exposed MCP search/connectors only; do not use built-in web search.
+description: Use when any chapter or subsection needs 主要技术指标、技术指标、考核指标、性能指标、应用指标、效能指标、量化目标、验收指标、预期成效、量化考核等内容, including metric sections inside 预期目标, 项目目标, or 考核指标体系. This is a rulebook rather than a fixed template: derive only the requested metrics from the research content and achievements, then write them after official-doc-research has established recent metric baselines and source logging in formal project-report style. Use this skill only after using-official-docs has initialized workspace and plan files and official-doc-core has validated them. Network search must use session-exposed MCP search/connectors only; do not use built-in web search.
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -34,7 +34,20 @@ allowed-tools: Read Write Edit Bash
 
 ## 先做什么
 
-开始写之前必须先搜索并登记来源：
+开始写之前先检查指标类调研门禁是否完成。
+
+必须先读取：
+- `workspace/plan/<project-slug>/research-plan.md`
+- `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-notes.md`
+- `workspace/plan/<project-slug>/facts-ledger.md`
+
+如果指标类调研仍存在以下任一情况，应先回到 `official-doc-research` 补调研：
+- 指标区间没有近 3 年基线
+- 缺少验收口径或测试场景参照
+- 指标数字看起来像拍脑袋，没有主源或辅源支撑
+
+只有在指标框架已清楚、但个别指标仍需补证时，才允许少量补充检索，例如：
 - 同类项目的常见指标口径
 - 公开可见的行业基准、验收口径、性能口径
 - 与本主题相关的准确率、效率、容量、兼容性、应用效果等合理区间

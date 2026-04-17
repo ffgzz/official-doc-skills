@@ -1,6 +1,6 @@
 ---
 name: official-doc-technical-achievements
-description: Use when any chapter or subsection needs 主要技术成果、预期技术成果、技术成果、成果形式、交付成果、预期成果、研究成果、形成成果、应用成果等内容, including sections inside 预期目标 or 项目成果. This is a rulebook rather than a fixed template: derive only the requested deliverables from the research content, then write them in formal project-report style after web search and source logging. Use this skill only after using-official-docs has initialized workspace and plan files and official-doc-core has validated them. Network search must use session-exposed MCP search/connectors only; do not use built-in web search.
+description: Use when any chapter or subsection needs 主要技术成果、预期技术成果、技术成果、成果形式、交付成果、预期成果、研究成果、形成成果、应用成果等内容, including sections inside 预期目标 or 项目成果. This is a rulebook rather than a fixed template: derive only the requested deliverables from the research content, then write them in formal project-report style after official-doc-research has established the relevant deliverable baselines and source logging. Use this skill only after using-official-docs has initialized workspace and plan files and official-doc-core has validated them. Network search must use session-exposed MCP search/connectors only; do not use built-in web search.
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -34,7 +34,20 @@ allowed-tools: Read Write Edit Bash
 
 ## 先做什么
 
-开始写之前必须先搜索并登记来源：
+开始写之前先检查成果类调研门禁是否完成。
+
+必须先读取：
+- `workspace/plan/<project-slug>/research-plan.md`
+- `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-notes.md`
+- `workspace/plan/<project-slug>/facts-ledger.md`
+
+如果成果类调研仍存在以下任一情况，应先回到 `official-doc-research` 补调研：
+- 还不知道同类项目通常交付哪些成果形态
+- 只有项目内部想法，没有外部成果口径参照
+- 缺少近年项目指南、任务书、成果清单样例
+
+只有在成果框架已基本明确、但个别成果命名仍需补证时，才允许少量补充检索，例如：
 - 同类项目通常形成哪些成果形态
 - 行业内常见的交付件、验收件、成果件写法
 - 相关成果类别的合理命名方式

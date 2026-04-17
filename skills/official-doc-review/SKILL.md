@@ -1,6 +1,6 @@
 ---
 name: official-doc-review
-description: Use when a prompt-driven project document needs review. This skill checks the requested chapters, tables, figures, source grounding, section dependencies, word counts, and assemble readiness for the current project slug, then writes an actionable issue list for revise.
+description: Use when a prompt-driven project document needs review. This skill checks the requested chapters, tables, figures, research depth, source grounding, section dependencies, word counts, recency discipline, and assemble readiness for the current project slug, then writes an actionable issue list for revise.
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -9,6 +9,7 @@ allowed-tools: Read Write Edit Bash
 > 当前复核只依据用户 brief、章节计划、事实台账、正文散件和装配稿。
 >
 > 当前 review 核心检查点是：
+> - `official-doc-research` 是否真的完成了独立调研门禁，而不是只搜两三次
 > - 用户要求的章节是否写完
 > - 五类共性章节是否完成搜索留痕
 > - `创新点 / 技术成果 / 技术指标` 是否与研究内容闭环
@@ -36,7 +37,9 @@ allowed-tools: Read Write Edit Bash
 开始复核前，至少读取以下文件：
 - `workspace/plan/<project-slug>/project-overview.md`
 - `workspace/plan/<project-slug>/project-brief.md`
+- `workspace/plan/<project-slug>/research-plan.md`
 - `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-notes.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`
 - `workspace/plan/<project-slug>/progress.md`
 - 已生成的 `workspace/outputs/<project-slug>/`、`workspace/tables/<project-slug>/`、`workspace/figures/<project-slug>/` 文件
@@ -97,6 +100,10 @@ allowed-tools: Read Write Edit Bash
 - 已装配进正式稿的表图内容，是否与 `workspace/tables/`、`workspace/figures/` 中最新文件一致
 
 ### 3. 事实一致性
+- `official-doc-research` 是否为激活调研组建立了调研计划
+- 每个激活调研组是否至少完成 3 轮检索，而不是只做 2 到 3 次零散搜索
+- 每个激活调研组是否达到最低保留来源量
+- 来源是否以近 3 年资料为主，超窗来源是否明确标记为 `历史基线` / `基础规范`
 - 项目名称是否统一
 - 单位全称/简称是否统一
 - 负责人、成员、职责是否冲突
@@ -110,6 +117,9 @@ allowed-tools: Read Write Edit Bash
 ### 4. 风险项
 - 是否存在大量 `【待补】`
 - 是否存在明显空话套话
+- 是否存在“研究台账里只有 2 到 3 条来源，却已开始大段写正文”
+- 是否存在“来源大多是 3 到 4 年前旧信息，却被当成当前现状依据”
+- 是否存在“research-plan / research-notes 仍接近空白，但正文已写得很实”
 - 是否存在“图表已有但正文未引用”
 - 是否存在“正文提到表图但文件未生成”
 - 是否存在“正文已写具体事实，但 facts-ledger 无对应 `已核验` 记录”
@@ -173,6 +183,8 @@ allowed-tools: Read Write Edit Bash
 - 修复动作
 
 Must Fix 问题优先覆盖以下高风险类型：
+- 调研深度明显不足
+- 最新来源不足，仍大量依赖过旧资料
 - 未核验具体事实
 - 来源等级不达标却被标记为已核验
 - 章节比例硬阈值不满足
@@ -222,6 +234,9 @@ Must Fix 问题应尽量写成：
 
 对于“未核验具体事实”问题，要写成类似：
 - `第1章行业背景写入了具体政策文号和发布日期，但 facts-ledger 中无对应已核验记录；应先补官方来源核验，若无法核验则改写为概括性政策背景表述。`
+
+对于“调研过浅”问题，要写成类似：
+- `背景类调研组在 research-sources 中仅保留 3 条来源，其中 2 条早于近 3 年，且 research-notes 仍为空表；在这种情况下直接写第1章会导致现状判断失真。应先回到 official-doc-research 补足多轮检索和近年主源。`
 
 对于“来源等级不达标”问题，要写成类似：
 - `第1章关于船舶行业大模型的具体断言虽然在 facts-ledger 中标记为已核验，但 research-sources 的支撑来源主要是百科和资讯转载，缺少官方公告或一手材料；应补充 A主源后再保留该断言，否则改写为保守趋势表述。`

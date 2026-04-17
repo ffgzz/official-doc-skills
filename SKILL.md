@@ -11,6 +11,7 @@ description: Use when drafting formal Chinese project materials from a prompt-on
 
 - 入口统筹：`using-official-docs`
 - 通用规则：`official-doc-core`
+- 独立调研门禁：`official-doc-research`
 - 共性章节：
   - `official-doc-project-background`
   - `official-doc-research-content`
@@ -36,8 +37,9 @@ description: Use when drafting formal Chinese project materials from a prompt-on
 ## 核心原则
 
 - 先解析 brief，再写作
-- 共性章节按能力 skill 写，非共性章节直接写
-- 五类共性章节必须先做网络搜索
+- 五类共性章节先过 `official-doc-research` 调研门禁，再按能力 skill 写
+- 非共性章节直接写
+- 调研默认优先近 3 年资料，不得只搜两三次就停
 - 技术成果必须由研究内容推出
 - 技术指标必须可量化、可测试
 - 最终交付要经过 review / revise / assemble
