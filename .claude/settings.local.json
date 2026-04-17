@@ -34,7 +34,15 @@
       "mcp__filesystem__list_directory_with_sizes",
       "mcp__exa__web_search_exa",
       "mcp__filesystem__move_file",
-      "Skill(official-doc-writing-skill:official-doc-research)"
+      "Skill(official-doc-writing-skill:official-doc-research)",
+      "WebSearch",
+      "mcp__thinking__sequentialthinking",
+      "WebFetch(domain:www.ship-technology.com)",
+      "WebFetch(domain:www.marinelink.com)",
+      "WebFetch(domain:www.neotechnics.co.uk)",
+      "WebFetch(domain:www.iea.org)",
+      "WebFetch(domain:www.marinetreaty.org)",
+      "Bash(exa --version)"
     ]
   }
 }

@@ -1,6 +1,6 @@
 ---
 name: official-doc-revise
-description: Use after official-doc-review for the current project slug. This skill fixes concrete chapter, table, figure, source, and dependency issues without inventing facts, then updates progress and determines whether assembly can proceed.
+description: 用于在 official-doc-review 之后回修当前项目稿件。它根据问题清单定向修复章节、表格、图示、来源、风格和依赖问题，不得编造事实，并在完成后更新进度和装配判定。
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -13,6 +13,7 @@ allowed-tools: Read Write Edit Bash
 > - 先补搜索和依赖关系，再修措辞
 > - `技术成果` 必须由研究内容回推
 > - `技术指标` 必须补齐阈值、单位、验证口径
+> - 正文必须改回正式公文自然段，不能保留答题卡式 AI 痕迹
 
 ## 适用时机
 
@@ -53,6 +54,7 @@ allowed-tools: Read Write Edit Bash
 - 若 Must Fix 包含章节配比失衡，必须优先修正章节展开深度，再处理措辞润色
 - 若 review 指出“正式稿中的信息比散件文件更空”或“已知事实被回退成 `【待补】`”，必须优先修复该回退问题，再做其他润色
 - 若 review 指出总字数不达标，必须先判断是整体过长还是过短，再按章节轻重规则定向压缩或补足
+- 若 review 指出正文存在列表化、加粗小标签或机械过渡词，必须优先改回自然段表述，再进入装配
 
 ## 回修顺序
 
@@ -62,6 +64,7 @@ allowed-tools: Read Write Edit Bash
 3. 补高优先表图缺失
 4. 修正文与表图引用、术语、数字口径
 5. 修台账与进度记录
+6. 运行风格检查，确认明显 AI 痕迹已清理
 
 不要一上来就只改文字表述，先解决结构性问题。
 
@@ -72,6 +75,7 @@ allowed-tools: Read Write Edit Bash
 - 项目名称、单位、负责人、周期、预算等口径统一
 - 将 review 指出的空泛段落改成更贴近模板要求的正式表述
 - 将缺失说明补回台账，而不是只在对话中说明
+- 将列表化正文、加粗小标签和机械过渡词改写为连续自然段
 
 ## 回修优先级
 
@@ -83,6 +87,19 @@ allowed-tools: Read Write Edit Bash
 5. 正文与表图引用、术语、数字口径不一致
 6. 已知事实被回退成 `【待补】`
 7. 语言、风格、冗余重复问题
+
+## 风格回修后的检查
+
+正文回修后，优先运行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/style_check.ps1 -FilePath <文件路径>
+```
+
+如果脚本仍命中以下项，默认说明回修未完成：
+- 正文列表行
+- 正文加粗小标签
+- 机械过渡词
 
 ## 与 table / figure skill 的协同
 

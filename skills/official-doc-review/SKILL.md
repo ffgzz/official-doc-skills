@@ -1,6 +1,6 @@
 ---
 name: official-doc-review
-description: Use when a prompt-driven project document needs review. This skill checks the requested chapters, tables, figures, research depth, source grounding, section dependencies, word counts, recency discipline, and assemble readiness for the current project slug, then writes an actionable issue list for revise.
+description: 用于对当前项目稿件进行复核。它检查章节完整性、调研深度、来源等级、事实核验、文风与格式、表图一致性、字数约束以及装配就绪度，并输出可执行的问题清单供 revise 修复。
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -13,6 +13,7 @@ allowed-tools: Read Write Edit Bash
 > - 用户要求的章节是否写完
 > - 五类共性章节是否完成搜索留痕
 > - `创新点 / 技术成果 / 技术指标` 是否与研究内容闭环
+> - 正文是否仍存在明显 AI 痕迹、列表化正文或加粗小标签
 > - 用户要求的表图是否齐
 > - 字数是否满足 brief
 > - 正文中的具体事实是否已在 `facts-ledger.md` 中完成核验
@@ -37,6 +38,7 @@ allowed-tools: Read Write Edit Bash
 开始复核前，至少读取以下文件：
 - `workspace/plan/<project-slug>/project-overview.md`
 - `workspace/plan/<project-slug>/project-brief.md`
+- `workspace/plan/<project-slug>/stage-gates.md`
 - `workspace/plan/<project-slug>/research-plan.md`
 - `workspace/plan/<project-slug>/research-sources.md`
 - `workspace/plan/<project-slug>/research-notes.md`
@@ -117,6 +119,9 @@ allowed-tools: Read Write Edit Bash
 ### 4. 风险项
 - 是否存在大量 `【待补】`
 - 是否存在明显空话套话
+- 是否存在正文列表化、演示稿化、答题卡化
+- 是否存在 `**技术描述**`、`**技术难点**`、`**作用**` 之类加粗小标签
+- 是否存在 `首先、其次、最后、此外、另外、接下来、总之` 等机械过渡词
 - 是否存在“研究台账里只有 2 到 3 条来源，却已开始大段写正文”
 - 是否存在“来源大多是 3 到 4 年前旧信息，却被当成当前现状依据”
 - 是否存在“research-plan / research-notes 仍接近空白，但正文已写得很实”
@@ -185,6 +190,7 @@ allowed-tools: Read Write Edit Bash
 Must Fix 问题优先覆盖以下高风险类型：
 - 调研深度明显不足
 - 最新来源不足，仍大量依赖过旧资料
+- 正文风格明显不像正式公文
 - 未核验具体事实
 - 来源等级不达标却被标记为已核验
 - 章节比例硬阈值不满足
@@ -237,6 +243,29 @@ Must Fix 问题应尽量写成：
 
 对于“调研过浅”问题，要写成类似：
 - `背景类调研组在 research-sources 中仅保留 3 条来源，其中 2 条早于近 3 年，且 research-notes 仍为空表；在这种情况下直接写第1章会导致现状判断失真。应先回到 official-doc-research 补足多轮检索和近年主源。`
+
+对于“正文风格不正式”问题，要写成类似：
+- `第3章仍大量使用项目符号和加粗小标签，如“技术描述”“技术难点”“作用”，整体更像演示稿备注而不是正式公文正文；应改写为连续自然段，并删除机械过渡词和答题卡式标记。`
+
+## 风格检查脚本
+
+复核正文风格时，优先运行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/style_check.ps1 -FilePath <文件路径>
+```
+
+重点检查：
+- 正文列表行
+- 正文加粗小标签
+- 机械过渡词
+- 空壳强调句
+- 目录式过密编号
+
+如果脚本命中以下任一项，默认直接记为 Must Fix：
+- 正文列表行
+- 正文加粗小标签
+- 同一章节中高频出现机械过渡词
 
 对于“来源等级不达标”问题，要写成类似：
 - `第1章关于船舶行业大模型的具体断言虽然在 facts-ledger 中标记为已核验，但 research-sources 的支撑来源主要是百科和资讯转载，缺少官方公告或一手材料；应补充 A主源后再保留该断言，否则改写为保守趋势表述。`

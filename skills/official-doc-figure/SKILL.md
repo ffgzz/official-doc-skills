@@ -1,6 +1,6 @@
 ---
 name: official-doc-figure
-description: Use when the user brief or a drafted chapter requires project figures. This skill generates only the requested diagrams for the current project slug, using chapter logic and research evidence, and outputs mermaid plus figure notes for later assembly.
+description: 用于生成项目公文所需图示。它只补用户要求的图，依据章节逻辑和调研证据生成图示内容，并输出 mermaid 及图示说明供后续装配。
 allowed-tools: Read Write Edit Bash
 ---
 

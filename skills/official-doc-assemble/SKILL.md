@@ -1,6 +1,6 @@
 ---
 name: official-doc-assemble
-description: Use when the current project slug is ready for a formal assembled draft. This skill merges the requested prompt-driven chapters, tables, and figures into one deliverable, writes assembly notes, and then triggers final review.
+description: 用于在当前项目满足条件时装配正式总稿。它按照章节顺序整合正文、表格和图示，生成 formal-draft 与 assembly-notes，并在装配后触发 final review。
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -76,6 +76,7 @@ allowed-tools: Read Write Edit Bash
 - 如果 review 中仍有未修复的 Must Fix，不能直接宣称“最终定稿”
 - 如果高优先表图尚未齐备，不得进入装配
 - 如果用户给出了总字数硬约束且当前稿件未满足，不得进入装配
+- 如果正文仍明显保留列表化、加粗小标签或机械过渡词，不得进入装配
 - 装配时要优先纳入 brief 与 `00-section-plan.md` 中要求的表图
 - 若正式稿中的任一表图内容与对应散件文件不一致，必须视为装配失败并回到 revise / assemble 修复
 - 若正式稿仍包含未核验的高风险具体事实，不能用 assemble 掩盖该问题，必须回到 revise / review 修复

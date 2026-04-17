@@ -1,6 +1,6 @@
 ---
 name: official-doc-innovation
-description: Use when any chapter or subsection needs 创新点、项目创新点、主要创新、技术创新、创新性、特色亮点、创新突破、差异化优势等内容, including sections titled 关键技术及创新点 or 预期成果与创新价值. This is a rulebook rather than a fixed template: derive innovation only for the requested parts, based on current-status gaps and research content. Use this skill only after using-official-docs has initialized workspace and plan files, official-doc-core has validated them, and official-doc-research has completed or supplemented the relevant comparison-baseline research. Network search must use session-exposed MCP search/connectors only; do not use built-in web search.
+description: 用于撰写创新点类内容，包括项目创新点、技术创新、创新性、差异化优势、特色亮点、创新突破等。它只负责把现状差距和研究内容收束成成立的创新表达，不能脱离比较基线单独发挥。只能在 official-doc-research 完成相关比较调研后使用。
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -31,6 +31,8 @@ allowed-tools: Read Write Edit Bash
 不要把完整创新点正文直接输出到终端。
 
 本 skill 写完后，必须把控制权交还给 `using-official-docs` 继续推进下游流程。
+
+创新点正文默认不用项目符号堆砌“亮点”，而应写成有参照系、有差异来源、有工程价值落点的自然段或少量正式小节。
 
 ## 先做什么
 

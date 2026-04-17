@@ -1,11 +1,20 @@
 ---
 name: official-doc-writing-skill
-description: Use when drafting formal Chinese project materials from a prompt-only brief. The plugin parses a topic plus chapter requirements, routes five recurring chapter types to dedicated skills, drafts other chapters directly, and coordinates tables, figures, review, revise, and assembly.
+description: 正式中文项目公文写作插件总入口。只要用户要求撰写或继续撰写项目可行性报告、立项申请书、项目建议书、攻关任务书、技术总结等正式项目文稿，就必须先使用本插件，而不是先直接联网搜索或直接起草正文。典型触发提示包括：“请使用official-doc-writing-skill”“围绕某主题写一份正式项目可行性报告”“按以下章节顺序生成”“每章需要写什么、有哪些图表、字数要求”“切记深度调研”。本插件会先调用 using-official-docs，再进入 official-doc-core、official-doc-research 和各章节 skill。
 ---
 
 # 公文项目写作助手
 
 这是一个“按共性章节能力拆分”的正式项目材料写作插件，不再按固定公文模板拆分。
+
+<EXTREMELY-IMPORTANT>
+只要用户消息是在要求生成正式项目公文，不论用户是否同时要求“先深度调研”“先搜索公开资料”“按章节顺序生成”，都必须先进入本插件。
+
+禁止行为：
+- 还没加载本插件就直接联网搜索
+- 还没进入 `using-official-docs` 就直接开始写正文
+- 因为用户写了“切记深度调研”就绕过插件、按默认搜索流程执行
+</EXTREMELY-IMPORTANT>
 
 ## 当前架构
 

@@ -1,6 +1,6 @@
 ---
 name: official-doc-project-background
-description: Use when any chapter or subsection needs 项目背景、行业背景、建设背景、宏观背景、立项意义、建设意义、国内外现状、发展现状、行业发展动向、趋势判断、痛点问题、差距分析、攻关必要性、建设必要性、立项必要性、产业链安全、自主可控等内容. This is a rulebook, not a fixed chapter template: apply only the requested subparts even if they appear inside generic chapters such as 概述, 项目现状和发展趋势, 立项目的, or 研究结论. Use this skill only after using-official-docs has initialized workspace and plan files, official-doc-core has validated them, and official-doc-research has completed or supplemented the relevant background research gate. Network search must use session-exposed MCP search/connectors only; do not use built-in web search.
+description: 用于撰写项目背景类内容，包括建设背景、立项意义、国内外现状、发展动向、痛点问题、必要性、产业链安全、自主可控等。它是写法规则库，不是固定章模板。只能在 official-doc-research 完成背景类调研门禁后使用。
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -135,6 +135,8 @@ allowed-tools: Read Write Edit Bash
 - 已写入哪个章节文件
 - 已登记哪些来源
 - 主入口下一步应继续补什么
+
+正式正文默认写成连续自然段，不要把“背景、现状、痛点、必要性”机械拆成项目符号或加粗小标签。需要细分时，优先用二级小标题加自然段展开。
 
 本 skill 写完后，必须把控制权交还给 `using-official-docs`，由主入口继续判断：
 - 是否还有其他章节要写

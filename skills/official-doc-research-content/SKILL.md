@@ -1,6 +1,6 @@
 ---
 name: official-doc-research-content
-description: Use when any chapter or subsection needs 研究内容、研发内容、主要研究内容、主要攻关内容、建设内容、任务设置、专题设置、课题设置、子课题、子任务、关键技术、技术关键、核心技术、实施内容、实施任务等内容. This is a rulebook rather than a fixed chapter template: apply only the requested parts even if they appear inside chapters such as 研发内容及技术关键, 项目建设方案, 技术路线和实施方案, or 项目任务设置. Use this skill only after using-official-docs has initialized workspace and plan files, official-doc-core has validated them, and official-doc-research has completed or supplemented the relevant research-content gate. Network search must use session-exposed MCP search/connectors only; do not use built-in web search.
+description: 用于撰写研究内容类内容，包括研究内容、研发内容、主要攻关内容、任务设置、专题设置、子课题、子任务、关键技术、实施内容等。它是写法规则库，不是固定章模板。只能在 official-doc-research 完成相关调研门禁后使用。
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -33,6 +33,10 @@ allowed-tools: Read Write Edit Bash
 不要把完整研究内容大段文本直接输出到终端。
 
 本 skill 写完后，必须把控制权交还给 `using-official-docs` 继续推进下游流程。
+
+正式正文写法必须同时遵守：
+- `official-doc-core` 中的公文文风规则
+- [../official-doc-core/references/formal-doc-style.md](../official-doc-core/references/formal-doc-style.md)
 
 ## 先做什么
 
@@ -150,6 +154,12 @@ allowed-tools: Read Write Edit Bash
 - 关键技术是什么
 - 形成什么输出
 
+但这四件事应融入自然段，不要写成：
+- `**技术描述**：`
+- `**技术难点**：`
+- `**作用**：`
+- 或大段项目符号
+
 ### D. 关键技术单独提炼
 
 如果用户要求 `关键技术`、`技术关键`、`核心技术`，要从研究内容中提炼而来，而不是另起一套完全无关的话术。
@@ -215,6 +225,60 @@ allowed-tools: Read Write Edit Bash
 - 再写机制
 - 再写应用位置
 - 最后写成效
+
+## 正文呈现规则
+
+### 1. 不要把提示词原样铺开成目录
+
+用户给出的子课题清单，是写作输入，不是最终正文格式。
+
+除非用户明确要求保留多级编号目录，否则不要机械输出：
+- `1.1`
+- `1.1.1`
+- `1.1.2`
+
+再逐条配上一句短说明。
+
+更好的做法是：
+- 先写一段总述
+- 再按 3 到 5 个研究方向分节
+- 每节下用连续自然段展开关键任务和技术链路
+
+### 2. 不要写成“答题卡体”
+
+错误示例：
+
+```md
+**技术描述**：研究自动化训练样本生成技术。
+
+**技术难点**：保证样本与真实工程一致。
+
+**作用**：为分类模型训练提供支撑。
+```
+
+正确示例：
+
+```md
+针对训练样本不足的问题，本研究拟建立自动化训练样本生成技术，通过参数化模型模板和批量化变参机制快速构造训练样本。该技术的关键在于保持样本与真实工程场景的一致性，并控制自动标注误差。相关成果将为后续分类模型训练提供稳定的数据支撑。
+```
+
+### 3. 不要写成项目符号正文
+
+错误示例：
+
+```md
+本研究内容包括：
+- 数据标准化
+- 规则建模
+- 模型训练
+- 平台实现
+```
+
+正确示例：
+
+```md
+本研究围绕数据标准化、规则建模、模型训练和平台实现四个环节展开。其中，数据标准化负责统一多源输入口径，规则建模负责沉淀行业知识和设计约束，模型训练负责形成核心识别与生成能力，平台实现则承担流程集成与工程验证任务。
+```
 
 ## 从附件归纳出的常见拆分维度
 

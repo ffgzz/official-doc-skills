@@ -1,6 +1,6 @@
 ---
 name: official-doc-core
-description: Shared validation layer for this project-writing plugin. Use only after using-official-docs has already parsed the brief and initialized workspace plus plan files. This skill checks common constraints, facts discipline, section dependency rules, and workflow order. It does not create workspace directories, does not write initial plan files, and does not start web searches for the five specialized chapter types.
+description: 项目公文写作的公共校验层。仅在 using-official-docs 完成 brief 解析和工作区初始化后使用，用于检查台账、事实纪律、阶段顺序和章节依赖。它不创建工作区，不首次写 plan，也不直接联网搜索或写五类共性章节。
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -17,6 +17,9 @@ allowed-tools: Read Write Edit Bash
 > - `技术指标` 可量化、可测试、可验证
 
 这是当前写作流程的公共门禁层。
+
+涉及正式正文写法时，读取：
+- [references/formal-doc-style.md](./references/formal-doc-style.md)
 
 ## 一、执行原则
 
@@ -38,7 +41,10 @@ allowed-tools: Read Write Edit Bash
 ### 6. 表图服务正文，不替代正文
 适合用表表达的，不硬写成长段；适合用图表达的，不把图的逻辑塞回正文。
 
-### 7. core 不代替专项 skill
+### 7. 正文必须像正式公文，不像演示稿或 AI 草稿
+正文默认写成连续自然段，不写成项目符号堆砌，不写成加粗小标签拼贴，不写成机械的多级目录摘抄。
+
+### 8. core 不代替专项 skill
 `official-doc-core` 只做公共校验，不代替：
 - `official-doc-research`
 - `official-doc-project-background`
@@ -98,6 +104,51 @@ allowed-tools: Read Write Edit Bash
 - 不把预期写成既成事实
 - 申报阶段优先使用“拟”“计划”“预期”“将”等表述
 
+### 正文形态要求
+- 正文默认不用项目符号列表
+- 正文默认不用 `**技术描述**`、`**技术难点**`、`**作用**` 这类加粗小标签
+- 正文默认不用演示稿式短句堆叠
+- 二级标题下优先写 1 到 3 个完整自然段，而不是把提示词拆成一串点
+
+### 禁用 AI 痕迹
+- 机械过渡词：`首先、其次、最后、此外、另外、接下来、总之`
+- 空壳强调句：`值得注意的是、需要指出的是、重要的是、必须强调的是`
+- 空泛表述：`显著提升`、`大幅优化`、`有效赋能`，若没有对应依据或对象，不应单独出现
+
+### 正确与错误示例
+
+错误：
+
+```md
+**技术描述**：研究自动化训练样本生成技术。
+
+**技术难点**：样本与工程场景一致性不足。
+
+**作用**：为后续模型训练提供支撑。
+```
+
+正确：
+
+```md
+针对训练样本不足的问题，项目拟研究自动化训练样本生成技术，通过参数化模板和批处理机制提升样本构建效率。该技术的关键在于保持生成样本与工程场景的一致性，避免样本分布偏移。相关成果将为后续模型训练提供稳定的数据基础，并支撑分类性能的持续优化。
+```
+
+错误：
+
+```md
+本章主要包括：
+- 背景
+- 现状
+- 痛点
+- 必要性
+```
+
+正确：
+
+```md
+当前，行业数字化和智能化转型正在持续深化，但相关核心环节仍存在数据沉淀不足、流程割裂和经验依赖较强等问题。围绕这些瓶颈，本项目有必要从现状差距、业务痛点和工程需求三个层面展开分析，从而为后续攻关内容提供充分依据。
+```
+
 ### 标题要求
 - 一级标题与用户要求保持一致
 - 二级标题优先服从用户指定的小节结构
@@ -121,6 +172,7 @@ workspace/
 必须维护以下文件：
 - `workspace/plan/<project-slug>/project-overview.md`
 - `workspace/plan/<project-slug>/project-brief.md`
+- `workspace/plan/<project-slug>/stage-gates.md`
 - `workspace/plan/<project-slug>/research-plan.md`
 - `workspace/plan/<project-slug>/research-sources.md`
 - `workspace/plan/<project-slug>/research-notes.md`
@@ -135,6 +187,7 @@ workspace/
 - 本轮已执行 `official-doc-core`
 - 工作区与台账校验是否通过
 - 用户是否给出总字数要求
+- `stage-gates.md` 当前推进到哪一关
 - 下一步将进入哪个专项 skill 或公共 skill
 
 `已执行 official-doc-core` 不等于 `已执行专项章节 skill`。

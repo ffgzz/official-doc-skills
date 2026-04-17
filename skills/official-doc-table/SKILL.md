@@ -1,6 +1,6 @@
 ---
 name: official-doc-table
-description: Use when the user brief or a drafted chapter requires project tables. This skill reads the parsed chapter plan, generates only the requested tables for the current project slug, keeps table contents consistent with the chapter text and search evidence, and writes table notes for later assembly.
+description: 用于生成项目公文所需表格。它只补用户要求的表格，依据章节计划、正文口径和调研证据生成表格内容，并为后续装配写入表格说明。
 allowed-tools: Read Write Edit Bash
 ---
 

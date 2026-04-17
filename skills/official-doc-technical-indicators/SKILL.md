@@ -1,6 +1,6 @@
 ---
 name: official-doc-technical-indicators
-description: Use when any chapter or subsection needs 主要技术指标、技术指标、考核指标、性能指标、应用指标、效能指标、量化目标、验收指标、预期成效、量化考核等内容, including metric sections inside 预期目标, 项目目标, or 考核指标体系. This is a rulebook rather than a fixed template: derive only the requested metrics from the research content and achievements, then write them after official-doc-research has established recent metric baselines and source logging in formal project-report style. Use this skill only after using-official-docs has initialized workspace and plan files and official-doc-core has validated them. Network search must use session-exposed MCP search/connectors only; do not use built-in web search.
+description: 用于撰写技术指标类内容，包括主要技术指标、考核指标、性能指标、量化目标、验收指标、预期成效等。它要求指标来源于研究内容和成果，并参考近年的行业基准与验收口径。只能在 official-doc-research 完成指标类调研后使用。
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -31,6 +31,8 @@ allowed-tools: Read Write Edit Bash
 不要把完整指标正文直接输出到终端。
 
 本 skill 写完后，必须把控制权交还给 `using-official-docs` 继续推进下游流程。
+
+指标正文应先有一段总述，再按类别展开，不要把所有指标直接平铺成零散短句；若用户未要求表格，正文仍应写成正式段落。
 
 ## 先做什么
 

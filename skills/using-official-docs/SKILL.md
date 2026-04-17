@@ -1,6 +1,6 @@
 ---
 name: using-official-docs
-description: 正式中文项目公文写作总入口。Use this skill first for prompt-driven 项目可行性报告、立项申请书、项目建议书、攻关任务书、技术总结等正式项目文稿。 Hard rule: this entry skill must never run web/MCP search itself. On trigger, do only four things in order: parse the brief, initialize workspace and plan files, load official-doc-core, then immediately load official-doc-research before any search or chapter drafting. Only after official-doc-research finishes may the specialized chapter skills write background, research content, innovation, technical achievements, or technical indicators. Do not use built-in web search.
+description: 正式中文项目公文写作总入口。用于项目可行性报告、立项申请书、项目建议书、攻关任务书、技术总结等提示词驱动任务，尤其适用于这类输入：“请围绕某主题写一份正式项目可行性报告”“按以下章节顺序生成”“每章需要写什么、图表要求、字数要求”“切记深度调研”“请使用official-doc-writing-skill”。硬规则：本入口只负责解析 brief、初始化工作区、调用 official-doc-core 和 official-doc-research，自己绝不直接联网搜索或起草五类共性章节。
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -63,6 +63,7 @@ allowed-tools: Read Write Edit Bash
 以下文件的首次创建与首轮回填，归 `using-official-docs`：
 - `project-overview.md`
 - `project-brief.md`
+- `stage-gates.md`
 - `research-plan.md`
 - `research-sources.md`
 - `research-notes.md`
@@ -272,6 +273,7 @@ allowed-tools: Read Write Edit Bash
 3. 由主入口初始化或更新 plan 台账：
    - `project-overview.md`
    - `project-brief.md`
+   - `stage-gates.md`
    - `research-plan.md`
    - `research-sources.md`
    - `research-notes.md`

@@ -1,6 +1,6 @@
 ---
 name: official-doc-research
-description: Mandatory research gate for prompt-driven formal Chinese project documents. Use this skill immediately after using-official-docs has parsed the brief and official-doc-core has validated the workspace, and before any MCP/web search or any drafting of background, research content, innovation, technical achievements, or technical indicators. This skill builds the research plan, runs multi-round MCP searches, enforces recency and source-count thresholds, logs sources and notes, and only then hands off to the chapter skills. Do not use built-in web search.
+description: 正式项目公文的独立调研门禁。必须在 using-official-docs 解析 brief、official-doc-core 校验完成之后立即使用，并且必须早于任何联网搜索和任何共性章节写作。它负责建立调研计划、执行多轮 MCP 检索、控制年份和来源门槛、沉淀来源与摘记，然后才放行章节 skill。
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -13,6 +13,9 @@ allowed-tools: Read Write Edit Bash
 它的职责不是写正文，而是先把“能不能写、该怎么写、依据够不够新”这几件事做扎实。
 
 如果你已经准备开始搜索，而本 skill 还没加载，说明流程顺序错误，应先加载本 skill。
+
+调研策略细则见：
+- [references/research-depth.md](./references/research-depth.md)
 
 它服务于以下五类共性章节：
 - 项目背景
@@ -48,6 +51,7 @@ allowed-tools: Read Write Edit Bash
 开始调研前，至少读取：
 - `workspace/plan/<project-slug>/project-brief.md`
 - `workspace/plan/<project-slug>/project-overview.md`
+- `workspace/plan/<project-slug>/stage-gates.md`
 - `workspace/outputs/<project-slug>/00-section-plan.md`
 - `workspace/plan/<project-slug>/research-plan.md`
 - `workspace/plan/<project-slug>/research-sources.md`
@@ -78,6 +82,8 @@ allowed-tools: Read Write Edit Bash
 1. `范围确认`：确认主题边界、关键词、同义表述
 2. `重点深挖`：围绕政策、行业、技术、案例或指标做纵深检索
 3. `交叉核验`：补主源、补最新资料、补相互印证
+
+如果总检索量还停留在“2 到 3 次零散搜索”，默认视为调研未完成，不得放行正文。
 
 ### 2. 默认只看近 3 年
 
@@ -185,6 +191,9 @@ allowed-tools: Read Write Edit Bash
 - 结果概览
 - 下一步
 
+不要只记录“搜过了”或“找到一些资料”。
+必须留下可复查的查询式、年份过滤和结果判断。
+
 ### 第三步：筛来源
 
 把保留下来的来源登记到 `research-sources.md`，并补齐：
@@ -207,6 +216,8 @@ allowed-tools: Read Write Edit Bash
 - 可支撑的断言强度
 - 风险提示
 
+如果来源只停留在标题层，没有被提炼成摘记，等于尚未完成调研转写。
+
 ### 第五步：升格为事实台账
 
 只有当某条信息完成核验后，才可写入 `facts-ledger.md`，并标注：
@@ -228,6 +239,7 @@ allowed-tools: Read Write Edit Bash
 ## 完成判定
 
 只有同时满足以下条件，才算本轮调研完成：
+- `stage-gates.md` 中 G1、G2 已勾选
 - 已为激活调研组建立 `research-plan.md`
 - 每个激活调研组至少完成 3 轮检索
 - 每个激活调研组达到最低来源保留量

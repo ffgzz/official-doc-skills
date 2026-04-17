@@ -1,6 +1,6 @@
 ---
 name: official-doc-technical-achievements
-description: Use when any chapter or subsection needs 主要技术成果、预期技术成果、技术成果、成果形式、交付成果、预期成果、研究成果、形成成果、应用成果等内容, including sections inside 预期目标 or 项目成果. This is a rulebook rather than a fixed template: derive only the requested deliverables from the research content, then write them in formal project-report style after official-doc-research has established the relevant deliverable baselines and source logging. Use this skill only after using-official-docs has initialized workspace and plan files and official-doc-core has validated them. Network search must use session-exposed MCP search/connectors only; do not use built-in web search.
+description: 用于撰写技术成果类内容，包括主要技术成果、预期技术成果、交付成果、成果形式、应用成果等。它要求成果从研究内容中推导出来，并参考同类项目的成果口径。只能在 official-doc-research 完成成果类调研后使用。
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -31,6 +31,8 @@ allowed-tools: Read Write Edit Bash
 不要把完整成果正文直接输出到终端。
 
 本 skill 写完后，必须把控制权交还给 `using-official-docs` 继续推进下游流程。
+
+成果正文应采用“成果名称 + 来源于哪项研究内容 + 作用 + 交付形态”的正式段落表达，不要写成简历式清单。
 
 ## 先做什么
 
