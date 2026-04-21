@@ -40,7 +40,9 @@ allowed-tools: Read Write Edit Bash
 - 缺少 `A主源`
 - 还没有形成可写正文的 `research-notes.md`
 
-只有在背景类台账已经基本齐全，但某个小问题仍缺支撑时，才允许做少量补充检索，并把结果登记到：
+本 skill 不直接联网搜索。只有在背景类台账已经基本齐全、但某个小问题仍缺支撑时，才回到 `official-doc-research` 补充调研，由 `official-doc-research` 使用本地 MCP 完成检索、抓取和落账。
+
+补充调研结果必须登记到：
 - `workspace/plan/<project-slug>/research-sources.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`
 
@@ -62,16 +64,7 @@ allowed-tools: Read Write Edit Bash
 
 如果 `using-official-docs` 尚未先调用 `official-doc-research`，或背景类调研仍明显过浅、过旧，就直接开始写背景、现状、痛点、必要性，说明流程执行错误，应先回到“先过调研门禁，再写”的顺序。
 
-默认搜索工具优先级：
-1. 当前 session 已暴露的 MCP 搜索 / connector 搜索工具
-2. 其他会话可用的 MCP / connector 搜索工具
-
-不允许使用内置 `Web Search`。
-如果当前没有可用的 MCP 搜索工具，或 MCP 搜索报错无法继续：
-- 停止联网搜索
-- 在 `facts-ledger.md` 中记录搜索阻断原因
-- 在 `progress.md` 中记录本章因缺少 MCP 搜索而暂停
-- 不得改用内置搜索继续写正文
+补查完成后，本 skill 只读取调研台账和事实台账，不自行改用其他搜索工具。
 
 政策、文号、发布日期、主管部门表述，优先使用官方来源核验。
 市场规模、增长率、部署占比、行业排名等数字，优先使用研究机构或企业原始报告核验。

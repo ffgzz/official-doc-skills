@@ -49,25 +49,16 @@ allowed-tools: Read Write Edit Bash
 - 只有本项目视角，没有外部参照系
 - 来源还停留在旧资讯稿或单篇宣传稿
 
-只有在比较基线已形成、但某个创新点仍需补证时，才允许少量补充检索，例如：
+本 skill 不直接联网搜索。只有在比较基线已形成、但某个创新点仍需补证时，才回到 `official-doc-research` 补充调研，由 `official-doc-research` 使用本地 MCP 完成检索、抓取和落账。补查重点包括：
 - 同领域已有方案、竞品、论文、专利、白皮书
 - 公开可见的主流技术路线和能力边界
 - 同类项目的创新点写法和口径
 
-记录到：
+补充调研结果必须记录到：
 - `workspace/plan/<project-slug>/research-sources.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`
 
-默认搜索工具优先级：
-1. 当前 session 已暴露的 MCP 搜索 / connector 搜索工具
-2. 其他会话可用的 MCP / connector 搜索工具
-
-不允许使用内置 `Web Search`。
-如果当前没有可用的 MCP 搜索工具，或 MCP 搜索报错无法继续：
-- 停止联网搜索
-- 在 `facts-ledger.md` 中记录搜索阻断原因
-- 在 `progress.md` 中记录本章因缺少 MCP 搜索而暂停
-- 不得改用内置搜索继续写正文
+补查完成后，本 skill 只读取调研台账和事实台账，不自行改用其他搜索工具。
 
 ## 从附件提炼出的共性写法
 

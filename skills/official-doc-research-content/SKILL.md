@@ -54,12 +54,12 @@ allowed-tools: Read Write Edit Bash
 - 研究内容边界仍明显拍脑袋
 - `research-notes.md` 尚未沉淀出“问题 -> 方法 -> 输出”的摘记
 
-只有在研究内容大框架已建立、但某个子课题仍需补证时，才允许少量补充检索，例如：
+本 skill 不直接联网搜索。只有在研究内容大框架已建立、但某个子课题仍需补证时，才回到 `official-doc-research` 补充调研，由 `official-doc-research` 使用本地 MCP 完成检索、抓取和落账。补查重点包括：
 - 同领域项目指南、攻关任务书、立项书
 - 相关技术路线论文、白皮书、行业报告
 - 头部企业、研究机构公开方案
 
-记录到：
+补充调研结果必须记录到：
 - `workspace/plan/<project-slug>/research-sources.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`
 
@@ -68,16 +68,7 @@ allowed-tools: Read Write Edit Bash
 - 关键技术通常如何命名才专业且可落地
 - 子课题边界如何划分才合理
 
-默认搜索工具优先级：
-1. 当前 session 已暴露的 MCP 搜索 / connector 搜索工具
-2. 其他会话可用的 MCP / connector 搜索工具
-
-不允许使用内置 `Web Search`。
-如果当前没有可用的 MCP 搜索工具，或 MCP 搜索报错无法继续：
-- 停止联网搜索
-- 在 `facts-ledger.md` 中记录搜索阻断原因
-- 在 `progress.md` 中记录本章因缺少 MCP 搜索而暂停
-- 不得改用内置搜索继续写正文
+补查完成后，本 skill 只读取调研台账和事实台账，不自行改用其他搜索工具。
 
 ## 从附件提炼出的共性写法
 

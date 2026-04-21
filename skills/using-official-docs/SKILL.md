@@ -134,7 +134,7 @@ allowed-tools: Read Write Edit Bash
 `official-doc-research` 必须先做这些事：
 - 按内容拆出激活调研组，而不是只按整章粗搜
 - 默认只保留近 3 年资料；更早资料只能作为 `历史基线` 或 `基础规范`
-- 每个激活调研组至少完成 3 轮检索
+- 每个激活调研组至少完成 4 轮检索；`BG`、`TI` 等高风险组还必须追加近年更新检索
 - 每个激活调研组达到最低来源保留量后，才能放行正文写作
 
 `research-sources.md` 至少记录：
@@ -214,12 +214,14 @@ allowed-tools: Read Write Edit Bash
 
 ### 5.5 搜索工具优先级
 
-凡需联网搜索时，默认优先级如下：
-1. 当前 session 已暴露的 MCP 搜索 / connector 搜索工具
-2. 其他会话内可用的 MCP / connector 搜索工具
+主入口不直接联网搜索。凡需联网调研，必须先进入 `official-doc-research`，并按它规定的本地 MCP 顺序执行：
+1. `mcp__miro-google-search__google_search`
+2. `mcp__miro-google-search__scrape_website`
+3. `mcp__miro-reading__convert_to_markdown`
+4. 必要时用 `mcp__miro-python__create_sandbox`、`mcp__miro-python__run_python_code`、`mcp__miro-python__run_command` 做整理核验
 
 不允许使用内置 `Web Search` / `web search` 作为兜底。
-如果当前会话没有可用的 MCP 搜索工具，或 MCP 搜索报错无法完成，应：
+如果当前会话没有可用的 `miro-google-search`，或 MCP 搜索报错无法完成，应：
 - 停止该章节的联网搜索
 - 在 `facts-ledger.md` 和 `progress.md` 中记录“搜索阻断：缺少可用 MCP 搜索”
 - 不要偷偷改用内置搜索继续写作
