@@ -66,6 +66,7 @@ allowed-tools: Read Write Edit Bash
 - `stage-gates.md`
 - `research-plan.md`
 - `research-sources.md`
+- `research-evidence.md`
 - `research-notes.md`
 - `facts-ledger.md`
 - `progress.md`
@@ -120,6 +121,7 @@ allowed-tools: Read Write Edit Bash
 
 凡命中以下五类内容，必须先经过独立调研门禁，再进入正文写作：
 - `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-evidence.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`
 - `workspace/plan/<project-slug>/research-plan.md`
 - `workspace/plan/<project-slug>/research-notes.md`
@@ -147,6 +149,14 @@ allowed-tools: Read Write Edit Bash
 - 对应支持的章节 / 小节
 - 是否可直接支撑正文断言：`可` / `不可`
 
+`research-evidence.md` 至少记录：
+- 每条有效来源的同编号证据卡
+- 检索查询式、命中标题、命中摘要和选择原因
+- 抓取/转换工具、抓取状态和正文可读性
+- 来源内容的结构化记录、关键数据、政策/标准/技术机制
+- 可支撑断言的证据点、原文位置/页码/章节和使用边界
+- 必要短摘录；不要把长篇原文整段复制成全文转载
+
 `facts-ledger.md` 至少记录：
 - 事实表述
 - 对应章节 / 小节
@@ -159,6 +169,7 @@ allowed-tools: Read Write Edit Bash
 如果某条事实还没有完成登记，就不要先把它写进正文。
 
 如果某个激活调研组只有 2 到 3 条来源，或大部分来源都超过 3 年，默认视为“调研未完成”，不得直接进入正文。
+如果来源只写入 `research-sources.md`，但没有进入 `research-evidence.md` 建立证据卡，也视为“调研未完成”。
 
 来源等级默认按以下口径处理：
 - `A主源`：政府/主管部门/标准发布机构/船级社/论文原文/官方产品页/官方公告
@@ -211,6 +222,16 @@ allowed-tools: Read Write Edit Bash
 - 待核验的事实：不得直接进入正文
 
 若某条事实的来源只包含 `C参考`，即使内容看起来具体，也不得写成“已核验事实”。
+
+专项 skill 写正文前，还必须先形成对应章节的“论证链”，至少覆盖：
+- 本章核心判断
+- 可用事实依据
+- 差距或问题
+- 技术机制或项目动作
+- 输出成果、指标或验证方式
+- 仍需保守处理的边界
+
+如果论证链填不实，不得让专项 skill 靠空话扩写。应回到 `official-doc-research` 补调研，或只向用户提出一个会影响写作方向的关键问题。
 
 ### 5.5 搜索工具优先级
 
@@ -278,6 +299,7 @@ allowed-tools: Read Write Edit Bash
    - `stage-gates.md`
    - `research-plan.md`
    - `research-sources.md`
+   - `research-evidence.md`
    - `research-notes.md`
    - `facts-ledger.md`
    - `progress.md`

@@ -34,6 +34,12 @@ allowed-tools: Read Write Edit Bash
 
 指标正文应先有一段总述，再按类别展开，不要把所有指标直接平铺成零散短句；若用户未要求表格，正文仍应写成正式段落。
 
+正式正文写法必须同时遵守：
+- `official-doc-core` 中的公文文风规则
+- [../official-doc-core/references/formal-doc-style.md](../official-doc-core/references/formal-doc-style.md)
+- [../official-doc-core/references/depth-writing-rules.md](../official-doc-core/references/depth-writing-rules.md)
+- [../official-doc-core/references/depth-writing-examples.md](../official-doc-core/references/depth-writing-examples.md) 中的技术指标示例
+
 ## 先做什么
 
 开始写之前先检查指标类调研门禁是否完成。
@@ -41,6 +47,7 @@ allowed-tools: Read Write Edit Bash
 必须先读取：
 - `workspace/plan/<project-slug>/research-plan.md`
 - `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-evidence.md`
 - `workspace/plan/<project-slug>/research-notes.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`
 
@@ -48,6 +55,7 @@ allowed-tools: Read Write Edit Bash
 - 指标区间没有近 3 年基线
 - 缺少验收口径或测试场景参照
 - 指标数字看起来像拍脑袋，没有主源或辅源支撑
+- `research-evidence.md` 没有记录指标目标值、测试条件或验收口径的证据点
 
 本 skill 不直接联网搜索。只有在指标框架已清楚、但个别指标仍需补证时，才回到 `official-doc-research` 补充调研，由 `official-doc-research` 使用本地 MCP 完成检索、抓取和落账。补查重点包括：
 - 同类项目的常见指标口径
@@ -56,9 +64,22 @@ allowed-tools: Read Write Edit Bash
 
 补充调研结果必须记录到：
 - `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-evidence.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`
 
-补查完成后，本 skill 只读取调研台账和事实台账，不自行改用其他搜索工具。
+补查完成后，本 skill 优先读取 `research-evidence.md` 的证据卡，再读取调研台账和事实台账，不自行改用其他搜索工具。
+
+## 写作深度门槛
+
+指标类正文不能只列百分比或空泛目标。每项指标必须具备可验收链条：
+- `指标对象`：对应哪个系统、模块、模型、数据资源、流程或应用场景。
+- `指标定义`：指标衡量的具体含义是什么，避免名称相同但口径不同。
+- `目标值或区间`：给出可测试数值、范围或阶段性目标；无依据时用保守区间或 `【待补】`。
+- `测试条件`：在什么数据规模、船型范围、样例数量、运行环境或业务场景下测试。
+- `验证方法`：通过功能测试、对比测试、抽样复核、专家评审、系统日志或应用示范中的哪种方式验证。
+- `依据来源`：目标值来自行业基线、同类项目、标准规范、用户要求还是项目阶段测算。
+
+若无法说明测试条件和验证方法，该项不能作为正式验收指标，只能作为预期方向或待校准指标。
 
 ## 从附件提炼出的共性写法
 

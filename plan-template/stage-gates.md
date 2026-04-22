@@ -17,6 +17,7 @@
 - [ ] 每个激活调研组已完成至少 4 轮检索
 - [ ] `BG`、`TI` 等高风险组已完成追加近年更新检索
 - [ ] 近 3 年来源占主导
+- [ ] 已形成 `research-evidence.md`，每条有效来源均有证据卡
 - [ ] 已形成 `research-notes.md`
 - [ ] 已完成 `facts-ledger.md` 初步核验
 

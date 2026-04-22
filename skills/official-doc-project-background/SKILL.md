@@ -31,6 +31,7 @@ allowed-tools: Read Write Edit Bash
 必须先读取：
 - `workspace/plan/<project-slug>/research-plan.md`
 - `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-evidence.md`
 - `workspace/plan/<project-slug>/research-notes.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`
 
@@ -38,18 +39,21 @@ allowed-tools: Read Write Edit Bash
 - 只有零散 2 到 3 条来源
 - 多数来源早于近 3 年，且没有标记为 `历史基线` / `基础规范`
 - 缺少 `A主源`
+- `research-evidence.md` 没有为有效来源建立证据卡，或证据卡只记录标题和链接
 - 还没有形成可写正文的 `research-notes.md`
 
 本 skill 不直接联网搜索。只有在背景类台账已经基本齐全、但某个小问题仍缺支撑时，才回到 `official-doc-research` 补充调研，由 `official-doc-research` 使用本地 MCP 完成检索、抓取和落账。
 
 补充调研结果必须登记到：
 - `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-evidence.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`
 
 这一步必须在本 skill 已显式加载之后执行。
 
 登记时至少补齐以下字段：
 - `research-sources.md`：来源标题、来源类型、来源等级、发布机构/作者、发布时间、链接、支撑章节、是否可直接支撑正文断言
+- `research-evidence.md`：同编号证据卡、抓取状态、结构化证据点、短摘录、使用边界和仍需补证的问题
 - `facts-ledger.md`：事实表述、对应章节、来源编号、主源编号、辅源编号、事实状态、备注
 
 事实状态只允许使用：
@@ -64,7 +68,7 @@ allowed-tools: Read Write Edit Bash
 
 如果 `using-official-docs` 尚未先调用 `official-doc-research`，或背景类调研仍明显过浅、过旧，就直接开始写背景、现状、痛点、必要性，说明流程执行错误，应先回到“先过调研门禁，再写”的顺序。
 
-补查完成后，本 skill 只读取调研台账和事实台账，不自行改用其他搜索工具。
+补查完成后，本 skill 优先读取 `research-evidence.md` 的证据卡，再读取调研台账和事实台账，不自行改用其他搜索工具。
 
 政策、文号、发布日期、主管部门表述，优先使用官方来源核验。
 市场规模、增长率、部署占比、行业排名等数字，优先使用研究机构或企业原始报告核验。
@@ -114,7 +118,7 @@ allowed-tools: Read Write Edit Bash
 - `official-doc-core` 已执行
 - `using-official-docs` 已完成工作区初始化
 - 工作区目录已创建
-- `project-brief.md`、`research-sources.md`、`facts-ledger.md`、`progress.md` 已存在
+- `project-brief.md`、`research-sources.md`、`research-evidence.md`、`facts-ledger.md`、`progress.md` 已存在
 
 因此，本 skill 不负责：
 - 创建工作区
@@ -131,6 +135,12 @@ allowed-tools: Read Write Edit Bash
 
 正式正文默认写成连续自然段，不要把“背景、现状、痛点、必要性”机械拆成项目符号或加粗小标签。需要细分时，优先用二级小标题加自然段展开。
 
+正式正文写法必须同时遵守：
+- `official-doc-core` 中的公文文风规则
+- [../official-doc-core/references/formal-doc-style.md](../official-doc-core/references/formal-doc-style.md)
+- [../official-doc-core/references/depth-writing-rules.md](../official-doc-core/references/depth-writing-rules.md)
+- [../official-doc-core/references/depth-writing-examples.md](../official-doc-core/references/depth-writing-examples.md) 中的项目背景示例
+
 本 skill 写完后，必须把控制权交还给 `using-official-docs`，由主入口继续判断：
 - 是否还有其他章节要写
 - 是否需要 `official-doc-table`
@@ -146,6 +156,18 @@ allowed-tools: Read Write Edit Bash
 - 国家战略、主管部门政策、产业专项指南
 - 行业协会、头部企业、船级社、研究院公开资料
 - 最近 3 年的论文、白皮书、案例、同类项目指南
+
+## 写作深度门槛
+
+背景类正文不能停留在“宏观形势很好、行业有需求、项目很必要”的浅层表述。写作前必须形成本章论证链：
+- `宏观背景`：国家战略、产业趋势或技术演进如何构成项目外部前提。
+- `细分场景`：该前提落到本项目所在业务场景后，具体表现为什么需求。
+- `国内外现状`：按技术路线、工程成熟度、应用场景、标准合规、数据积累等维度比较，而不是只写“国外先进、国内不足”。
+- `差距原因`：说明差距来自数据、工具链、规则、流程、人才、标准或工程验证中的哪一类瓶颈。
+- `影响后果`：说明这些瓶颈如何影响效率、质量、合规、成本、交付或自主可控。
+- `攻关必要性`：把必要性收束到本项目将解决的具体问题，而不是泛泛写“意义重大”。
+
+如果用户只要求其中某一小节，也要在该小节内部保留“现状 -> 差距 -> 影响 -> 项目切入”的最小闭环。若缺少支撑差距判断的来源，应回到 `official-doc-research` 补调研，或降级为保守趋势表述并记录 `【待补】`。
 
 ## 从附件提炼出的共性写法
 

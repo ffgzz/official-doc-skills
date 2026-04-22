@@ -43,6 +43,11 @@ def main() -> int:
     show_matches("[3] mechanical transitions", r"首先|其次|最后|此外|另外|接下来|总之", text)
     show_matches("[4] empty emphasis phrases", r"值得注意的是|需要指出的是|重要的是|必须强调的是", text)
     show_matches("[5] dense outline numbering", r"^[0-9]+\.[0-9]+(\.[0-9]+)?\s", text)
+    show_matches(
+        "[6] shallow slogan phrases",
+        r"赋能|打造.*平台|构建.*体系|形成.*闭环|显著提升|大幅提升|全面提升|达到先进水平|推动高质量发展",
+        text,
+    )
 
     print()
     print("Done.")

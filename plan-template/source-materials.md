@@ -5,3 +5,4 @@
 请改用：
 - `project-brief.md` 记录用户提示词
 - `research-sources.md` 记录网络搜索来源
+- `research-evidence.md` 记录抓取、阅读和证据点的完整调研档案

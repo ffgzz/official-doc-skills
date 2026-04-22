@@ -34,7 +34,10 @@
       "mcp__miro-reading__convert_to_markdown",
       "mcp__miro-python__create_sandbox",
       "mcp__miro-python__run_python_code",
-      "mcp__miro-python__run_command"
+      "mcp__miro-python__run_command",
+      "Bash(python \"D:\\\\文件\\\\HaiZhou\\\\公文写作三\\\\official-doc-writing-skill-rebuilt\\\\scripts\\\\style_check.py\" \"D:\\\\文件\\\\HaiZhou\\\\公文写作三\\\\official-doc-writing-skill-rebuilt\\\\workspace\\\\outputs\\\\ai-ship-electrical-eid\\\\01-overview.md\")",
+      "Bash(python \"D:\\\\文件\\\\HaiZhou\\\\公文写作三\\\\official-doc-writing-skill-rebuilt\\\\scripts\\\\style_check.py\" \"D:\\\\文件\\\\HaiZhou\\\\公文写作三\\\\official-doc-writing-skill-rebuilt\\\\workspace\\\\outputs\\\\ai-ship-electrical-eid\\\\05-difficulty-assessment.md\")",
+      "Bash(python \"D:\\\\文件\\\\HaiZhou\\\\公文写作三\\\\official-doc-writing-skill-rebuilt\\\\scripts\\\\style_check.py\" \"D:\\\\文件\\\\HaiZhou\\\\公文写作三\\\\official-doc-writing-skill-rebuilt\\\\workspace\\\\outputs\\\\ai-ship-electrical-eid\\\\07-expected-outcomes.md\")"
     ]
   }
 }

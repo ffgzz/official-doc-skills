@@ -10,7 +10,7 @@ allowed-tools: Read Write Edit Bash
 > - `project-brief.md`
 > - `00-section-plan.md`
 > - 当前章节正文
-> - `facts-ledger.md` 与 `research-sources.md`
+> - `facts-ledger.md`、`research-sources.md` 与 `research-evidence.md`
 
 ## 适用时机
 
@@ -30,7 +30,7 @@ allowed-tools: Read Write Edit Bash
 2. 读取 `workspace/outputs/<project-slug>/00-section-plan.md`
 3. 读取当前章节正文
 4. 核对 `workspace/plan/<project-slug>/facts-ledger.md`
-5. 如表格涉及行业对比或公开指标，再核对 `research-sources.md`
+5. 如表格涉及行业对比或公开指标，再核对 `research-sources.md` 和 `research-evidence.md`
 
 ## 选择逻辑
 

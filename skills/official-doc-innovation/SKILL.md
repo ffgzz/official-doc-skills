@@ -34,6 +34,12 @@ allowed-tools: Read Write Edit Bash
 
 创新点正文默认不用项目符号堆砌“亮点”，而应写成有参照系、有差异来源、有工程价值落点的自然段或少量正式小节。
 
+正式正文写法必须同时遵守：
+- `official-doc-core` 中的公文文风规则
+- [../official-doc-core/references/formal-doc-style.md](../official-doc-core/references/formal-doc-style.md)
+- [../official-doc-core/references/depth-writing-rules.md](../official-doc-core/references/depth-writing-rules.md)
+- [../official-doc-core/references/depth-writing-examples.md](../official-doc-core/references/depth-writing-examples.md) 中的创新点示例
+
 ## 先做什么
 
 开始写之前先检查创新点所需的比较基线是否已经由 `official-doc-research` 做扎实。
@@ -41,6 +47,7 @@ allowed-tools: Read Write Edit Bash
 必须先读取：
 - `workspace/plan/<project-slug>/research-plan.md`
 - `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-evidence.md`
 - `workspace/plan/<project-slug>/research-notes.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`
 
@@ -48,6 +55,7 @@ allowed-tools: Read Write Edit Bash
 - 缺少对“传统方案 / 现有路线 / 同类项目”的近年基线
 - 只有本项目视角，没有外部参照系
 - 来源还停留在旧资讯稿或单篇宣传稿
+- `research-evidence.md` 没有记录外部方案、传统路线或主流工具能力边界的证据点
 
 本 skill 不直接联网搜索。只有在比较基线已形成、但某个创新点仍需补证时，才回到 `official-doc-research` 补充调研，由 `official-doc-research` 使用本地 MCP 完成检索、抓取和落账。补查重点包括：
 - 同领域已有方案、竞品、论文、专利、白皮书
@@ -56,9 +64,22 @@ allowed-tools: Read Write Edit Bash
 
 补充调研结果必须记录到：
 - `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-evidence.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`
 
-补查完成后，本 skill 只读取调研台账和事实台账，不自行改用其他搜索工具。
+补查完成后，本 skill 优先读取 `research-evidence.md` 的证据卡，再读取调研台账和事实台账，不自行改用其他搜索工具。
+
+## 写作深度门槛
+
+创新点类正文不能只写“新平台、新方法、新模式”。每个创新点必须形成比较论证链：
+- `比较基线`：相对传统人工方式、现有单点工具、通用模型方案、国外平台或国内同类做法中的哪一种。
+- `现有局限`：现有路线为什么不能充分解决本项目场景问题。
+- `新机制`：本项目的新方法、新模型、新流程或新组织方式是什么。
+- `差异成立原因`：这种新机制为什么和现有做法不同，而不是换个说法。
+- `工程价值`：差异最终落到效率、质量、合规、标准化、自主可控或交付能力中的哪一项。
+- `映射关系`：对应哪项研究内容、技术成果或技术指标。
+
+如果没有外部比较基线，不得写“创新点成立”。应回到 `official-doc-research` 补充 `IN` 组调研，或把文字降级为“特色做法/技术特点”。
 
 ## 从附件提炼出的共性写法
 

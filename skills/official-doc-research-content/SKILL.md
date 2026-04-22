@@ -37,6 +37,8 @@ allowed-tools: Read Write Edit Bash
 正式正文写法必须同时遵守：
 - `official-doc-core` 中的公文文风规则
 - [../official-doc-core/references/formal-doc-style.md](../official-doc-core/references/formal-doc-style.md)
+- [../official-doc-core/references/depth-writing-rules.md](../official-doc-core/references/depth-writing-rules.md)
+- [../official-doc-core/references/depth-writing-examples.md](../official-doc-core/references/depth-writing-examples.md) 中的研究内容示例
 
 ## 先做什么
 
@@ -45,6 +47,7 @@ allowed-tools: Read Write Edit Bash
 必须先读取：
 - `workspace/plan/<project-slug>/research-plan.md`
 - `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-evidence.md`
 - `workspace/plan/<project-slug>/research-notes.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`
 
@@ -52,6 +55,7 @@ allowed-tools: Read Write Edit Bash
 - 同类任务拆法还只有一两个零散样例
 - 关键技术命名缺少近 3 年公开资料校准
 - 研究内容边界仍明显拍脑袋
+- `research-evidence.md` 缺少同类任务、技术路线或子课题拆分的证据卡
 - `research-notes.md` 尚未沉淀出“问题 -> 方法 -> 输出”的摘记
 
 本 skill 不直接联网搜索。只有在研究内容大框架已建立、但某个子课题仍需补证时，才回到 `official-doc-research` 补充调研，由 `official-doc-research` 使用本地 MCP 完成检索、抓取和落账。补查重点包括：
@@ -61,6 +65,7 @@ allowed-tools: Read Write Edit Bash
 
 补充调研结果必须记录到：
 - `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-evidence.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`
 
 搜索目的不是抄材料，而是校准三件事：
@@ -68,7 +73,19 @@ allowed-tools: Read Write Edit Bash
 - 关键技术通常如何命名才专业且可落地
 - 子课题边界如何划分才合理
 
-补查完成后，本 skill 只读取调研台账和事实台账，不自行改用其他搜索工具。
+补查完成后，本 skill 优先读取 `research-evidence.md` 的证据卡，再读取调研台账和事实台账，不自行改用其他搜索工具。
+
+## 写作深度门槛
+
+研究内容类正文不能写成“研究A、研究B、研究C”的名词清单。每项研究内容必须建立任务包论证链：
+- `问题来源`：对应背景、痛点或现状差距中的哪一类问题。
+- `研究对象`：处理的是数据、规则、模型、系统、流程、设备、报告还是场景。
+- `技术机制`：采用什么方法、模型、规则、算法、工具链或流程编排来解决问题。
+- `子课题边界`：每个子课题解决的具体环节是什么，彼此如何衔接。
+- `输入输出`：该研究内容需要什么输入，形成什么中间成果或交付件。
+- `验证方式`：后续如何通过指标、场景、样例、系统测试或报告验收证明有效。
+
+每个研究内容段落至少写出“问题 -> 方法 -> 输出”三项，重章节还应写出“原因 -> 机制 -> 验证”。如果只能写出任务名称，说明调研或设计仍不足，应先补 `research-notes.md`，不得靠套话扩写。
 
 ## 从附件提炼出的共性写法
 

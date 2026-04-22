@@ -13,6 +13,7 @@ allowed-tools: Read Write Edit Bash
 > - 先补搜索和依赖关系，再修措辞
 > - `技术成果` 必须由研究内容回推
 > - `技术指标` 必须补齐阈值、单位、验证口径
+> - 浅层章节必须先重建论证链，再扩写正文
 > - 正文必须改回正式公文自然段，不能保留答题卡式 AI 痕迹
 
 ## 适用时机
@@ -33,6 +34,7 @@ allowed-tools: Read Write Edit Bash
 - `workspace/review/<project-slug>/review.md`
 - `workspace/plan/<project-slug>/project-brief.md`
 - `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-evidence.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`
 - 当前受影响的 `workspace/outputs/<project-slug>/`、`workspace/tables/<project-slug>/`、`workspace/figures/<project-slug>/` 文件
 
@@ -42,6 +44,7 @@ allowed-tools: Read Write Edit Bash
 2. 按严重级别区分 Must Fix / Should Fix
 3. 逐项定位受影响文件
 4. 核对 `workspace/plan/<project-slug>/facts-ledger.md` 中相关事实口径
+5. 若修复来源或补调研，核对并补齐 `workspace/plan/<project-slug>/research-evidence.md`
 
 ## 强制规则
 
@@ -55,16 +58,18 @@ allowed-tools: Read Write Edit Bash
 - 若 review 指出“正式稿中的信息比散件文件更空”或“已知事实被回退成 `【待补】`”，必须优先修复该回退问题，再做其他润色
 - 若 review 指出总字数不达标，必须先判断是整体过长还是过短，再按章节轻重规则定向压缩或补足
 - 若 review 指出正文存在列表化、加粗小标签或机械过渡词，必须优先改回自然段表述，再进入装配
+- 若 review 指出内容深度不足，不得只加套话或同义改写；必须先补齐“核心判断、事实依据、差距问题、技术机制、输出结果、边界条件”六项论证链，再重写对应段落
 
 ## 回修顺序
 
 默认按以下顺序推进：
 1. 修标题、编号、固定模板结构错误
 2. 修章节配比问题
-3. 补高优先表图缺失
-4. 修正文与表图引用、术语、数字口径
-5. 修台账与进度记录
-6. 运行风格检查，确认明显 AI 痕迹已清理
+3. 修写作深度问题，补齐论证链和章节内部因果关系
+4. 补高优先表图缺失
+5. 修正文与表图引用、术语、数字口径
+6. 修来源证据档案、事实台账与进度记录
+7. 运行风格检查，确认明显 AI 痕迹已清理
 
 不要一上来就只改文字表述，先解决结构性问题。
 
@@ -74,6 +79,7 @@ allowed-tools: Read Write Edit Bash
 - 正文与表图引用统一
 - 项目名称、单位、负责人、周期、预算等口径统一
 - 将 review 指出的空泛段落改成更贴近模板要求的正式表述
+- 将“打造平台、赋能业务、形成闭环、提升效率”等口号化段落改成“对象、问题、机制、输出、验证”齐全的论证段落
 - 将缺失说明补回台账，而不是只在对话中说明
 - 将列表化正文、加粗小标签和机械过渡词改写为连续自然段
 

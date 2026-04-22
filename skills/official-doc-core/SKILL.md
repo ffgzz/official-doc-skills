@@ -1,6 +1,6 @@
 ---
 name: official-doc-core
-description: 项目公文写作的公共校验层。仅在 using-official-docs 完成 brief 解析和工作区初始化后使用，用于检查台账、事实纪律、阶段顺序和章节依赖。它不创建工作区，不首次写 plan，也不直接联网搜索或写五类共性章节。
+description: 项目公文写作的公共校验层。仅在 using-official-docs 完成 brief 解析和工作区初始化后使用，用于检查台账、事实纪律、阶段顺序、章节依赖、正式文风和写作深度门禁。它不创建工作区，不首次写 plan，也不直接联网搜索或写五类共性章节。
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -20,6 +20,8 @@ allowed-tools: Read Write Edit Bash
 
 涉及正式正文写法时，读取：
 - [references/formal-doc-style.md](./references/formal-doc-style.md)
+- [references/depth-writing-rules.md](./references/depth-writing-rules.md)
+- [references/depth-writing-examples.md](./references/depth-writing-examples.md)
 
 ## 一、执行原则
 
@@ -44,6 +46,9 @@ allowed-tools: Read Write Edit Bash
 ### 7. 正文必须像正式公文，不像演示稿或 AI 草稿
 正文默认写成连续自然段，不写成项目符号堆砌，不写成加粗小标签拼贴，不写成机械的多级目录摘抄。
 
+### 7.5 正文必须有论证深度
+五类共性章节写作前，必须先建立“章节论证链”，至少说明本章核心判断、事实依据、差距问题、技术机制、输出结果和边界条件。若论证链填不实，不得靠空泛扩写凑字数，应回到 `official-doc-research` 补调研，或只向用户提出一个会影响方向的关键问题。
+
 ### 8. core 不代替专项 skill
 `official-doc-core` 只做公共校验，不代替：
 - `official-doc-research`
@@ -64,6 +69,7 @@ allowed-tools: Read Write Edit Bash
   - `project-brief.md`
   - `research-plan.md`
   - `research-sources.md`
+  - `research-evidence.md`
   - `research-notes.md`
   - `facts-ledger.md`
   - `progress.md`
@@ -95,6 +101,7 @@ allowed-tools: Read Write Edit Bash
 1. 正文标 `【待补】`
 2. `facts-ledger.md` 记录缺口
 3. `source-materials.md` 记录待补来源
+4. 若缺口来自已有来源抓取不充分，`research-evidence.md` 记录证据不足原因
 
 ## 四、语言与结构
 
@@ -175,6 +182,7 @@ workspace/
 - `workspace/plan/<project-slug>/stage-gates.md`
 - `workspace/plan/<project-slug>/research-plan.md`
 - `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-evidence.md`
 - `workspace/plan/<project-slug>/research-notes.md`
 - `workspace/plan/<project-slug>/source-materials.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`

@@ -1,6 +1,6 @@
 ---
 name: official-doc-research
-description: 正式项目公文的独立调研门禁。必须在 using-official-docs 解析 brief、official-doc-core 校验完成之后立即使用，并且必须早于任何联网搜索和任何共性章节写作。它负责先澄清调研边界、建立调研矩阵、检查本地 MCP 可用性、执行多轮 MCP 检索、控制年份和来源门槛、沉淀来源与摘记，然后才放行章节 skill。
+description: 正式项目公文的独立调研门禁。必须在 using-official-docs 解析 brief、official-doc-core 校验完成之后立即使用，并且必须早于任何联网搜索和任何共性章节写作。它负责先澄清调研边界、建立调研矩阵、检查本地 MCP 可用性、执行多轮 MCP 检索、控制年份和来源门槛、沉淀来源、完整调研证据、摘记与事实台账，然后才放行章节 skill。
 allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__miro-google-search__scrape_website mcp__miro-reading__convert_to_markdown mcp__miro-python__create_sandbox mcp__miro-python__run_python_code mcp__miro-python__run_command
 ---
 
@@ -63,6 +63,7 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 - `workspace/outputs/<project-slug>/00-section-plan.md`
 - `workspace/plan/<project-slug>/research-plan.md`
 - `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-evidence.md`
 - `workspace/plan/<project-slug>/research-notes.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`
 - `workspace/plan/<project-slug>/progress.md`
@@ -231,6 +232,7 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 必须同时补齐：
 - `research-plan.md`：调研组、轮次、查询式、覆盖状态
 - `research-sources.md`：来源清单与分级
+- `research-evidence.md`：每条来源的搜索命中、抓取/转换内容、证据点、短摘录和使用边界
 - `research-notes.md`：逐条提炼的核心发现
 - `facts-ledger.md`：能入正文的事实和核验状态
 
@@ -341,7 +343,27 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 - 支撑章节 / 小节
 - 是否可直接支撑正文断言
 
-### 第四步：做研究摘记
+### 第四步：建立完整调研证据档案
+
+每条进入 `research-sources.md` 的有效来源，必须在 `research-evidence.md` 中建立同编号证据卡。不得只写标题、链接或一句摘要。
+
+每张证据卡至少记录：
+- 来源编号、调研组、对应问题编号
+- 来源标题、链接或定位、发布机构、发布时间、来源等级、时效标记
+- 使用工具：`google_search` / `scrape_website` / `convert_to_markdown` / `miro-python`
+- 检索查询式、命中标题、命中摘要、选择该来源的原因
+- 抓取或转换状态：成功 / 部分成功 / 失败
+- 正文可读性：完整 / 部分 / 仅摘要 / 需人工复核
+- 抓取内容的结构化记录：主题范围、主要章节、关键数据、关键政策/标准/技术机制、与本项目相关内容、不宜使用内容
+- 可用证据点表：证据点编号、可支撑断言、原文位置/页码/章节、证据强度、使用边界
+- 必要短摘录：只保存必要短摘录，避免把长篇网页原文或受版权保护材料整段粘贴到文件
+- 后续使用建议：可进入哪些章节、哪些事实可升入 `facts-ledger.md`、哪些只能作趋势参考、仍需补证什么
+
+若 `scrape_website` 或 `convert_to_markdown` 抓取失败，仍须建立证据卡，记录失败原因、可见的搜索摘要、是否需要换源或人工补证。抓取失败来源不得直接支撑 `已核验` 事实。
+
+对于政府公告、标准目录、官方产品页、论文摘要等可公开转述内容，应记录尽可能完整的结构化证据；对于长篇报告、论文、新闻稿或商业报告，不要复制全文，改为保存完整调研摘要、关键短摘录、页码/章节定位和可支撑断言。
+
+### 第五步：做研究摘记
 
 每条保留来源至少提炼一条“可用于写作”的摘记，写入 `research-notes.md`。
 
@@ -352,7 +374,7 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 - 可支撑的断言强度
 - 风险提示
 
-如果来源只停留在标题层，没有被提炼成摘记，等于尚未完成调研转写。
+如果来源只停留在标题层，没有进入 `research-evidence.md` 并被提炼成摘记，等于尚未完成调研转写。
 
 每个调研组结束时，还必须写 300 至 600 字的“调研结论摘要”，说明：
 - 当前可形成的稳健判断
@@ -361,7 +383,7 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 - 可以进入正文的口径
 - 暂不能强写的内容
 
-### 第五步：升格为事实台账
+### 第六步：升格为事实台账
 
 只有当某条信息完成核验后，才可写入 `facts-ledger.md`，并标注：
 - `已核验`
@@ -378,10 +400,11 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 4. 如果命中的是 PDF / DOCX / PPTX / XLSX / CSV 等材料：
    - 直接用 `miro-reading.convert_to_markdown(uri)` 转 Markdown
    - 或先下载到本地再用 `file:///...` 形式读取
-5. 如果要做去重、表格整理、指标比对、批量摘要：
+5. 立即把每条保留来源写入 `research-evidence.md`，建立证据卡；证据卡未写入前，不得把该来源视为已完成调研
+6. 如果要做去重、表格整理、指标比对、批量摘要：
    - 用 `miro-python` 进入沙箱处理
-6. 每个调研组形成调研结论摘要
-7. 只有进入 `research-notes.md` 和 `facts-ledger.md` 的内容，才允许被后续章节 skill 使用
+7. 每个调研组形成调研结论摘要
+8. 只有进入 `research-evidence.md`、`research-notes.md` 和 `facts-ledger.md` 的内容，才允许被后续章节 skill 使用
 
 ## 与五个章节 skill 的关系
 
@@ -389,6 +412,7 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 
 五个章节 skill 负责：
 - 读取本 skill 产出的调研台账
+- 优先读取 `research-evidence.md` 中的来源证据卡，再读取摘要和事实台账
 - 按各自规则写成正式公文表述
 
 五个章节 skill 不应从零开始各搜各的。
@@ -404,6 +428,7 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 - 每个激活调研组至少完成 4 轮检索，高风险组完成追加近年检索
 - 每个激活调研组达到最低来源保留量
 - 近 3 年来源占主导，旧来源只作为基线或规范
+- `research-evidence.md` 已为每条有效来源建立证据卡，且不只是链接列表
 - `research-notes.md` 不再只是空表
 - 每个调研组形成 300 至 600 字调研结论摘要
 - `facts-ledger.md` 已沉淀出可入正文的事实

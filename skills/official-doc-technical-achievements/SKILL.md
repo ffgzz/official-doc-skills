@@ -34,6 +34,12 @@ allowed-tools: Read Write Edit Bash
 
 成果正文应采用“成果名称 + 来源于哪项研究内容 + 作用 + 交付形态”的正式段落表达，不要写成简历式清单。
 
+正式正文写法必须同时遵守：
+- `official-doc-core` 中的公文文风规则
+- [../official-doc-core/references/formal-doc-style.md](../official-doc-core/references/formal-doc-style.md)
+- [../official-doc-core/references/depth-writing-rules.md](../official-doc-core/references/depth-writing-rules.md)
+- [../official-doc-core/references/depth-writing-examples.md](../official-doc-core/references/depth-writing-examples.md) 中的技术成果示例
+
 ## 先做什么
 
 开始写之前先检查成果类调研门禁是否完成。
@@ -41,6 +47,7 @@ allowed-tools: Read Write Edit Bash
 必须先读取：
 - `workspace/plan/<project-slug>/research-plan.md`
 - `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-evidence.md`
 - `workspace/plan/<project-slug>/research-notes.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`
 
@@ -48,6 +55,7 @@ allowed-tools: Read Write Edit Bash
 - 还不知道同类项目通常交付哪些成果形态
 - 只有项目内部想法，没有外部成果口径参照
 - 缺少近年项目指南、任务书、成果清单样例
+- `research-evidence.md` 没有记录成果形态、交付件或验收件证据点
 
 本 skill 不直接联网搜索。只有在成果框架已基本明确、但个别成果命名仍需补证时，才回到 `official-doc-research` 补充调研，由 `official-doc-research` 使用本地 MCP 完成检索、抓取和落账。补查重点包括：
 - 同类项目通常形成哪些成果形态
@@ -56,9 +64,22 @@ allowed-tools: Read Write Edit Bash
 
 补充调研结果必须记录到：
 - `workspace/plan/<project-slug>/research-sources.md`
+- `workspace/plan/<project-slug>/research-evidence.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`
 
-补查完成后，本 skill 只读取调研台账和事实台账，不自行改用其他搜索工具。
+补查完成后，本 skill 优先读取 `research-evidence.md` 的证据卡，再读取调研台账和事实台账，不自行改用其他搜索工具。
+
+## 写作深度门槛
+
+成果类正文不能把“能力提升、支撑应用、形成体系”当成果。每项成果必须建立从研究内容到交付件的映射链：
+- `来源研究内容`：成果由哪项研究内容或关键技术自然推导出来。
+- `成果名称`：名称应具体到系统、模块、模型、工具、数据集、规则库、报告、规范或知识产权。
+- `功能边界`：成果能做什么，不能泛化成所有能力。
+- `交付形态`：以软件、文档、报告、数据库、模型文件、接口、标准草案、专利软著等何种形式交付。
+- `应用场景`：成果用于哪个业务环节或验证场景。
+- `验收方式`：通过功能测试、指标测试、示范应用、专家评审、文档审查或知识产权申请中的哪类方式确认。
+
+如果某项成果无法回指研究内容，应删去或改为预期成效；如果只有“提升水平”而没有可交付形态，应补写成果实体。
 
 ## 从附件提炼出的共性写法
 
