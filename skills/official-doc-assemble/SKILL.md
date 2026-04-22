@@ -77,6 +77,8 @@ allowed-tools: Read Write Edit Bash
 - 如果高优先表图尚未齐备，不得进入装配
 - 如果用户给出了总字数硬约束且当前稿件未满足，不得进入装配
 - 如果正文仍明显保留列表化、加粗小标签或机械过渡词，不得进入装配
+- 装配前必须运行 `scripts/style_check.ps1` 检查将要装配的散件或当前 `formal-draft`。若脚本输出 `Result: FAIL`，不得装配，也不得把 assembly-notes 写成“可装配正式稿”
+- 装配前必须核对 `project-brief.md` 与 `00-section-plan.md` 中的全文编号方案；若散件中存在章内二级标题写成 `### 一、`、`### 二、` 而方案要求 `（一）`、`（二）`，不得装配
 - 装配时要优先纳入 brief 与 `00-section-plan.md` 中要求的表图
 - 若正式稿中的任一表图内容与对应散件文件不一致，必须视为装配失败并回到 revise / assemble 修复
 - 若正式稿仍包含未核验的高风险具体事实，不能用 assemble 掩盖该问题，必须回到 revise / review 修复
@@ -102,6 +104,8 @@ allowed-tools: Read Write Edit Bash
 4. 立即调用 `official-doc-review` 做一轮 final review
 5. 生成 `workspace/review/<project-slug>-final-review.md`
 6. 仅当 final review 未发现新的 Must Fix 时，才允许把装配结果标记为“可装配正式稿”
+
+final review 中关于调研来源数、style_check 结果和编号方案的结论必须来自当前文件实时检查；若 final review 与脚本输出或 `research-sources.md` 实际来源数矛盾，以脚本输出和实际来源数为准，assembly-notes 必须记录“需回退 revise / research”，不得写“可保留为正式交付稿”。
 
 不要把装配前的 review 直接沿用为装配后的最终判断。
 

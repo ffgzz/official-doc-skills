@@ -20,6 +20,7 @@ allowed-tools: Read Write Edit Bash
 
 涉及正式正文写法时，读取：
 - [references/formal-doc-style.md](./references/formal-doc-style.md)
+- [references/attachment-writing-patterns.md](./references/attachment-writing-patterns.md)
 - [references/depth-writing-rules.md](./references/depth-writing-rules.md)
 - [references/depth-writing-examples.md](./references/depth-writing-examples.md)
 
@@ -48,6 +49,11 @@ allowed-tools: Read Write Edit Bash
 
 ### 7.5 正文必须有论证深度
 五类共性章节写作前，必须先建立“章节论证链”，至少说明本章核心判断、事实依据、差距问题、技术机制、输出结果和边界条件。若论证链填不实，不得靠空泛扩写凑字数，应回到 `official-doc-research` 补调研，或只向用户提出一个会影响方向的关键问题。
+
+### 7.6 编号必须由文档级方案统筹
+`using-official-docs` 应在 `project-brief.md` 和 `00-section-plan.md` 中记录全文编号方案。core 校验时要确认五个专项章节没有各自混用编号层级。
+
+默认正式报告型编号为：一级章 `一、`，二级节 `（一）`，三级项 `1.`，四级点 `（1）`。若研究内容需要课题化下钻，可在研究内容内部采用 `课题1 / 子课题1.1 / 1.1.1`，但不得与同层级 `（1）` 混用。
 
 ### 8. core 不代替专项 skill
 `official-doc-core` 只做公共校验，不代替：
@@ -161,6 +167,7 @@ allowed-tools: Read Write Edit Bash
 - 二级标题优先服从用户指定的小节结构
 - 若用户未固定更深层级，可补充三级小标题，但必须服务现有逻辑
 - 材料不足时不删标题，只在对应位置补 `【待补】`
+- 标题编号必须服从文档级编号方案，不允许某章用 `（1）`、另一章同层级用 `1.1`
 
 ## 五、工作区约定
 

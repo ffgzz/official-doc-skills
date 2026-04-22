@@ -37,6 +37,7 @@ allowed-tools: Read Write Edit Bash
 正式正文写法必须同时遵守：
 - `official-doc-core` 中的公文文风规则
 - [../official-doc-core/references/formal-doc-style.md](../official-doc-core/references/formal-doc-style.md)
+- [../official-doc-core/references/attachment-writing-patterns.md](../official-doc-core/references/attachment-writing-patterns.md) 中的编号方案和成果写法
 - [../official-doc-core/references/depth-writing-rules.md](../official-doc-core/references/depth-writing-rules.md)
 - [../official-doc-core/references/depth-writing-examples.md](../official-doc-core/references/depth-writing-examples.md) 中的技术成果示例
 
@@ -83,6 +84,8 @@ allowed-tools: Read Write Edit Bash
 
 ## 从附件提炼出的共性写法
 
+写成果前必须读取 `00-section-plan.md` 中的全文编号方案。成果清单如需编号，编号层级必须与本章其他小节一致；表格中的序号可以独立使用阿拉伯数字，但不得反向影响正文标题编号。
+
 ### 1. 技术成果必须从研究内容推导出来
 
 附件中的成熟文本反复强调：
@@ -106,6 +109,20 @@ allowed-tools: Read Write Edit Bash
 - 成果叫什么
 - 它解决或支撑什么
 - 以什么形式交付或验收
+
+### 4. 附件式成果组织方式
+
+成果章节优先采用“总述 + 成果表 + 分组说明”的形态。若用户允许表格，先写：
+
+```md
+根据以上研究专题，项目实施完毕后，可形成以下技术成果。
+```
+
+成果表字段建议为：
+
+`序号 | 技术成果 | 对应研究内容 | 交付形态 | 主要作用/验收方式`
+
+表后用自然段按 `软件与平台成果 / 模型与算法成果 / 数据与知识成果 / 文档与标准成果 / 知识产权与应用验证成果` 分组说明。每项成果都要说明它来自哪项研究内容，不能只列名称。
 
 ## 写作原则
 
@@ -222,6 +239,7 @@ allowed-tools: Read Write Edit Bash
 可采用如下句式：
 - `围绕……研究内容，形成……成果，用于……，并以……形式交付。`
 - `项目实施后，预计形成……，支撑……场景应用。`
+- `...研究对应形成...，解决...问题；...研究对应形成...，支撑...。上述成果共同构成...交付链路。`
 
 ## 与“成效”和“指标”的边界
 

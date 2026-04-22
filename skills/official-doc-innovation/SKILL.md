@@ -37,6 +37,7 @@ allowed-tools: Read Write Edit Bash
 正式正文写法必须同时遵守：
 - `official-doc-core` 中的公文文风规则
 - [../official-doc-core/references/formal-doc-style.md](../official-doc-core/references/formal-doc-style.md)
+- [../official-doc-core/references/attachment-writing-patterns.md](../official-doc-core/references/attachment-writing-patterns.md) 中的编号方案和创新点写法
 - [../official-doc-core/references/depth-writing-rules.md](../official-doc-core/references/depth-writing-rules.md)
 - [../official-doc-core/references/depth-writing-examples.md](../official-doc-core/references/depth-writing-examples.md) 中的创新点示例
 
@@ -83,6 +84,8 @@ allowed-tools: Read Write Edit Bash
 
 ## 从附件提炼出的共性写法
 
+写创新点前必须读取 `00-section-plan.md` 中的全文编号方案。创新点若作为二级节，编号服从全文方案；若作为“关键技术及创新点”内部条目，必须沿用本章既定层级，不得与研究内容同级编号混用。
+
 ### 1. 创新点不是“夸项目”，而是“写差异”
 
 附件中的高质量创新点，都不是空喊“先进”“领先”，而是强调：
@@ -107,6 +110,20 @@ allowed-tools: Read Write Edit Bash
 - 创新点和前文现状分析无关
 - 创新点和研究内容不对应
 - 创新点和成果、指标无法挂钩
+
+### 4. 附件式创新点骨架
+
+创新点应按 `比较对象 -> 现有局限 -> 本项目机制 -> 差异成立原因 -> 工程价值` 写成完整段落。
+
+可直接套用的段落骨架：
+
+```md
+区别于传统...方式，本项目拟构建...机制。相较于现有...路线，该机制将...、...和...统一纳入...，通过...实现...。由此，...从...转向...，为...提供...。
+```
+
+若没有足够证据支撑“创新”，应降级写成 `技术特点` 或 `特色做法`，不得强写 `首创`、`领先`、`填补空白`。
+
+正式可研/立项材料中的创新点不得压缩成一句评审摘要。每个创新点建议 220 到 350 字，至少包含 2 个自然句：第一句写比较基线和现有局限，第二句写本项目机制、差异成立原因和工程价值。若 review 要求“压缩创新点”，只能删除重复修饰，不能删除比较基线、技术机制和价值落点。
 
 ## 写作原则
 

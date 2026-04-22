@@ -37,7 +37,8 @@
       "mcp__miro-python__run_command",
       "Bash(python \"D:\\\\文件\\\\HaiZhou\\\\公文写作三\\\\official-doc-writing-skill-rebuilt\\\\scripts\\\\style_check.py\" \"D:\\\\文件\\\\HaiZhou\\\\公文写作三\\\\official-doc-writing-skill-rebuilt\\\\workspace\\\\outputs\\\\ai-ship-electrical-eid\\\\01-overview.md\")",
       "Bash(python \"D:\\\\文件\\\\HaiZhou\\\\公文写作三\\\\official-doc-writing-skill-rebuilt\\\\scripts\\\\style_check.py\" \"D:\\\\文件\\\\HaiZhou\\\\公文写作三\\\\official-doc-writing-skill-rebuilt\\\\workspace\\\\outputs\\\\ai-ship-electrical-eid\\\\05-difficulty-assessment.md\")",
-      "Bash(python \"D:\\\\文件\\\\HaiZhou\\\\公文写作三\\\\official-doc-writing-skill-rebuilt\\\\scripts\\\\style_check.py\" \"D:\\\\文件\\\\HaiZhou\\\\公文写作三\\\\official-doc-writing-skill-rebuilt\\\\workspace\\\\outputs\\\\ai-ship-electrical-eid\\\\07-expected-outcomes.md\")"
+      "Bash(python \"D:\\\\文件\\\\HaiZhou\\\\公文写作三\\\\official-doc-writing-skill-rebuilt\\\\scripts\\\\style_check.py\" \"D:\\\\文件\\\\HaiZhou\\\\公文写作三\\\\official-doc-writing-skill-rebuilt\\\\workspace\\\\outputs\\\\ai-ship-electrical-eid\\\\07-expected-outcomes.md\")",
+      "Bash(powershell:*)"
     ]
   }
 }

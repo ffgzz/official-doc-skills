@@ -37,6 +37,7 @@ allowed-tools: Read Write Edit Bash
 正式正文写法必须同时遵守：
 - `official-doc-core` 中的公文文风规则
 - [../official-doc-core/references/formal-doc-style.md](../official-doc-core/references/formal-doc-style.md)
+- [../official-doc-core/references/attachment-writing-patterns.md](../official-doc-core/references/attachment-writing-patterns.md) 中的编号方案和指标写法
 - [../official-doc-core/references/depth-writing-rules.md](../official-doc-core/references/depth-writing-rules.md)
 - [../official-doc-core/references/depth-writing-examples.md](../official-doc-core/references/depth-writing-examples.md) 中的技术指标示例
 
@@ -83,6 +84,8 @@ allowed-tools: Read Write Edit Bash
 
 ## 从附件提炼出的共性写法
 
+写指标前必须读取 `00-section-plan.md` 中的全文编号方案。指标项可以在表格内用独立序号，但正文标题层级必须服从全文方案；不得把指标条目编号误当成章节标题编号。
+
 ### 1. 指标通常是分层分类写，不是一个混合清单
 
 附件中常见的指标分组包括：
@@ -109,6 +112,20 @@ allowed-tools: Read Write Edit Bash
 - 研究内容做了分类模型，就可以有准确率、召回率、覆盖率
 - 做了自动化图像输出，就可以有输出成功率、批处理效率
 - 做了报告生成，就可以有模板填充准确率、合规问答准确率、报告生成时间
+
+### 4. 附件式指标口径
+
+附件中的指标常写成“输入条件 + 能力动作 + 目标值 + 验证口径”。不要只写 `准确率达到...`，必须补充适用条件和测试对象。
+
+可直接套用的句式：
+
+- `在...输入信息准确、完整的前提下，实现...，...达到...。`
+- `在...测试场景下，系统能够...，...准确率/完整率/通过率达到...。`
+- `通过...测试、抽样复核或示范应用，验证...。`
+
+若用户允许表格，指标表字段建议为：
+
+`指标类别 | 指标名称 | 目标值/区间 | 测试条件 | 验证方式 | 对应成果`
 
 ## 写作原则
 
@@ -207,6 +224,7 @@ allowed-tools: Read Write Edit Bash
 
 每个指标项建议采用以下表达：
 - `指标名称：目标值；测量对象/场景；说明。`
+- `在...条件下，...指标达到...，通过...方式验证。`
 
 如果用户允许表格，可整理成：
 - 指标类别

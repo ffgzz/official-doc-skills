@@ -225,6 +225,10 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 - `TI` 技术指标/验收口径：不少于 10 条有效来源
 - `IN` 创新点比较基线：不少于 8 条有效来源，且必须包含外部方案或技术路线对比
 
+不得把全文来源总数、其他调研组来源数或事实条数加到某一组来源数中。`research-sources.md` 的状态栏必须按各组实际来源逐行统计；若 `BG` 只有 5 条来源，就只能写 `BG组5条，未达标`，不得写 `BG组已达12条`。未达标组不得在 `progress.md`、`stage-gates.md` 或终端中标记为“调研门禁完成”。
+
+正式可研、立项申请书、项目建议书默认按上述门槛执行。只有用户明确要求“快速初稿/低调研版”，才允许降级为“调研不足的阶段稿”，并必须在 `progress.md` 和 `facts-ledger.md` 中记录风险，不能声称“可正式交付”。
+
 ### 4. 来源不能只停留在列表
 
 调研完成不等于“记了几个链接”。
@@ -433,6 +437,8 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 - 每个调研组形成 300 至 600 字调研结论摘要
 - `facts-ledger.md` 已沉淀出可入正文的事实
 - `progress.md` 已明确记录“调研门禁完成”
+
+若任一激活组来源数量或证据卡不达标，`progress.md` 必须写成“调研门禁未完成：XX组缺少N条来源/证据卡”，下一步只能回到本 skill 补调研，不能放行章节写作或装配。
 
 ## 终端输出要求
 

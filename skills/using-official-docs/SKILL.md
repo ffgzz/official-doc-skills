@@ -75,6 +75,19 @@ allowed-tools: Read Write Edit Bash
 
 `official-doc-core` 只校验这些文件，不负责首次写入。
 
+### 0.75 文档级编号方案由主入口确定
+
+主入口必须在解析 brief 时确定全文编号方案，并写入：
+- `workspace/plan/<project-slug>/project-brief.md`
+- `workspace/outputs/<project-slug>/00-section-plan.md`
+
+默认规则：
+- 可研报告、立项申请书、项目建议书、技术总结：一级章 `一、`，二级节 `（一）`，三级项 `1.`，四级点 `（1）`。
+- 项目指南、攻关任务书、任务清单型材料：一级任务 `1.`，二级要求 `（1）`，三级动作 `（a）`。
+- 研究内容、主要攻关内容需要深度拆成课题/子课题时：章级编号仍服从全文方案，章节内部可采用 `课题1 / 子课题1.1 / 1.1.1`。
+
+后续五个专项 skill 不得自行决定编号。若某章已经采用 `1.1` 技术分解，同级条目不得再改用 `（1）`；若全文二级标题采用 `（一）`，其他章节二级标题也必须沿用。
+
 ### 1. 路由依据是“写什么”，不是“这一章叫什么”
 
 必须按用户 brief 中的以下信息综合判断：
@@ -279,6 +292,7 @@ allowed-tools: Read Write Edit Bash
 1. 解析 brief，提取：
    - 项目主题
    - `project-slug`
+   - 目标文体与全文编号方案
    - 章节顺序
    - 每章标题
    - 每章要求写的内容
@@ -308,6 +322,7 @@ allowed-tools: Read Write Edit Bash
 5. 若命中五类共性章节，先调用一次 `official-doc-research`，建立调研计划、完成多轮检索并落账
 6. 对每一章按关键词做路由判断
 7. 命中五类共性章节时，先显式加载专项 skill，再由该 skill 读取调研台账并写作，并把正文写入 `workspace/outputs/<project-slug>/`
+   - 专项 skill 必须服从 `00-section-plan.md` 中的编号方案，不得自行改用另一套标题编号
 8. 未命中五类时，主入口按 brief 直接写该章，并把正文写入 `workspace/outputs/<project-slug>/`
 9. 当所有章节正文完成后，主入口必须自动检查每章要求的表格和图示，并按需调用：
    - `official-doc-table`
@@ -575,6 +590,8 @@ allowed-tools: Read Write Edit Bash
 - 是否已调用 `official-doc-core`
 - 是否已先调用 `official-doc-research`
 - 是否按小节内容而非章名做了路由
+- 是否已在 `project-brief.md` 和 `00-section-plan.md` 中记录全文编号方案
+- 各章同层级编号是否一致，是否避免了 `（1）` 与 `1.1` 在同层级混用
 - 是否允许一章多 skill 叠加
 - 五个专项内容是否都要求先过调研门禁再写
 - 非专项章节是否仍由主入口负责统筹

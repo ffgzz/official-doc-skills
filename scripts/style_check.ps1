@@ -4,3 +4,4 @@ param(
 )
 
 python "$PSScriptRoot/style_check.py" $FilePath
+exit $LASTEXITCODE

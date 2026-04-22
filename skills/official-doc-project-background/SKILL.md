@@ -138,6 +138,7 @@ allowed-tools: Read Write Edit Bash
 正式正文写法必须同时遵守：
 - `official-doc-core` 中的公文文风规则
 - [../official-doc-core/references/formal-doc-style.md](../official-doc-core/references/formal-doc-style.md)
+- [../official-doc-core/references/attachment-writing-patterns.md](../official-doc-core/references/attachment-writing-patterns.md) 中的编号方案和背景写法
 - [../official-doc-core/references/depth-writing-rules.md](../official-doc-core/references/depth-writing-rules.md)
 - [../official-doc-core/references/depth-writing-examples.md](../official-doc-core/references/depth-writing-examples.md) 中的项目背景示例
 
@@ -170,6 +171,8 @@ allowed-tools: Read Write Edit Bash
 如果用户只要求其中某一小节，也要在该小节内部保留“现状 -> 差距 -> 影响 -> 项目切入”的最小闭环。若缺少支撑差距判断的来源，应回到 `official-doc-research` 补调研，或降级为保守趋势表述并记录 `【待补】`。
 
 ## 从附件提炼出的共性写法
+
+写背景类内容前，先读取 `00-section-plan.md` 中的全文编号方案。若本章使用二级标题，必须服从全文方案；不得本章用 `1.1`、其他章用 `（一）`。若用户没有要求列表化表达，背景、现状、痛点和必要性均应写成自然段。
 
 ### 1. 先“势”后“需”，再落到项目
 
@@ -210,6 +213,16 @@ allowed-tools: Read Write Edit Bash
 - 工程必要性
 - 产业链/供应链/安全必要性
 - 数据资产与知识沉淀必要性
+
+### 5. 附件式段落骨架
+
+可按以下结构组织，但要替换为本项目真实对象和已核验证据：
+
+```md
+在...层面，...正在推动...，对...提出了更高要求。落实到...场景，现有...仍主要依赖...，在...、...和...方面存在不足，直接影响...。因此，有必要围绕...开展系统性攻关，形成...能力，为...提供支撑。
+```
+
+立项意义不宜写成口号，建议按 `战略价值 / 技术价值 / 工程价值 / 数据资产价值 / 自主可控价值` 分层，每层至少说明“解决什么问题、支撑什么目标、沉淀什么能力”。
 
 ## 写作步骤
 
