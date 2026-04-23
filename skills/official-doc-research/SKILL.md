@@ -1,6 +1,6 @@
 ---
 name: official-doc-research
-description: 正式项目公文的独立调研门禁。必须在 using-official-docs 解析 brief、official-doc-core 校验完成之后立即使用，并且必须早于任何联网搜索和任何共性章节写作。它负责先澄清调研边界、建立调研矩阵、检查本地 MCP 可用性、执行多轮 MCP 检索、控制年份和来源门槛、沉淀来源、完整调研证据、摘记与事实台账，然后才放行章节 skill。
+description: 正式项目公文流程中的内部调研门禁，只能在 using-official-docs 已经解析 brief、初始化工作区并完成 official-doc-core 校验后，由 using-official-docs 调用；或在 official-doc-review / official-doc-revise 明确要求补调研时使用。不要把本 skill 作为用户正式公文请求的首个入口；用户一开始要求“深度调研、先搜资料、生成可研/立项/建议书”时，应先触发 using-official-docs。本 skill 负责澄清调研边界、建立调研矩阵、检查 MCP、执行多轮检索并沉淀来源、证据、摘记与事实台账。
 allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__miro-google-search__scrape_website mcp__miro-reading__convert_to_markdown mcp__miro-python__create_sandbox mcp__miro-python__run_python_code mcp__miro-python__run_command
 ---
 
@@ -12,7 +12,11 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 
 它的职责不是写正文，而是先把“能不能写、该怎么写、依据够不够新”这几件事做扎实。
 
-如果你已经准备开始搜索，而本 skill 还没加载，说明流程顺序错误，应先加载本 skill。
+本 skill 不是首个入口。若当前是用户刚发起的正式公文生成、重跑、续写或深度调研请求，而 `using-official-docs` 尚未加载并完成初始化，必须停止本 skill，切回 `using-official-docs`。
+
+只有在以下条件之一成立时，本 skill 才能继续执行：
+- `using-official-docs` 已经完成 brief 解析、工作区初始化、文档级编号方案和章节计划，并明确进入调研门禁。
+- `official-doc-review` 或 `official-doc-revise` 已经给出明确问题，要求回到本 skill 补调研、补证据卡或补事实台账。
 
 调研策略细则见：
 - [references/research-depth.md](./references/research-depth.md)
@@ -23,6 +27,8 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 - 把搜索结果直接改写成章节内容
 - 调用五个章节写作 skill
 - 声称“调研完成”
+
+若本 skill 被作为用户正式公文请求的首个 skill 触发，禁止继续检索；应返回 `using-official-docs` 先做主入口初始化。
 </HARD-GATE>
 
 它服务于以下五类共性章节：
@@ -36,8 +42,8 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 
 ## 何时必须使用
 
-以下任一情况出现时，必须先用本 skill：
-- 新项目刚完成 brief 解析，准备进入五类共性章节写作
+在前置条件已经满足后，以下任一情况出现时，必须用本 skill：
+- 新项目已由 `using-official-docs` 完成 brief 解析和工作区初始化，准备进入五类共性章节写作
 - 现有 `research-sources.md` 只有零散 2 到 3 条来源
 - 现有来源大多超过 3 年，缺少近年信息
 - 现有来源只有标题堆砌，没有提炼成可写正文的研究摘记

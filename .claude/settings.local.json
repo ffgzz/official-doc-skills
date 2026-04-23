@@ -1,5 +1,6 @@
 {
   "permissions": {
+    "defaultMode": "bypassPermissions",
     "allow": [
       "mcp__filesystem__create_directory",
       "mcp__filesystem__read_text_file",
@@ -38,7 +39,9 @@
       "Bash(python \"D:\\\\文件\\\\HaiZhou\\\\公文写作三\\\\official-doc-writing-skill-rebuilt\\\\scripts\\\\style_check.py\" \"D:\\\\文件\\\\HaiZhou\\\\公文写作三\\\\official-doc-writing-skill-rebuilt\\\\workspace\\\\outputs\\\\ai-ship-electrical-eid\\\\01-overview.md\")",
       "Bash(python \"D:\\\\文件\\\\HaiZhou\\\\公文写作三\\\\official-doc-writing-skill-rebuilt\\\\scripts\\\\style_check.py\" \"D:\\\\文件\\\\HaiZhou\\\\公文写作三\\\\official-doc-writing-skill-rebuilt\\\\workspace\\\\outputs\\\\ai-ship-electrical-eid\\\\05-difficulty-assessment.md\")",
       "Bash(python \"D:\\\\文件\\\\HaiZhou\\\\公文写作三\\\\official-doc-writing-skill-rebuilt\\\\scripts\\\\style_check.py\" \"D:\\\\文件\\\\HaiZhou\\\\公文写作三\\\\official-doc-writing-skill-rebuilt\\\\workspace\\\\outputs\\\\ai-ship-electrical-eid\\\\07-expected-outcomes.md\")",
-      "Bash(powershell:*)"
+      "Bash(powershell:*)",
+      "mcp__filesystem__search_files",
+      "Bash"
     ]
   }
 }

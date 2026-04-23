@@ -64,6 +64,9 @@ allowed-tools: Read Write Edit Bash
 ## 装配规则
 
 - 装配顺序必须与模板章节顺序一致
+- 装配输出的一级标题必须使用 `00-section-plan.md` 的 `正式输出标题`，不得使用 `用户章节标记`。例如正式输出标题为 `一、概述` 时，formal-draft 中不得写成 `# 第一章 概述`
+- 装配前后必须逐章核对二级节清单。formal-draft 中出现 `00-section-plan.md` 未登记的二级节时，装配失败，应回到 revise 将内容并入既有小节或删除
+- 若 `project-brief.md` 或 `00-section-plan.md` 中存在章次数量自相矛盾、原始标记跳号未说明、正式输出标题缺失等问题，不得装配，应先回到 using-official-docs / revise 修正计划
 - 以正文章节文件为主线进行拼装
 - 在正文引用位附近插入对应表格 / 图示内容，不要只保留孤立文件路径
 - 不要把所有图表统一堆到文末“附图 / 附表”区来代替章节内插入；如需保留文末目录，只能作为补充，不得替代正文附近装配
@@ -79,6 +82,7 @@ allowed-tools: Read Write Edit Bash
 - 如果正文仍明显保留列表化、加粗小标签或机械过渡词，不得进入装配
 - 装配前必须运行 `scripts/style_check.ps1` 检查将要装配的散件或当前 `formal-draft`。若脚本输出 `Result: FAIL`，不得装配，也不得把 assembly-notes 写成“可装配正式稿”
 - 装配前必须核对 `project-brief.md` 与 `00-section-plan.md` 中的全文编号方案；若散件中存在章内二级标题写成 `### 一、`、`### 二、` 而方案要求 `（一）`、`（二）`，不得装配
+- 若正式报告型方案下散件或 formal-draft 出现 `# 第一章`、`# 第二章` 等章标题，或普通章节出现 `#### 11.1`、`#### 13.2` 等十进制标题，均不得装配
 - 装配时要优先纳入 brief 与 `00-section-plan.md` 中要求的表图
 - 若正式稿中的任一表图内容与对应散件文件不一致，必须视为装配失败并回到 revise / assemble 修复
 - 若正式稿仍包含未核验的高风险具体事实，不能用 assemble 掩盖该问题，必须回到 revise / review 修复

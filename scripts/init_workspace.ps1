@@ -49,8 +49,8 @@ if (-not (Test-Path $sectionPlan)) {
 
 ## 章节拆解
 
-| 章节序号 | 章节标题 | 命中 skill | 编号层级要求 | 当前状态 | 备注 |
-|---|---|---|---|---|---|
+| 用户章节标记 | 正式输出标题 | 章节标题 | 命中 skill | 编号层级要求 | 当前状态 | 备注 |
+|---|---|---|---|---|---|---|
 "@ | Set-Content -Path $sectionPlan -Encoding UTF8
 }
 
