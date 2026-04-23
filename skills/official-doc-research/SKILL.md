@@ -311,6 +311,36 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 - 性能区间
 - 评测或验证方法
 
+## 子代理并行检索（环境支持时）
+
+若运行环境支持子代理（如 Claude Code），且激活调研组达到 3 组及以上，推荐并行检索。
+
+推荐分工：
+- 子代理 A：`BG`（政策、现状、趋势）
+- 子代理 B：`RC`（研究内容、技术路线）
+- 子代理 C：`IN`（创新比较基线）
+- 子代理 D：`TA`（成果形态与交付口径）
+- 子代理 E：`TI`（指标区间与验收口径）
+
+并行时必须执行“文件独占”：
+- 每个子代理先写入 `workspace/plan/<project-slug>/research-drafts/<group>-sources.md`
+- 每个子代理先写入 `workspace/plan/<project-slug>/research-drafts/<group>-evidence.md`
+- 每个子代理先写入 `workspace/plan/<project-slug>/research-drafts/<group>-notes.md`
+- 主控代理统一合并进 `research-sources.md / research-evidence.md / research-notes.md / facts-ledger.md`
+
+子代理不得直接宣布“调研门禁通过”，只能提交：
+- 本组来源清单
+- 证据卡草稿
+- 可入正文与不可入正文的边界建议
+
+子代理任务单应复用 `skills/official-doc-core/references/subagent-task-card-template.md`，并在“禁止项”中明确不得自行放行调研门禁。
+
+主控代理必须在合并后统一复核：
+- 来源数量门槛
+- `A主源/B辅源` 比例
+- 近 3 年占比
+- 证据卡完整性
+
 ## 调研流程
 
 ### 第一步：建立调研计划

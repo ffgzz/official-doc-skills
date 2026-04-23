@@ -45,6 +45,10 @@ allowed-tools: Read Write Edit Bash
 
 扩写创新点时，不得新增 `00-section-plan.md` 未登记的二级节，也不得用连续流水号标题堆篇幅。需要补深度时，只能加深既有创新点的比较基线、现有局限、项目机制和工程价值，并回指研究内容、成果和指标。
 
+若本章由子代理执行（如 Claude Code 并行任务），该子代理也必须完整遵守本 skill 与 `attachment-writing-patterns.md` 的硬规则；不得把创新点写成无比较基线的摘要或口号。
+若运行环境支持 skill 显式调用，子代理必须在开始读取台账和写作前显式加载 `official-doc-innovation`；仅手动读取本文件路径不算完成本 skill 的调用。
+子代理任务单应复用 `skills/official-doc-core/references/subagent-task-card-template.md`，并写明本章独占可编辑文件。
+
 ## 先做什么
 
 开始写之前先检查创新点所需的比较基线是否已经由 `official-doc-research` 做扎实。

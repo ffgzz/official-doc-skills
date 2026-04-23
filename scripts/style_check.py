@@ -28,11 +28,6 @@ def show_matches(title: str, pattern: str, text: str, display_text: str | None =
         print("OK")
         return 0
     lines = (display_text or text).splitlines()
-    offsets = []
-    total = 0
-    for line in lines:
-        offsets.append(total)
-        total += len(line) + 1
     for m in matches:
         line_no = text.count("\n", 0, m.start()) + 1
         print(f"{line_no}:{lines[line_no - 1]}")
@@ -50,6 +45,29 @@ def show_duplicate_headings(text: str) -> int:
         normalized = re.sub(r"^#{1,6}\s+", "", line.strip())
         normalized = re.sub(r"^(?:[0-9]+\.|[一二三四五六七八九十]+、|（[一二三四五六七八九十0-9]+）)\s*", "", normalized)
         normalized = re.sub(r"\s+", " ", normalized.strip())
+        if normalized in seen:
+            duplicates.append((line_no, line, seen[normalized]))
+        else:
+            seen[normalized] = line_no
+    if not duplicates:
+        print("OK")
+        return 0
+    for line_no, line, first_line in duplicates:
+        print(f"{line_no}:{line} (duplicate of line {first_line})")
+    return len(duplicates)
+
+
+def show_duplicate_long_lines(text: str) -> int:
+    print()
+    print("[16] duplicate long body lines")
+    seen: dict[str, int] = {}
+    duplicates: list[tuple[int, str, int]] = []
+    for line_no, line in enumerate(text.splitlines(), start=1):
+        normalized = re.sub(r"\s+", "", line.strip())
+        if len(normalized) < 50:
+            continue
+        if re.match(r"^#{1,6}\s+", line):
+            continue
         if normalized in seen:
             duplicates.append((line_no, line, seen[normalized]))
         else:
@@ -84,7 +102,12 @@ def main() -> int:
         text,
         raw_text,
     )
-    counts["transitions"] = show_matches("[3] mechanical transitions", r"首先|其次|最后|此外|另外|接下来|总之", text, raw_text)
+    counts["transitions"] = show_matches(
+        "[3] mechanical transitions",
+        r"(?:^|[。；\n])\s*(?:首先|其次|最后|此外|另外|接下来|总之)[，,:：]",
+        text,
+        raw_text,
+    )
     counts["empty_emphasis"] = show_matches("[4] empty emphasis phrases", r"值得注意的是|需要指出的是|重要的是|必须强调的是", text, raw_text)
     counts["dense_numbering"] = show_matches("[5] dense outline numbering", r"^[0-9]+\.[0-9]+(\.[0-9]+)?\s", text, raw_text)
     counts["slogans"] = show_matches(
@@ -124,6 +147,25 @@ def main() -> int:
         text,
         raw_text,
     )
+    counts["mixed_token_noise"] = show_matches(
+        "[13] mixed token noise",
+        r"[A-Za-z]{2,}[一-龥]{1,4}[A-Za-z]{2,}",
+        text,
+        raw_text,
+    )
+    counts["broken_formula_phrase"] = show_matches(
+        "[14] broken formula phrases",
+        r"在的时间复杂度|复杂度降至约，其中|协调层复杂度为约|其中为子系统节点数|数量级为。",
+        text,
+        raw_text,
+    )
+    counts["strong_claims"] = show_matches(
+        "[15] aggressive claims",
+        r"填补[^。；\n]{0,20}空白|国际领先|国内领先|首创|唯一",
+        text,
+        raw_text,
+    )
+    counts["duplicate_long_lines"] = show_duplicate_long_lines(text)
 
     print()
     print(
@@ -140,6 +182,9 @@ def main() -> int:
         or counts["high_ordinal_heading"]
         or counts["chapter_number_under_section"]
         or counts["duplicate_headings"]
+        or counts["mixed_token_noise"]
+        or counts["broken_formula_phrase"]
+        or counts["duplicate_long_lines"]
     )
     if hard_fail:
         print("Result: FAIL")
@@ -149,7 +194,7 @@ def main() -> int:
         print("Result: FAIL")
         print("Done.")
         return 2
-    if counts["slogans"] or counts["generic_expansion_heading"]:
+    if counts["slogans"] or counts["generic_expansion_heading"] or counts["strong_claims"]:
         print("Result: WARN")
         print("Done.")
         return 0

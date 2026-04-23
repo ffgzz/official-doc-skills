@@ -23,6 +23,7 @@ allowed-tools: Read Write Edit Bash
 - [references/attachment-writing-patterns.md](./references/attachment-writing-patterns.md)
 - [references/depth-writing-rules.md](./references/depth-writing-rules.md)
 - [references/depth-writing-examples.md](./references/depth-writing-examples.md)
+- [references/subagent-task-card-template.md](./references/subagent-task-card-template.md)
 
 ## 一、执行原则
 
@@ -73,6 +74,16 @@ allowed-tools: Read Write Edit Bash
 - `official-doc-technical-indicators`
 
 若当前章节命中上述五类之一，core 执行后下一步必须先进入 `official-doc-research`，再显式加载对应专项 skill，而不是由 core 自己搜索或写作。
+
+### 8.5 子代理总守则（环境支持时）
+若运行环境支持子代理（如 Claude Code），允许并行，但必须遵守以下统一约束：
+- 主控代理必须保留最终决策权，子代理不能单独判定“可交付正式稿”。
+- 子代理开工前必须读取：`project-brief.md`、`00-section-plan.md`、`attachment-writing-patterns.md`、对应专项 skill。
+- 若运行环境支持 skill 显式调用，子代理还必须先显式加载任务单列出的 skill；仅手动读取 `SKILL.md` 文件不算完成 skill 调用。
+- 子代理任务单应按 `references/subagent-task-card-template.md` 填写，字段不可删减。
+- 子代理不得跳过调研门禁，不得新增计划外二级节，不得自行改写全文编号方案。
+- 每个子代理必须有独占文件范围，避免多人同时改同一文件。
+- 子代理提交后，主控代理必须先检查“已显式加载的 skill 清单与顺序”是否完整，再执行脚本检查和人工抽检；若缺失，视为派发失败并重派。
 
 ## 二、core 的职责边界
 

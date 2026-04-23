@@ -45,6 +45,10 @@ allowed-tools: Read Write Edit Bash
 
 扩写成果章节时，不得新增 `00-section-plan.md` 未登记的二级节，也不得用 `### 一、软件与平台成果` 这类降级一级编号作为三级标题。需要分组时，优先用成果表和自然段说明；如确需三级标题，正式报告型统一用 `### 1. 软件与平台成果`。
 
+若本章由子代理执行（如 Claude Code 并行任务），该子代理也必须完整遵守本 skill 与 `attachment-writing-patterns.md` 的硬规则；每项成果都要给出对应研究内容、交付形态和验收方式，不得只列愿景性结果。
+若运行环境支持 skill 显式调用，子代理必须在开始读取台账和写作前显式加载 `official-doc-technical-achievements`；若当前被派发任务还同时覆盖指标、成效等其他内容，则继续按该任务实际命中的内容类型追加加载对应 skill。仅手动读取本文件路径不算完成本 skill 的调用。
+子代理任务单应复用 `skills/official-doc-core/references/subagent-task-card-template.md`，并写明本章独占可编辑文件。
+
 ## 先做什么
 
 开始写之前先检查成果类调研门禁是否完成。

@@ -146,6 +146,10 @@ allowed-tools: Read Write Edit Bash
 
 扩写本章时，不得新增 `00-section-plan.md` 未登记的二级节，也不得用连续 `### 11.`、`### 12.`、`### 13.` 之类流水号标题堆篇幅。字数不足时，只能在既定二级节内补充政策依据、国内外差距、场景问题、影响后果和项目切入。
 
+若本章由子代理执行（如 Claude Code 并行任务），该子代理也必须完整遵守本 skill 与 `attachment-writing-patterns.md` 的硬规则；不得因“并行补字数”放宽句式、编号、事实核验或小节边界要求。
+若运行环境支持 skill 显式调用，子代理必须在开始读取台账和写作前显式加载 `official-doc-project-background`；仅手动读取本文件路径不算完成本 skill 的调用。
+子代理任务单应复用 `skills/official-doc-core/references/subagent-task-card-template.md`，并写明本章独占可编辑文件。
+
 本 skill 写完后，必须把控制权交还给 `using-official-docs`，由主入口继续判断：
 - 是否还有其他章节要写
 - 是否需要 `official-doc-table`
@@ -153,8 +157,8 @@ allowed-tools: Read Write Edit Bash
 - 是否应进入 `official-doc-review`
 
 至少覆盖三类来源：
-- 政策或官方来源
 - 行业或企业来源
+- 政策或官方来源
 - 学术或研究来源
 
 优先补充检索：

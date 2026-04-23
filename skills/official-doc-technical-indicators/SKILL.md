@@ -45,6 +45,10 @@ allowed-tools: Read Write Edit Bash
 
 扩写指标或成效章节时，不得新增 `00-section-plan.md` 未登记的二级节，也不得用连续流水号标题堆篇幅。需要加深时，应补充指标来源、测试场景、验收方法、对应成果和成效解释；指标表内的序号不得反向变成正文标题编号。
 
+若本章由子代理执行（如 Claude Code 并行任务），该子代理也必须完整遵守本 skill 与 `attachment-writing-patterns.md` 的硬规则；每项指标都要具备测试条件和验证口径，不得只保留百分比目标。
+若运行环境支持 skill 显式调用，子代理必须在开始读取台账和写作前显式加载 `official-doc-technical-indicators`；仅手动读取本文件路径不算完成本 skill 的调用。
+子代理任务单应复用 `skills/official-doc-core/references/subagent-task-card-template.md`，并写明本章独占可编辑文件。
+
 ## 先做什么
 
 开始写之前先检查指标类调研门禁是否完成。

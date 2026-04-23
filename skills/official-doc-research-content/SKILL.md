@@ -45,6 +45,10 @@ allowed-tools: Read Write Edit Bash
 
 扩写研究内容时，不得新增 `00-section-plan.md` 未登记的二级节，也不得在既定小节末尾连续追加 `### 11.`、`### 12.`、`### 13.` 这类目录标题。需要加深时，应补子课题机制、输入输出、验证方式、研究内容表和表后关系说明。
 
+若本章由子代理执行（如 Claude Code 并行任务），该子代理也必须完整遵守本 skill 与 `attachment-writing-patterns.md` 的硬规则；不得通过追加流水号标题、弱化课题边界或省略验证口径来换取速度。
+若运行环境支持 skill 显式调用，子代理必须在开始读取台账和写作前显式加载 `official-doc-research-content`；若当前被派发任务还同时覆盖创新点等其他内容，则继续按该任务实际命中的内容类型追加加载对应 skill。仅手动读取本文件路径不算完成本 skill 的调用。
+子代理任务单应复用 `skills/official-doc-core/references/subagent-task-card-template.md`，并写明本章独占可编辑文件。
+
 ## 先做什么
 
 开始写之前，先检查研究内容类调研门禁是否完成。

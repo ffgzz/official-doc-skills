@@ -87,6 +87,20 @@ allowed-tools: Read Write Edit Bash
 - 若正式稿中的任一表图内容与对应散件文件不一致，必须视为装配失败并回到 revise / assemble 修复
 - 若正式稿仍包含未核验的高风险具体事实，不能用 assemble 掩盖该问题，必须回到 revise / review 修复
 
+## 子代理装配预检（环境支持时）
+
+若运行环境支持子代理（如 Claude Code）且正式稿体量较大（建议 `> 50,000` 字），可在装配前并行预检：
+- 预检子代理 A：章节顺序、标题编号、计划内外小节一致性
+- 预检子代理 B：图表是否已在对应章节附近落位，是否仍有占位语
+- 预检子代理 C：assembly-notes 统计口径与当前 formal-draft 是否一致
+
+并行预检约束：
+- 子代理只写预检报告文件，不直接改动 `formal-draft.md`
+- 主控代理根据预检结果执行最终装配与修订
+- 子代理不得直接给出“可交付正式稿”结论
+
+子代理任务单应复用 `skills/official-doc-core/references/subagent-task-card-template.md`，并把预检范围、只读范围和禁止改写范围写清。
+
 ## 装配前判定
 
 装配前必须先给出结论：
