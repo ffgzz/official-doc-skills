@@ -39,6 +39,29 @@ def show_matches(title: str, pattern: str, text: str, display_text: str | None =
     return len(matches)
 
 
+def show_duplicate_headings(text: str) -> int:
+    print()
+    print("[11] duplicate markdown headings")
+    seen: dict[str, int] = {}
+    duplicates: list[tuple[int, str, int]] = []
+    for line_no, line in enumerate(text.splitlines(), start=1):
+        if not re.match(r"^#{1,6}\s+", line):
+            continue
+        normalized = re.sub(r"^#{1,6}\s+", "", line.strip())
+        normalized = re.sub(r"^(?:[0-9]+\.|[一二三四五六七八九十]+、|（[一二三四五六七八九十0-9]+）)\s*", "", normalized)
+        normalized = re.sub(r"\s+", " ", normalized.strip())
+        if normalized in seen:
+            duplicates.append((line_no, line, seen[normalized]))
+        else:
+            seen[normalized] = line_no
+    if not duplicates:
+        print("OK")
+        return 0
+    for line_no, line, first_line in duplicates:
+        print(f"{line_no}:{line} (duplicate of line {first_line})")
+    return len(duplicates)
+
+
 def main() -> int:
     if len(sys.argv) != 2:
         print("Usage: python scripts/style_check.py <file>")
@@ -82,6 +105,25 @@ def main() -> int:
         text,
         raw_text,
     )
+    counts["high_ordinal_heading"] = show_matches(
+        "[9] high ordinal markdown heading",
+        r"^#{2,6}\s+[1-9][0-9]\.",
+        text,
+        raw_text,
+    )
+    counts["chapter_number_under_section"] = show_matches(
+        "[10] chapter-style number used under section",
+        r"^#{3,6}\s+[一二三四五六七八九十]+、",
+        text,
+        raw_text,
+    )
+    counts["duplicate_headings"] = show_duplicate_headings(text)
+    counts["generic_expansion_heading"] = show_matches(
+        "[12] generic expansion headings",
+        r"^#{2,6}\s+.*(?:历史意义|时代价值|远景展望|政策建议|社会责任|一带一路|国际合作机遇|可持续发展规划|人才培养|产业化路径规划|总结与展望)",
+        text,
+        raw_text,
+    )
 
     print()
     print(
@@ -95,6 +137,9 @@ def main() -> int:
         or counts["dense_numbering"]
         or counts["chapter_heading_style"]
         or counts["markdown_decimal_heading"]
+        or counts["high_ordinal_heading"]
+        or counts["chapter_number_under_section"]
+        or counts["duplicate_headings"]
     )
     if hard_fail:
         print("Result: FAIL")
@@ -104,7 +149,7 @@ def main() -> int:
         print("Result: FAIL")
         print("Done.")
         return 2
-    if counts["slogans"]:
+    if counts["slogans"] or counts["generic_expansion_heading"]:
         print("Result: WARN")
         print("Done.")
         return 0

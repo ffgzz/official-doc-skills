@@ -142,6 +142,10 @@ allowed-tools: Read Write Edit Bash
 - [../official-doc-core/references/depth-writing-rules.md](../official-doc-core/references/depth-writing-rules.md)
 - [../official-doc-core/references/depth-writing-examples.md](../official-doc-core/references/depth-writing-examples.md) 中的项目背景示例
 
+`attachment-writing-patterns.md` 是硬门禁，也是必须使用的句式模板，不是可选参考。背景、现状、痛点、必要性相关段落必须套用该文件中“背景与必要性”的常用写法和句式骨架，尤其是 `在...层面...`、`在...场景下...`、`上述问题直接影响...`、`因此，有必要围绕...开展系统性攻关...` 这类句式。每个二级节至少应有 1 到 2 个核心段落按这些句式展开，并覆盖 `对象 / 问题 / 动作 / 机制 / 输出 / 验证` 中至少 4 项。若写完后只剩宏观口号或意义判断，必须先回修再交付。
+
+扩写本章时，不得新增 `00-section-plan.md` 未登记的二级节，也不得用连续 `### 11.`、`### 12.`、`### 13.` 之类流水号标题堆篇幅。字数不足时，只能在既定二级节内补充政策依据、国内外差距、场景问题、影响后果和项目切入。
+
 本 skill 写完后，必须把控制权交还给 `using-official-docs`，由主入口继续判断：
 - 是否还有其他章节要写
 - 是否需要 `official-doc-table`

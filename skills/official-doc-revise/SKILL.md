@@ -72,6 +72,27 @@ allowed-tools: Read Write Edit Bash
 - 若 review 指出调研组来源数量或证据卡未达标，不能只改正文，应先回到 `official-doc-research` 补齐来源、证据卡、摘记和事实台账；补齐前不得把 Must Fix 关闭
 - 若 review 指出 `**子课题...**`、`**创新点...**` 等加粗伪标题，必须改为规范 Markdown 标题层级或自然段引导句，并重新运行 `style_check.ps1`
 - 若 review 指出创新点过短或像摘要，必须按“比较基线 -> 现有局限 -> 本项目机制 -> 差异成立原因 -> 工程价值”补足，不得继续压缩成一句话
+- 若 review 指出普通章节存在连续 `### 11.`、`### 12.`、`### 13.` 等流水号标题、重复标题、泛化展望标题，必须先合并或删除标题，再把有效内容并入 `00-section-plan.md` 允许的小节自然段中；不得保留标题后只润色正文
+
+## 专项回修路由
+
+回修或扩充五类正文内容时，`official-doc-revise` 不能独立发挥，必须先读取并执行对应正文 skill 的规则，再改文件：
+
+- 背景、概述、国内外现状、发展趋势、痛点、必要性、产业链安全、自主可控：读取并遵守 `skills/official-doc-project-background/SKILL.md`
+- 研究内容、研发内容、主要攻关内容、任务设置、子课题、关键技术、实施内容：读取并遵守 `skills/official-doc-research-content/SKILL.md`
+- 创新点、技术创新、差异化优势、特色亮点：读取并遵守 `skills/official-doc-innovation/SKILL.md`
+- 技术成果、预期技术成果、交付成果、成果形式、应用成果：读取并遵守 `skills/official-doc-technical-achievements/SKILL.md`
+- 技术指标、主要指标、考核指标、量化目标、验收指标、预期成效：读取并遵守 `skills/official-doc-technical-indicators/SKILL.md`
+
+若同一段同时属于多类内容，例如 `关键技术及创新点`、`预期技术成果及成效`，必须同时读取相关 skill，并按更严格的规则处理。回修结论中应说明本次使用了哪些专项规则。
+
+专项回修的最低动作：
+
+1. 先按 `00-section-plan.md` 确认允许标题层级。
+2. 删除或合并计划外标题、流水号标题和重复标题。
+3. 按对应正文 skill 的骨架补齐“对象、问题、动作、机制、输出、验证”。
+4. 确认成果、指标能回指研究内容。
+5. 运行 `style_check.ps1`，若命中硬失败项继续回修。
 
 ## 回修顺序
 

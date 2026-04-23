@@ -41,6 +41,10 @@ allowed-tools: Read Write Edit Bash
 - [../official-doc-core/references/depth-writing-rules.md](../official-doc-core/references/depth-writing-rules.md)
 - [../official-doc-core/references/depth-writing-examples.md](../official-doc-core/references/depth-writing-examples.md) 中的创新点示例
 
+`attachment-writing-patterns.md` 是硬门禁，也是必须使用的句式模板，不是可选参考。每个创新点必须套用该文件中“创新点写法”的常用写法和句式骨架，尤其是 `区别于传统...方式，本项目拟构建...机制`、`相较于现有...路线，该机制将...统一纳入...`、`由此，...从...转向...，支撑...` 这类句式。每个创新点至少使用一组“比较对象 -> 现有局限 -> 本项目机制 -> 差异成立原因 -> 工程价值”的句式链，并覆盖 `比较对象 / 现有局限 / 本项目机制 / 差异成立原因 / 工程价值 / 对应研究内容或成果指标` 中至少 5 项。若缺少比较对象和差异成立原因，只能写成“技术特点”或“特色做法”，不得写成创新点。
+
+扩写创新点时，不得新增 `00-section-plan.md` 未登记的二级节，也不得用连续流水号标题堆篇幅。需要补深度时，只能加深既有创新点的比较基线、现有局限、项目机制和工程价值，并回指研究内容、成果和指标。
+
 ## 先做什么
 
 开始写之前先检查创新点所需的比较基线是否已经由 `official-doc-research` 做扎实。

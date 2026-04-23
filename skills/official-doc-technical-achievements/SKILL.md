@@ -41,6 +41,10 @@ allowed-tools: Read Write Edit Bash
 - [../official-doc-core/references/depth-writing-rules.md](../official-doc-core/references/depth-writing-rules.md)
 - [../official-doc-core/references/depth-writing-examples.md](../official-doc-core/references/depth-writing-examples.md) 中的技术成果示例
 
+`attachment-writing-patterns.md` 是硬门禁，也是必须使用的句式模板，不是可选参考。成果章节必须套用该文件中“技术成果写法”的常用写法和句式骨架，尤其是 `根据以上研究专题，项目实施完毕后，可形成以下技术成果`、`围绕...研究内容，形成...成果，用于...，并以...形式交付`、`...研究对应形成...，解决...问题；...研究对应形成...，支撑...` 这类句式。每项技术成果至少使用一处“成果名称 -> 对应研究内容 -> 功能边界 -> 交付形态 -> 应用场景 -> 验收方式”的句式链，并覆盖 6 项中的至少 5 项。只有“提升能力、形成体系、支撑应用”的条目不是技术成果，必须改成可交付实体。
+
+扩写成果章节时，不得新增 `00-section-plan.md` 未登记的二级节，也不得用 `### 一、软件与平台成果` 这类降级一级编号作为三级标题。需要分组时，优先用成果表和自然段说明；如确需三级标题，正式报告型统一用 `### 1. 软件与平台成果`。
+
 ## 先做什么
 
 开始写之前先检查成果类调研门禁是否完成。

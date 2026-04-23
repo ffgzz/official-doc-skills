@@ -41,6 +41,10 @@ allowed-tools: Read Write Edit Bash
 - [../official-doc-core/references/depth-writing-rules.md](../official-doc-core/references/depth-writing-rules.md)
 - [../official-doc-core/references/depth-writing-examples.md](../official-doc-core/references/depth-writing-examples.md) 中的技术指标示例
 
+`attachment-writing-patterns.md` 是硬门禁，也是必须使用的句式模板，不是可选参考。指标和成效章节必须套用该文件中“技术指标写法”的常用写法和句式骨架，尤其是 `在...输入信息准确、完整的前提下，实现...，...达到...`、`在...测试场景下，系统能够...，...准确率/完整率/通过率达到...`、`通过...测试、抽样复核或示范应用，验证...` 这类句式。每项指标至少使用一处“输入条件 -> 能力动作 -> 目标值 -> 验证口径”的句式链，并覆盖 `指标对象 / 指标定义 / 目标值或区间 / 测试条件 / 验证方法 / 对应成果` 中至少 5 项。只有百分比、提升方向或“达到先进水平”的条目不能作为正式技术指标。
+
+扩写指标或成效章节时，不得新增 `00-section-plan.md` 未登记的二级节，也不得用连续流水号标题堆篇幅。需要加深时，应补充指标来源、测试场景、验收方法、对应成果和成效解释；指标表内的序号不得反向变成正文标题编号。
+
 ## 先做什么
 
 开始写之前先检查指标类调研门禁是否完成。

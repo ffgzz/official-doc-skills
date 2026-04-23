@@ -41,6 +41,10 @@ allowed-tools: Read Write Edit Bash
 - [../official-doc-core/references/depth-writing-rules.md](../official-doc-core/references/depth-writing-rules.md)
 - [../official-doc-core/references/depth-writing-examples.md](../official-doc-core/references/depth-writing-examples.md) 中的研究内容示例
 
+`attachment-writing-patterns.md` 是硬门禁，也是必须使用的句式模板，不是可选参考。研究内容、子课题、关键技术段落必须套用该文件中“研究内容与关键技术”的常用写法和句式骨架，尤其是 `本项目围绕...目标，拟按照...主线组织研究内容`、`针对...问题，本研究拟开展...研究，开发/构建...，实现...`、`在...方面，研究...方法，形成...规则/模型/接口`、`最终形成...，为后续...提供...`、`...的关键不在于...，而在于...` 这类句式。每项研究内容、每个重点子课题和每项关键技术都要至少套用一处对应句式，并覆盖 `对象 / 问题 / 动作 / 机制 / 输出 / 验证` 中至少 4 项；重章节应覆盖 5 项以上。
+
+扩写研究内容时，不得新增 `00-section-plan.md` 未登记的二级节，也不得在既定小节末尾连续追加 `### 11.`、`### 12.`、`### 13.` 这类目录标题。需要加深时，应补子课题机制、输入输出、验证方式、研究内容表和表后关系说明。
+
 ## 先做什么
 
 开始写之前，先检查研究内容类调研门禁是否完成。
