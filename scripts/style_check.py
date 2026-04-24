@@ -2,6 +2,9 @@ import re
 import sys
 from pathlib import Path
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(errors="replace")
+
 
 def strip_ignored_blocks(text: str) -> str:
     """Blank fenced code blocks and Markdown tables while preserving line numbers."""
@@ -136,20 +139,26 @@ def main() -> int:
     )
     counts["chapter_number_under_section"] = show_matches(
         "[10] chapter-style number used under section",
-        r"^#{3,6}\s+[一二三四五六七八九十]+、",
+        r"^#{2,6}\s+[一二三四五六七八九十]+、",
         text,
         raw_text,
     )
     counts["duplicate_headings"] = show_duplicate_headings(text)
+    counts["bare_numeric_heading"] = show_matches(
+        "[11.5] markdown heading uses bare arabic number without dot",
+        r"^#{3,6}\s+[0-9]+\s+",
+        text,
+        raw_text,
+    )
     counts["generic_expansion_heading"] = show_matches(
         "[12] generic expansion headings",
-        r"^#{2,6}\s+.*(?:历史意义|时代价值|远景展望|政策建议|社会责任|一带一路|国际合作机遇|可持续发展规划|人才培养|产业化路径规划|总结与展望)",
+        r"^#{2,6}\s+.*(?:历史意义|时代价值|远景展望|政策建议|社会责任|一带一路|国际合作机遇|可持续发展规划|人才培养|产业化路径规划|总结与展望|推广前景|产业化路径|经济社会效益分析)",
         text,
         raw_text,
     )
     counts["mixed_token_noise"] = show_matches(
         "[13] mixed token noise",
-        r"[A-Za-z]{2,}[一-龥]{1,4}[A-Za-z]{2,}",
+        r"[A-Z][一-龥]{1,2}[a-z]{2,}|[a-z]{2,}[一-龥]{1,2}[A-Za-z]{2,}",
         text,
         raw_text,
     )
@@ -161,7 +170,13 @@ def main() -> int:
     )
     counts["strong_claims"] = show_matches(
         "[15] aggressive claims",
-        r"填补[^。；\n]{0,20}空白|国际领先|国内领先|首创|唯一",
+        r"填补[^。；\n]{0,20}空白|国际领先|国内领先|首创|首次提出|首次构建|首次建立|(?<!没有)(?<!非)唯一",
+        text,
+        raw_text,
+    )
+    counts["high_parenthetical_heading"] = show_matches(
+        "[17] high parenthetical markdown heading",
+        r"^#{4,6}\s+（[1-9][0-9]+）",
         text,
         raw_text,
     )
@@ -182,8 +197,11 @@ def main() -> int:
         or counts["high_ordinal_heading"]
         or counts["chapter_number_under_section"]
         or counts["duplicate_headings"]
-        or counts["mixed_token_noise"]
+        or counts["bare_numeric_heading"]
         or counts["broken_formula_phrase"]
+        or counts["generic_expansion_heading"]
+        or counts["strong_claims"]
+        or counts["high_parenthetical_heading"]
         or counts["duplicate_long_lines"]
     )
     if hard_fail:
@@ -194,7 +212,11 @@ def main() -> int:
         print("Result: FAIL")
         print("Done.")
         return 2
-    if counts["slogans"] or counts["generic_expansion_heading"] or counts["strong_claims"]:
+    if counts["slogans"] >= 3:
+        print("Result: FAIL")
+        print("Done.")
+        return 2
+    if counts["slogans"]:
         print("Result: WARN")
         print("Done.")
         return 0

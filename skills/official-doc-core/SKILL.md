@@ -76,14 +76,16 @@ allowed-tools: Read Write Edit Bash
 若当前章节命中上述五类之一，core 执行后下一步必须先进入 `official-doc-research`，再显式加载对应专项 skill，而不是由 core 自己搜索或写作。
 
 ### 8.5 子代理总守则（环境支持时）
-若运行环境支持子代理（如 Claude Code），允许并行，但必须遵守以下统一约束：
+若运行环境支持子代理（如 Claude Code），只允许在 `official-doc-research` 与正文章节写作阶段并行；`review`、`revise`、`assemble` 不得使用子代理。并行时必须遵守以下统一约束：
 - 主控代理必须保留最终决策权，子代理不能单独判定“可交付正式稿”。
 - 子代理开工前必须读取：`project-brief.md`、`00-section-plan.md`、`attachment-writing-patterns.md`、对应专项 skill。
-- 若运行环境支持 skill 显式调用，子代理还必须先显式加载任务单列出的 skill；仅手动读取 `SKILL.md` 文件不算完成 skill 调用。
+- 若运行环境支持 skill 显式调用，命中专项内容的子代理还必须先执行任务单 `【显式 skill 调用指令】` 中列出的命令；仅手动读取 `SKILL.md` 文件不算完成 skill 调用。
 - 子代理任务单应按 `references/subagent-task-card-template.md` 填写，字段不可删减。
+- 写作子代理的可见 Prompt 前部必须直接出现 `【专项 skill 调用要求】`、`【显式 skill 调用指令】` 与 `【开工第一步】`；若看不到这三个区块，视为任务单不合格。
+- 若运行环境会显示 `Skill(...)`、`Successfully loaded skill` 或 slash 命令回显，主控应把它当作优先证据；若前 3 个可见动作内没有出现对应事件，视为派发失败并重派。
 - 子代理不得跳过调研门禁，不得新增计划外二级节，不得自行改写全文编号方案。
 - 每个子代理必须有独占文件范围，避免多人同时改同一文件。
-- 子代理提交后，主控代理必须先检查“已显式加载的 skill 清单与顺序”是否完整，再执行脚本检查和人工抽检；若缺失，视为派发失败并重派。
+- 子代理提交后，主控代理必须先检查“已显式加载的 skill 清单与顺序”或“本任务不需要显式加载专项写作 skill”的声明是否完整，再执行脚本检查和人工抽检；若缺失，视为派发失败并重派。
 
 ## 二、core 的职责边界
 
@@ -100,6 +102,7 @@ allowed-tools: Read Write Edit Bash
   - `progress.md`
   - `source-materials.md`
   - `workspace/outputs/<project-slug>/00-section-plan.md`
+- 校验调研总账已经合并完成：若存在 `workspace/plan/<project-slug>/research-drafts/`，但 `research-evidence.md`、`research-notes.md` 仍缺失，或明显只有分组草稿未合并，则不得放行
 - 校验事实纪律、阶段顺序、文件路径、章节依赖关系
 
 ### core 不负责

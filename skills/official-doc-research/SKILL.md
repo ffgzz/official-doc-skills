@@ -278,7 +278,7 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 ```markdown
 | 问题编号 | 调研组 | 对应章节 | 核心问题 | 初始查询式 | 预期来源类型 | 最低来源数 | 状态 |
 |---|---|---|---|---|---|---|---|
-| BG-Q1 | BG | 第1章行业背景 | 近年船舶电气设计智能化政策和行业背景是什么 | 船舶 电气设计 智能化 政策 2024 2025 2026 | 政策/行业报告 | 4 | 待检索 |
+| BG-Q1 | BG | 某背景章节 | 近年船舶电气设计智能化政策和行业背景是什么 | 船舶 电气设计 智能化 政策 2024 2025 2026 | 政策/行业报告 | 4 | 待检索 |
 ```
 
 没有调研矩阵，不得开始正式检索。
@@ -323,9 +323,10 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 - 子代理 E：`TI`（指标区间与验收口径）
 
 并行时必须执行“文件独占”：
-- 每个子代理先写入 `workspace/plan/<project-slug>/research-drafts/<group>-sources.md`
-- 每个子代理先写入 `workspace/plan/<project-slug>/research-drafts/<group>-evidence.md`
-- 每个子代理先写入 `workspace/plan/<project-slug>/research-drafts/<group>-notes.md`
+- 每个子代理优先写入 `workspace/plan/<project-slug>/research-drafts/<group>/sources.md`
+- 每个子代理优先写入 `workspace/plan/<project-slug>/research-drafts/<group>/evidence.md`
+- 每个子代理优先写入 `workspace/plan/<project-slug>/research-drafts/<group>/notes.md`
+- 若运行环境历史上已采用扁平命名，也可写入 `workspace/plan/<project-slug>/research-drafts/<group>-sources.md`、`<group>-evidence.md`、`<group>-notes.md`，但主控代理必须在合并前统一规范
 - 主控代理统一合并进 `research-sources.md / research-evidence.md / research-notes.md / facts-ledger.md`
 
 子代理不得直接宣布“调研门禁通过”，只能提交：
@@ -340,6 +341,9 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 - `A主源/B辅源` 比例
 - 近 3 年占比
 - 证据卡完整性
+
+`research-drafts/` 只是分组草稿区，不是后续写作和 review 的正式依据。
+如果只有 `research-drafts/*/evidence.md`、`research-drafts/*/notes.md`，但总账 `research-evidence.md`、`research-notes.md` 没有合并完成，则视为“调研门禁未完成”，不得放行章节写作、review 或 assemble。
 
 ## 调研流程
 
@@ -470,11 +474,13 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 - 近 3 年来源占主导，旧来源只作为基线或规范
 - `research-evidence.md` 已为每条有效来源建立证据卡，且不只是链接列表
 - `research-notes.md` 不再只是空表
+- 若使用了 `research-drafts/` 并行草稿，主控代理已完成合并并把 canonical 总账写回 `research-sources.md / research-evidence.md / research-notes.md / facts-ledger.md`
 - 每个调研组形成 300 至 600 字调研结论摘要
 - `facts-ledger.md` 已沉淀出可入正文的事实
 - `progress.md` 已明确记录“调研门禁完成”
 
 若任一激活组来源数量或证据卡不达标，`progress.md` 必须写成“调研门禁未完成：XX组缺少N条来源/证据卡”，下一步只能回到本 skill 补调研，不能放行章节写作或装配。
+若 `research-drafts/` 中已有分组证据卡，但 canonical `research-evidence.md` 缺失、为空或未合并到最新草稿，也必须写成“调研门禁未完成”，不得放行。
 
 ## 终端输出要求
 
