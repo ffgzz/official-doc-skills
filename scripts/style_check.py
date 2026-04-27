@@ -180,6 +180,18 @@ def main() -> int:
         text,
         raw_text,
     )
+    counts["inline_source_marker"] = show_matches(
+        "[18] inline internal source markers",
+        r"【来源：[^】]+】|来源：原始资料|\b(?:BG|RC|IN|TA|TI)-[0-9]+-[0-9]+\b",
+        text,
+        raw_text,
+    )
+    counts["internal_mapping_heading"] = show_matches(
+        "[19] internal research mapping headings",
+        r"检索与资料映射说明|调研执行概况|来源分组与章节映射",
+        text,
+        raw_text,
+    )
     counts["duplicate_long_lines"] = show_duplicate_long_lines(text)
 
     print()
@@ -202,6 +214,8 @@ def main() -> int:
         or counts["generic_expansion_heading"]
         or counts["strong_claims"]
         or counts["high_parenthetical_heading"]
+        or counts["inline_source_marker"]
+        or counts["internal_mapping_heading"]
         or counts["duplicate_long_lines"]
     )
     if hard_fail:
