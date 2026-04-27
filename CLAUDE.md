@@ -11,6 +11,7 @@
 - 不得还没进入 `/using-official-docs` 就直接联网搜索或直接起草正文
 - 不得因为用户写了“先深度调研”就绕过技能体系，按默认搜索流程自由执行
 - 用户如果口头提到“official-doc-writing-skill”，仍统一解释为进入 `/using-official-docs`，不要再走单独入口
+- 所有回答使用中文
 
 ## 强制流程
 
