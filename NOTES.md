@@ -7,14 +7,14 @@
 当前主链路为：
 - `using-official-docs`：解析用户提示词、初始化项目工作区、统筹推进
 - `official-doc-core`：通用规则与事实纪律
-- 五个共性章节 skill：负责背景、研究内容、创新点、技术成果、技术指标
+- 五个共性章节 skill：负责背景、项目建设方案、创新点、技术成果、技术指标
 - `official-doc-table` / `official-doc-figure` / `official-doc-review` / `official-doc-revise` / `official-doc-assemble`：负责公共流程
 
 ## 为什么这样改
 
 不同公文模板不同，但很多正式项目材料都会重复出现以下章节能力：
 - 项目背景
-- 研究内容
+- 项目建设方案
 - 创新点
 - 主要技术成果
 - 主要技术指标

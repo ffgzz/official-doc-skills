@@ -122,7 +122,7 @@ allowed-tools: Read Write Edit Bash
 默认规则：
 - 可研报告、立项申请书、项目建议书、技术总结：一级章 `一、`，二级节 `（一）`，三级项 `1.`，四级点 `（1）`。
 - 项目指南、攻关任务书、任务清单型材料：一级任务 `1.`，二级要求 `（1）`，三级动作 `（a）`。
-- 研究内容、主要攻关内容需要深度拆成课题/子课题时：章级编号仍服从全文方案，章节内部可采用 `课题1 / 子课题1.1 / 1.1.1`。
+- 项目建设方案中的项目研发内容需要深度拆成任务/子任务时：章级编号仍服从全文方案，章节内部可采用 `任务1 / 子任务1-1 / （1）` 等写法。
 
 后续五个专项 skill 不得自行决定编号。若某章已经采用 `1.1` 技术分解，同级条目不得再改用 `（1）`；若全文二级标题采用 `（一）`，其他章节二级标题也必须沿用。
 
@@ -227,7 +227,7 @@ allowed-tools: Read Write Edit Bash
 若缺少上述留痕，不得把该子代理结果判定为合格写作产物。
 
 `progress.md` 中的写作子代理留痕必须写成任务级独立条目，例如：
-- `writing-ch03-研发内容及技术关键`
+- `writing-ch04-项目建设方案`
   - `任务编号：...`
   - `独占文件：workspace/outputs/<project-slug>/ch03-...md`
   - `本章目标字数：...`
@@ -245,7 +245,7 @@ allowed-tools: Read Write Edit Bash
 
 文件命名约定：
 - research 子代理：`research-<group>.md`，例如 `research-BG.md`、`research-RC.md`
-- writing 子代理：`writing-<chapter-file-stem>.md`，例如 `writing-ch03-研发内容及技术关键.md`
+- writing 子代理：`writing-<chapter-file-stem>.md`，例如 `writing-ch04-项目建设方案.md`
 
 若正常项目调研或正常多章节写作结束后，`agent-prompts/` 下仍然没有上述命名文件，默认视为主控没有真正派发子代理。
 
@@ -283,8 +283,8 @@ allowed-tools: Read Write Edit Bash
 - 以命中关键词和内容类型决定要加载哪些 skill
 
 动态判定原则：
-- 命中背景、现状、发展动向、痛点、必要性，加载 `official-doc-project-background`
-- 命中研究内容、子课题、关键技术、实施内容，加载 `official-doc-research-content`
+- 命中建设背景、建设意义、国内外发展现状及前景、国内/国外现状、痛点分析、发展前景、必要性，加载 `official-doc-project-background`
+- 命中项目建设方案、总体目标、建设目标、项目解决的主要问题、项目研发内容、技术路线、应用推广方案、产学研用合作方式、攻关成果开源策略、产业链供应链韧性及安全保障，加载 `official-doc-research-content`
 - 命中创新点、差异化优势、特色亮点，加载 `official-doc-innovation`
 - 命中技术成果、成果形式、交付成果，加载 `official-doc-technical-achievements`
 - 命中技术指标、量化目标、验收指标、预期成效，加载 `official-doc-technical-indicators`
@@ -297,8 +297,8 @@ allowed-tools: Read Write Edit Bash
 - `workspace/plan/<project-slug>/facts-ledger.md`
 
 抽取要求：
-- 背景类二级节：至少整理 3 个证据点，覆盖政策/官方、行业场景、差距或影响三类中的至少三项。
-- 研究内容、创新点、成果、指标：每个待写条目至少整理 2 个证据点，覆盖“问题/比较”与“机制/输出/验证”中的至少两类。
+- 背景类二级节：至少整理 3 个证据点。完整背景章应按 `建设背景 / 建设意义 / 国内外发展现状及前景` 分配证据，其中建设背景覆盖政策/官方、行业或技术趋势、现实短板，建设意义覆盖技术/产业/生态中的至少两类，国内外发展现状及前景覆盖国内现状、国外现状或代表性产品、痛点或差距、发展前景中的至少三类。
+- 项目建设方案、创新点、成果、指标：每个待写条目至少整理 2 个证据点。项目建设方案证据要覆盖“目标/问题/任务/路线/输出/应用或保障”中的至少两类，创新点、成果、指标继续覆盖“问题/比较”与“机制/输出/验证”中的至少两类。
 - 证据点必须写明“支撑什么判断”，不能只抄来源标题。
 
 若当前小节抽不出足够证据点，主入口不得派发写作，应先回到 `official-doc-research` 补调研。不能把“证据不足”的任务直接扔给写作子代理，指望它边写边补。
@@ -327,7 +327,7 @@ allowed-tools: Read Write Edit Bash
 不要因为章名写的是：
 - `概述`
 - `项目现状和发展趋势`
-- `研发内容及技术关键`
+- `项目建设方案`
 - `预期目标`
 - `研究结论`
 
@@ -338,10 +338,11 @@ allowed-tools: Read Write Edit Bash
 调用专项 skill 的目的，是套用其中对应小节的写法规则。
 
 这意味着：
-- 用户如果在某一章要求写 `行业背景` 和 `立项意义`，要调用 `official-doc-project-background`
-- 用户如果在某一章要求写 `国内外现状` 和 `发展动向`，仍然调用 `official-doc-project-background`
-- 用户如果在某一章要求写 `研究内容`、`子课题`、`关键技术`，调用 `official-doc-research-content`
-- 用户如果某一章标题是 `研发内容及技术关键`，且正文要求里还写了 `创新点`，那么同一章要同时调用 `official-doc-research-content` 和 `official-doc-innovation`
+- 用户如果在某一章要求写 `建设背景` 和 `建设意义`，要调用 `official-doc-project-background`
+- 用户如果在某一章要求写 `技术层面`、`产业层面`、`生态层面` 的建设意义，要调用 `official-doc-project-background`
+- 用户如果在某一章要求写 `国内发展现状`、`国外发展与应用现状`、`痛点分析` 和 `发展前景`，仍然调用 `official-doc-project-background`
+- 用户如果在某一章要求写 `项目建设方案`、`总体目标`、`项目研发内容`、`技术路线`、`应用推广方案`、`产学研用合作方式`、`攻关成果开源策略`，调用 `official-doc-research-content`
+- 用户如果某一章标题是 `项目建设方案`，且正文要求里还写了 `创新点` 或 `技术创新`，那么同一章要同时调用 `official-doc-research-content` 和 `official-doc-innovation`
 - 用户如果在某一章 `预期目标` 小节里要求写 `预期技术成果`，调用 `official-doc-technical-achievements`
 - 用户如果同一章里还要求写 `技术指标`、`量化目标`、`预期成效`，还要调用 `official-doc-technical-indicators`
 
@@ -365,7 +366,7 @@ allowed-tools: Read Write Edit Bash
 
 不得直接凭常识硬编：
 - 项目背景
-- 研究内容
+- 项目建设方案
 - 创新点
 - 主要技术成果
 - 主要技术指标
@@ -659,15 +660,22 @@ allowed-tools: Read Write Edit Bash
 - `宏观背景`
 - `立项意义`
 - `建设意义`
+- `技术层面`
+- `产业层面`
+- `生态层面`
+- `国内外发展现状及前景`
 - `国内外现状`
 - `国内现状`
 - `国外现状`
+- `国外发展与应用现状`
 - `发展现状`
 - `现状分析`
 - `行业发展动向`
 - `发展趋势`
+- `发展前景`
 - `差距`
 - `痛点`
+- `痛点分析`
 - `问题分析`
 - `攻关必要性`
 - `建设必要性`
@@ -684,28 +692,44 @@ allowed-tools: Read Write Edit Bash
 ### B. `official-doc-research-content`
 
 命中任一关键词就要调用：
-- `研究内容`
+- `项目建设方案`
+- `总体目标`
+- `建设目标`
+- `项目解决的主要问题`
+- `主要问题`
+- `项目研发内容`
 - `研发内容`
-- `主要研究内容`
-- `主要攻关内容`
+- `预期成果`（位于项目建设方案或总体目标内部时）
+- `产业链供应链韧性`
+- `供应链韧性`
+- `安全保障`
+- `技术路线`
+- `总体技术方案`
+- `应用推广方案`
+- `应用推广路径`
+- `产学研用合作方式`
+- `联合体合作方式`
+- `攻关成果开源策略`
+- `开源策略`
 - `建设内容`
+- `建设任务`
 - `任务设置`
 - `任务分解`
-- `专题设置`
-- `课题设置`
-- `子课题`
 - `子任务`
-- `关键技术`
-- `技术关键`
-- `核心技术`
 - `实施内容`
 - `实施任务`
+- `主要攻关内容`
+- `专题设置`
+- `关键技术`（若位于项目建设方案章内，按技术路线或研发任务处理；若同时要求创新点，另调 `official-doc-innovation`）
+- `技术关键`（同上）
+- `核心技术`（同上）
 
 典型章名虽然不同，但都必须命中：
-- `研发内容及技术关键`
 - `项目建设方案`
-- `项目任务设置`
+- `总体目标`
 - `技术路线和实施方案`
+- `应用推广与产学研用合作`
+- `项目任务设置`
 
 ### C. `official-doc-innovation`
 
@@ -751,8 +775,8 @@ allowed-tools: Read Write Edit Bash
 ### 样例 1
 
 若用户写：
-- 某一章标题为 `概述`
-- 需要写 `行业背景`、`立项意义`
+- 某一章标题为 `项目背景及必要性`
+- 需要写 `建设背景`、`建设意义`
 
 则必须调用：
 - `official-doc-project-background`
@@ -761,7 +785,7 @@ allowed-tools: Read Write Edit Bash
 
 若用户写：
 - 某一章标题为 `项目现状和发展趋势`
-- 需要写 `国内外现状`、`行业发展动向`
+- 需要写 `国内发展现状`、`国外发展与应用现状`、`痛点分析`、`发展前景`
 
 则必须调用：
 - `official-doc-project-background`
@@ -769,12 +793,11 @@ allowed-tools: Read Write Edit Bash
 ### 样例 3
 
 若用户写：
-- 某一章标题为 `研发内容及技术关键`
-- 需要写 `研究内容`、`子课题`、`关键技术`、`创新点`
+- 某一章标题为 `项目建设方案`
+- 需要写 `总体目标`、`项目研发内容`、`技术路线`、`应用推广方案`、`产学研用合作方式`、`攻关成果开源策略`
 
 则必须调用：
 - `official-doc-research-content`
-- `official-doc-innovation`
 
 ### 样例 4
 
@@ -790,7 +813,7 @@ allowed-tools: Read Write Edit Bash
 
 若用户写：
 - 某一章标题为 `概述`
-- 小节包括 `行业背景`、`国内外现状`、`痛点问题`
+- 小节包括 `建设背景`、`国内外发展现状及前景`、`痛点分析`
 
 则必须调用：
 - `official-doc-project-background`
@@ -801,7 +824,7 @@ allowed-tools: Read Write Edit Bash
 
 若用户写：
 - 某一章标题为 `技术路线和实施方案`
-- 其中要求先写 `任务设置`、`子任务分解`、`关键技术`
+- 其中要求先写 `建设目标`、`项目解决的主要问题`、`任务分解`、`技术路线`
 
 则必须调用：
 - `official-doc-research-content`
@@ -823,7 +846,7 @@ allowed-tools: Read Write Edit Bash
 ### 样例 8
 
 若用户写：
-- `请围绕船舶智能设计平台，写国内外现状、攻关必要性、三个研究专题、创新点、预期技术成果和主要技术指标`
+- `请围绕船舶智能设计平台，写建设背景、技术/产业/生态层面的建设意义、国内外发展现状及前景、项目建设方案、创新点、预期技术成果和主要技术指标`
 
 即使用户没有明确写“第几章”，也必须按内容命中以下 skill：
 - `official-doc-project-background`
@@ -855,7 +878,6 @@ allowed-tools: Read Write Edit Bash
 由主入口直接按 brief 写。
 
 常见直接写的章节包括：
-- 技术路线
 - 实施方案
 - 工作基础
 - 困难评估
@@ -870,7 +892,7 @@ allowed-tools: Read Write Edit Bash
 - 不得要求用户提供旧式材料包才能启动流程
 - 不得因为用户章名较泛就跳过专项 skill
 - 不得把专项 skill 理解成“整章固定模板”
-- 不得把 `预期技术成果` 误判成 `研究内容`
+- 不得把 `预期技术成果` 误判成项目建设方案内的 `预期成果`；只有位于 `项目建设方案/总体目标` 内部的 `预期成果` 才按 `official-doc-research-content` 写概括性成果
 - 不得把 `预期成效`、`量化目标` 漏掉 `official-doc-technical-indicators`
 - 不得在识别出专项章节后，由 `using-official-docs` 或 `official-doc-core` 直接跳过 `official-doc-research`
 - 不得在未先通过 `official-doc-research` 的情况下直接搜索或起草背景、现状、痛点、必要性资料
@@ -895,8 +917,8 @@ allowed-tools: Read Write Edit Bash
 - 是否只在终端输出了简短状态，而把长正文写入文件
 
 如果用户明明写了以下内容，但没有触发对应 skill，就说明路由失败：
-- `国内外现状`、`攻关必要性` 没触发 `official-doc-project-background`
-- `研究内容`、`子课题`、`关键技术` 没触发 `official-doc-research-content`
+- `建设背景`、`建设意义`、`国内外发展现状及前景`、`痛点分析`、`发展前景` 没触发 `official-doc-project-background`
+- `项目建设方案`、`总体目标`、`项目研发内容`、`技术路线`、`应用推广方案`、`产学研用合作方式`、`攻关成果开源策略` 没触发 `official-doc-research-content`
 - `创新点`、`差异化优势` 没触发 `official-doc-innovation`
 - `预期技术成果`、`交付成果` 没触发 `official-doc-technical-achievements`
 - `技术指标`、`预期成效`、`量化目标` 没触发 `official-doc-technical-indicators`

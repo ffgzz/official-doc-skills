@@ -142,14 +142,14 @@ project-slug：ship-ai-design
 
 若任务涉及以下章节，子代理必须先读取对应 skill：
 - 背景与必要性：`official-doc-project-background`
-- 研究内容与关键技术：`official-doc-research-content`
+- 项目建设方案：`official-doc-research-content`
 - 创新点：`official-doc-innovation`
 - 技术成果：`official-doc-technical-achievements`
 - 技术指标：`official-doc-technical-indicators`
 
 若任务命中上述五类内容，且运行环境支持技能显式调用界面（如 Claude Code 的 skill 调用），子代理必须先执行 `【显式 skill 调用指令】` 中列出的 slash 命令，再开始读取台账和写作。仅把对应 `SKILL.md` 文件放进“必读规则文件”，不算完成 skill 调用。
 
-若任务是非专项章节写作，例如技术路线、实施方案、工作基础、困难评估、进度安排、经费预算、研究结论等，任务单应在 `【专项 skill 调用要求】` 中明确写 `无`，此时子代理不需要显式加载五个正文专项 skill。
+若任务是非专项章节写作，例如工作基础、困难评估、进度安排、经费预算、研究结论等，任务单应在 `【专项 skill 调用要求】` 中明确写 `无`，此时子代理不需要显式加载五个正文专项 skill。若 `技术路线` 属于 `项目建设方案` 章或与建设目标、项目研发内容、应用推广、产学研用合作、开源策略同章出现，则应加载 `official-doc-research-content`。
 若任务命中正文专项内容，主控代理还必须先显式加载对应正文 skill，再从 `research-evidence.md`、`research-notes.md`、`facts-ledger.md` 中为当前小节整理最少可用证据点，并写进 `【本节证据清单】`；不能把“自己去台账里找材料”完全甩给子代理。
 同理，主控还必须把当前小节适用的编号规则、句式骨架和禁止项压缩成 `【本节写作规则摘要】`，而不是只告诉子代理“去读 skill”。
 
@@ -158,18 +158,20 @@ project-slug：ship-ai-design
 若同一任务同时命中多个 skill，任务单必须把 `【必须显式加载的 skill】` 按顺序写全。顺序不按固定章节号写死，而按当前任务实际包含的小节顺序、内容主次和 `00-section-plan.md` 的安排确定。
 
 常见动态判定方式：
-- 当前任务包含“背景 / 现状 / 发展动向 / 必要性”，加载 `official-doc-project-background`
-- 当前任务包含“研究内容 / 子课题 / 关键技术 / 实施内容”，加载 `official-doc-research-content`
+- 当前任务包含“建设背景 / 建设意义 / 国内外发展现状及前景 / 国内或国外现状 / 痛点分析 / 发展前景 / 必要性”，加载 `official-doc-project-background`
+- 当前任务包含“项目建设方案 / 总体目标 / 建设目标 / 项目解决的主要问题 / 项目研发内容 / 技术路线 / 应用推广方案 / 产学研用合作方式 / 攻关成果开源策略 / 产业链供应链韧性及安全保障”，加载 `official-doc-research-content`
 - 当前任务包含“创新点 / 差异化优势 / 特色亮点”，追加 `official-doc-innovation`
 - 当前任务包含“技术成果 / 交付成果 / 成果形式”，加载 `official-doc-technical-achievements`
 - 当前任务包含“技术指标 / 量化目标 / 预期成效 / 验收指标”，加载 `official-doc-technical-indicators`
 
-若同一任务同时覆盖“研究内容 + 创新点”或“技术成果 + 技术指标/预期成效”，先加载当前任务中排在前面的主内容 skill，再加载后续补充 skill。
+若同一任务同时覆盖“项目建设方案 + 创新点”或“技术成果 + 技术指标/预期成效”，先加载当前任务中排在前面的主内容 skill，再加载后续补充 skill。
 
 若任务单没有写清“需要显式加载哪些专项 skill”、没有给出对应 `【显式 skill 调用指令】`，或没有明确写“本任务不需要专项写作 skill”，子代理应视为任务单不合格并停止开工，而不是自行猜测。
 
 且必须执行 `attachment-writing-patterns.md` 的硬门禁：
-- 背景/研究/创新：覆盖 `对象 / 问题 / 动作 / 机制 / 输出 / 验证` 至少 4 项
+- 背景：覆盖 `对象 / 现状 / 问题 / 影响 / 项目切入 / 能力或前景` 至少 4 项
+- 项目建设方案：覆盖 `目标 / 问题 / 任务 / 路线 / 输出 / 应用或保障` 至少 4 项
+- 创新：覆盖 `对象 / 问题 / 动作 / 机制 / 输出 / 验证` 至少 4 项
 - 成果/指标：覆盖各自要素至少 5 项
 
 ## 3. 子代理提交前自检（建议）
