@@ -2,15 +2,18 @@
 
 ## 默认入口
 
-- 当用户要求撰写或继续撰写正式中文项目材料时，默认先执行 `/using-official-docs`
-- `/using-official-docs` 是唯一首入口，不再保留额外包装入口
+- 当用户已经提供了较完整的长 prompt、章节要求、原始资料和输出约束时，默认先执行 `/using-official-docs`
+- 当用户只有主题、文种、零散材料，或明确希望“先问我该输入什么、帮我把提示词整理出来”时，先执行 `/official-doc-prompt-builder`
+- `/official-doc-prompt-builder` 只负责“前置问询 + prompt 组装 + 交接”，不直接调研、不直接写正文
+- `/using-official-docs` 仍是正式写作主入口；凡进入调研、正文、表图、review、revise、assemble 流程，最终都必须回到 `/using-official-docs`
 
 ## 全局约束
 
 - 当前工作方式是“主题 + 章节要求 + 表图要求 + 字数要求”的提示词驱动，不是“固定模板套写”
-- 不得还没进入 `/using-official-docs` 就直接联网搜索或直接起草正文
+- 不得还没进入 `/using-official-docs` 或 `/official-doc-prompt-builder` 就直接联网搜索或直接起草正文
 - 不得因为用户写了“先深度调研”就绕过技能体系，按默认搜索流程自由执行
 - 用户如果口头提到“official-doc-writing-skill”，仍统一解释为进入 `/using-official-docs`，不要再走单独入口
+- 用户如果口头提到“帮我整理 prompt”“给我一个问答式模板”“告诉我需要输入哪些信息”，统一解释为先进入 `/official-doc-prompt-builder`
 - 所有回答使用中文
 
 ## 强制流程
@@ -38,6 +41,7 @@
 ## 技能结构
 
 - 运行时生效目录是 `.claude/skills/`
+- `official-doc-prompt-builder` 是前置 intake skill
 - `using-official-docs` 是主 skill
 - `official-doc-core` 提供公共门禁
 - `official-doc-research` 是独立调研门禁

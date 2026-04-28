@@ -1,6 +1,6 @@
 ---
 name: using-official-docs
-description: 正式中文项目公文写作的唯一首个入口和总调度器。凡用户要求生成、重跑、续写、检查或装配项目可行性报告、立项申请书、项目建议书、攻关任务书、技术总结等正式公文，都必须先使用本 skill；即使用户强调“深度调研”“先搜资料”“网络检索”，也仍然先用本入口解析 brief、初始化工作区和确定流程，不得把 official-doc-research 作为首个 skill。本入口负责调用 official-doc-core、official-doc-research、专项写作、review、revise、assemble，自己绝不直接联网搜索或起草五类共性章节。
+description: 正式中文项目公文写作的主入口和总调度器。凡用户已经提供了较完整的长 prompt、章节要求、原始资料并要求生成、重跑、续写、检查或装配项目可行性报告、立项申请书、项目建议书、攻关任务书、技术总结等正式公文，都必须使用本 skill；若用户只有主题或零散材料，应先转入 official-doc-prompt-builder 完成前置问询与 prompt 组装。本入口负责调用 official-doc-core、official-doc-research、专项写作、review、revise、assemble，自己绝不直接联网搜索或起草五类共性章节。
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -8,7 +8,7 @@ allowed-tools: Read Write Edit Bash
 
 ## 定位
 
-这是新的主入口 skill。
+这是正式写作主入口 skill。
 
 它负责这些事：
 - 解析用户给出的提示词 brief
@@ -27,15 +27,41 @@ allowed-tools: Read Write Edit Bash
 
 ### 0.1 入口优先级
 
-本 skill 是正式公文任务的唯一首个入口。
+本 skill 是正式公文任务的主入口，但不是唯一前置入口。
 
-只要用户请求属于以下任一类型，必须先加载本 skill：
+若用户已经提供了较完整的长 prompt、章节表、原始资料和输出约束，只要请求属于以下任一类型，必须先加载本 skill：
 - 生成、重跑、续写、改写、装配正式中文项目公文
 - 围绕某主题写可研报告、立项申请书、项目建议书、攻关任务书、技术总结
 - 用户强调“深度调研”“先搜资料”“网络检索”“资料要够”
 - 用户要求使用本公文写作 skill 体系
 
+若用户只有以下输入形态，则不应直接进入本 skill，而应先转到 `official-doc-prompt-builder`：
+- 只有项目主题或一句话需求
+- 明确在问“提示词怎么写”“需要输入哪些信息”“能不能先帮我整理 prompt”
+- 只有零散原始资料，还没有整理成长 prompt
+- 只有文种和项目名，没有结构化章节要求
+
+`official-doc-prompt-builder` 只负责前置问询、prompt 组装和交接；一旦进入正式调研、正文、表图、review、revise、assemble 流程，仍必须回到本 skill。
+
 `official-doc-research` 是本入口调度的内部调研门禁，不是用户请求的首个入口。若一开始就命中 `official-doc-research`，应立即停止并切回本 skill，先完成 brief 解析、工作区初始化、文档级编号方案和章节计划。
+
+### 0.15 brief 稀疏时先转 intake
+
+若当前用户输入明显过短，不足以支撑直接初始化 `project-brief.md` 和 `00-section-plan.md`，主入口不得硬写。
+
+典型稀疏输入包括：
+- “帮我写一份某项目可行性报告”
+- “给我整理一个提示词”
+- “我有一些材料，你先问我需要补什么”
+
+此时应明确转到 `official-doc-prompt-builder`，先采集以下 5 组信息：
+1. 文档元信息
+2. 结构与输出约束
+3. 全局写作要求
+4. 章节原始资料
+5. 图表与缺失信息
+
+只有当 `workspace/intake/<project-slug>/compiled-prompt.txt` 已经形成，或用户直接给出了同等强度的长 prompt，本 skill 才进入正式写作流程。
 
 ### 0.25 STOP 规则
 
