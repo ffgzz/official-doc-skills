@@ -1,6 +1,6 @@
 ---
 name: official-doc-core
-description: 项目公文写作的公共校验层。仅在 using-official-docs 完成 brief 解析和工作区初始化后使用，用于检查台账、事实纪律、阶段顺序、章节依赖、正式文风和写作深度门禁。它不创建工作区，不首次写 plan，也不直接联网搜索或写五类共性章节。
+description: 项目公文写作的公共校验层。仅在 using-official-docs 完成 brief 解析和工作区初始化后使用，用于检查台账、事实纪律、阶段顺序、章节依赖、正式文风和写作深度门禁。它不创建工作区，不首次写 plan，也不直接联网搜索或写两类共性章节。
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -11,10 +11,7 @@ allowed-tools: Read Write Edit Bash
 > 当前通用规则是：
 > - 以 `project-brief.md` 和 `00-section-plan.md` 为准
 > - 工作区按 `workspace/<kind>/<project-slug>/` 隔离
-> - 五类共性章节先过 `official-doc-research` 调研门禁、先落账、后写作
-> - `创新点` 回指现状差距与项目建设方案
-> - `技术成果` 由项目研发内容或建设任务推出
-> - `技术指标` 可量化、可测试、可验证
+> - 背景和项目建设方案两类共性章节先过 `official-doc-research` 调研门禁、先落账、后写作
 
 这是当前写作流程的公共门禁层。
 
@@ -30,6 +27,15 @@ allowed-tools: Read Write Edit Bash
 ### 1. brief 先于措辞
 先服从用户提示词拆出的章节、图表、字数和风格要求，再考虑润色。
 
+若用户给出长 prompt，`source-materials.md` 必须保存完整提示词和分组项目资料，`project-brief.md` 必须保存从提示词拆出的硬约束。core 校验时如果发现 `source-materials.md` 只有摘要、没有项目资料分组，或没有记录“禁止参照外部模板文件”等用户硬约束，应返回 `using-official-docs` 重新初始化，不得放行调研或写作。
+
+长 prompt 项目还必须完成资料证据化。core 校验时如果发现：
+- `source-materials.md` 没有 `章节资料映射` 或等价分章资料摘录；
+- `facts-ledger.md` 没有 USER 系列或等价的 `用户提示词` 项目事实记录；
+- `00-section-plan.md` 没有每章可用项目资料摘要；
+- `project-brief.md` 没有记录“只基于提示词内项目资料”“禁止外部模板文件”等硬约束；
+则应返回 `using-official-docs` 重新初始化或补台账，不得放行调研、写作、review 或 assemble。
+
 ### 2. 流程先于提问
 当下一步可以根据工作区状态自动判断时，不要把流程分支问题抛回给用户。
 
@@ -42,19 +48,25 @@ allowed-tools: Read Write Edit Bash
 ### 5. 用户字数要求是硬约束
 如果用户明确给出总字数、上下限或篇幅要求，必须把它视为硬约束。
 
+core 校验时必须确认：
+- `project-brief.md` 已拆出 `总字数下限 / 总字数上限 / 统计口径`。如果用户给出“全文总字数控制在X至Y”，X 是硬下限，Y 是硬上限。
+- `00-section-plan.md` 已为每章登记 `目标字数区间 / 最低字数 / 是否硬门槛`。如果用户给出“建议X至Y、最低不得少于Z”，Z 是硬下限；如果只有“建议X至Y”，X 是硬下限。
+- 写作子代理任务单不能只写“本章目标字数”，必须同时写 `本章最低字数` 和 `低于最低字数不得提交完成`。
+- 若上述字段缺失，core 必须返回 `using-official-docs` 补计划，不得放行调研、写作、review 或 assemble。
+
 ### 6. 表图服务正文，不替代正文
 适合用表表达的，不硬写成长段；适合用图表达的，不把图的逻辑塞回正文。
 
 ### 7. 正文必须像正式公文，不像演示稿或 AI 草稿
 正文默认写成连续自然段，不写成项目符号堆砌，不写成加粗小标签拼贴，不写成机械的多级目录摘抄。
 
-`attachment-writing-patterns.md` 中的“常用写法”是硬约束，不是参考材料。五类共性正文和回修正文必须覆盖对象、问题、动作、机制、输出、验证等要素，不能只写“意义重大、形成体系、提升能力”。
+`attachment-writing-patterns.md` 中的“常用写法”是硬约束，不是参考材料。两类共性正文和回修正文必须覆盖各自关键要素，不能只写“意义重大、形成体系、提升能力”。
 
 ### 7.5 正文必须有论证深度
-五类共性章节写作前，必须先建立“章节论证链”，至少说明本章核心判断、事实依据、差距问题、技术机制、输出结果和边界条件。若论证链填不实，不得靠空泛扩写凑字数，应回到 `official-doc-research` 补调研，或只向用户提出一个会影响方向的关键问题。
+两类共性章节写作前，必须先建立“章节论证链”，至少说明本章核心判断、事实依据、差距问题、技术机制、输出结果和边界条件。若论证链填不实，不得靠空泛扩写凑字数，应回到 `official-doc-research` 补调研，或只向用户提出一个会影响方向的关键问题。
 
 ### 7.6 编号必须由文档级方案统筹
-`using-official-docs` 应在 `project-brief.md` 和 `00-section-plan.md` 中记录全文编号方案。core 校验时要确认五个专项章节没有各自混用编号层级。
+`using-official-docs` 应在 `project-brief.md` 和 `00-section-plan.md` 中记录全文编号方案。core 校验时要确认两个专项章节没有各自混用编号层级。
 
 默认正式报告型编号为：一级章 `一、`，二级节 `（一）`，三级项 `1.`，四级点 `（1）`。若项目建设方案中的项目研发内容需要任务化下钻，可在该节内部采用 `任务1 / 子任务1-1`，但不得与同层级 `（1）` 混用。
 
@@ -69,11 +81,8 @@ allowed-tools: Read Write Edit Bash
 - `official-doc-research`
 - `official-doc-project-background`
 - `official-doc-research-content`
-- `official-doc-innovation`
-- `official-doc-technical-achievements`
-- `official-doc-technical-indicators`
 
-若当前章节命中上述五类之一，core 执行后下一步必须先进入 `official-doc-research`，再显式加载对应专项 skill，而不是由 core 自己搜索或写作。
+若当前章节命中上述两类之一，core 执行后下一步必须先进入 `official-doc-research`，再显式加载对应专项 skill，而不是由 core 自己搜索或写作。
 
 ### 8.5 子代理总守则（环境支持时）
 若运行环境支持子代理（如 Claude Code），只允许在 `official-doc-research` 与正文章节写作阶段并行；`review`、`revise`、`assemble` 不得使用子代理。并行时必须遵守以下统一约束：
@@ -103,6 +112,7 @@ allowed-tools: Read Write Edit Bash
   - `source-materials.md`
   - `workspace/outputs/<project-slug>/00-section-plan.md`
 - 校验调研总账已经合并完成：若存在 `workspace/plan/<project-slug>/research-drafts/`，但 `research-evidence.md`、`research-notes.md` 仍缺失，或明显只有分组草稿未合并，则不得放行
+- 校验 `source-materials.md` 是否保存用户提示词原文或完整项目资料分组；若缺失，不能只依靠联网调研继续写
 - 校验事实纪律、阶段顺序、文件路径、章节依赖关系
 
 ### core 不负责
@@ -180,7 +190,7 @@ allowed-tools: Read Write Edit Bash
 正确：
 
 ```md
-项目背景及必要性宜按照“建设背景、建设意义、国内外发展现状及前景”递进展开。建设背景先交代政策环境、产业地位、外部压力和本项目切入；建设意义再从技术层面、产业层面、生态层面说明项目能够解决什么问题、形成什么能力、带动什么协同；国内外发展现状及前景则围绕国内基础、国外产品与应用、痛点分析和发展趋势展开，为后续项目建设方案与创新点提供依据。
+项目背景及必要性宜按照“建设背景、建设意义、国内外发展现状及前景”递进展开。建设背景先交代政策环境、产业地位、外部压力和本项目切入；建设意义再从技术层面、产业层面、生态层面说明项目能够解决什么问题、形成什么能力、带动什么协同；国内外发展现状及前景则围绕国内基础、国外产品与应用、痛点分析和发展趋势展开，为后续项目建设方案提供依据。
 ```
 
 ### 标题要求

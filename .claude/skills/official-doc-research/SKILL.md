@@ -25,25 +25,22 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 在完成调研理解摘要、调研矩阵、MCP 可用性检查和最低检索轮次之前，禁止：
 - 起草任何正文
 - 把搜索结果直接改写成章节内容
-- 调用五个章节写作 skill
+- 调用两个章节写作 skill
 - 声称“调研完成”
 
 若本 skill 被作为用户正式公文请求的首个 skill 触发，禁止继续检索；应返回 `using-official-docs` 先做主入口初始化。
 </HARD-GATE>
 
-它服务于以下五类共性章节：
+它服务于以下两类共性章节：
 - 项目背景
 - 项目建设方案
-- 创新点
-- 主要技术成果
-- 主要技术指标
 
 如果这些章节还没有经过本 skill 的调研门禁，就不应直接开始写正文。
 
 ## 何时必须使用
 
 在前置条件已经满足后，以下任一情况出现时，必须用本 skill：
-- 新项目已由 `using-official-docs` 完成 brief 解析和工作区初始化，准备进入五类共性章节写作
+- 新项目已由 `using-official-docs` 完成 brief 解析和工作区初始化，准备进入两类共性章节写作
 - 现有 `research-sources.md` 只有零散 2 到 3 条来源
 - 现有来源大多超过 3 年，缺少近年信息
 - 现有来源只有标题堆砌，没有提炼成可写正文的研究摘记
@@ -65,6 +62,7 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 开始调研前，至少读取：
 - `workspace/plan/<project-slug>/project-brief.md`
 - `workspace/plan/<project-slug>/project-overview.md`
+- `workspace/plan/<project-slug>/source-materials.md`
 - `workspace/plan/<project-slug>/stage-gates.md`
 - `workspace/outputs/<project-slug>/00-section-plan.md`
 - `workspace/plan/<project-slug>/research-plan.md`
@@ -86,6 +84,20 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 - 用户明确要求的章节
 - 本轮必须激活的调研组
 - 仍不确定但不影响启动调研的边界
+
+若 `source-materials.md` 中保存了用户完整提示词或项目资料，还必须先写入“用户资料吸收摘要”，包括：
+- 用户已给定且不得联网覆盖的项目事实，例如项目名称、牵头单位、团队成员、经费、周期、任务、成果、指标、风险和进度。
+- 用户明确给出的章节结构、字数、图表和禁用事项。
+- 用户是否禁止参照外部模板文件；若禁止，调研不得打开或模仿模板文件，只能围绕公开政策、行业趋势、国内外现状、公开案例补证。
+- 哪些事实缺失，只能写 `【待补】` 或保守表达。
+
+在任何联网检索之前，必须先完成“用户提示词事实证据化”：
+- 从 `source-materials.md` 中抽取项目名称、建设对象、牵头单位、参研单位、团队成员、项目周期、经费预算、任务设置、技术路线素材、预期成果、量化目标、风险和写作硬约束。
+- 将这些事实写入 `facts-ledger.md`，来源编号使用 `USER-PROMPT` 或 `USER-001` 系列，来源类型写 `用户提示词`，事实状态写 `已核验`，备注写明 `用户给定项目事实，非公开外部核验；不得被外部调研覆盖`。
+- 在 `research-notes.md` 中建立 `用户提示词项目资料摘记` 区块，按章节列出可直接进入正文的项目资料。
+- 在 `research-plan.md` 中明确区分 `用户给定项目事实` 与 `需要联网补证的公共事实`。联网调研不得重复搜索或改写用户已给定的项目事实，只能补政策、行业趋势、国内外现状、公开案例、技术路线合理性和验收口径。
+
+如果用户提示词明确“项目资料都在提示词里提供”“不要参照外部模板文件”，本 skill 不得打开任何外部样稿、模板或原始 docx 文件。即使这些文件存在于工作区，也只能使用提示词已经抽取到 `source-materials.md` 的内容。
 
 如果 brief 已经足够明确，直接写入理解摘要，不要打断用户。
 
@@ -196,7 +208,7 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 
 如果总检索量还停留在“2 到 3 次零散搜索”，默认视为调研未完成，不得放行正文。
 
-对 `BG` 和 `TI` 这类高风险组，必须追加第 5 轮 `近年更新检索`，专门检索当前年份和上一年度资料。
+对 `BG` 这类高风险组，必须追加第 5 轮 `近年更新检索`，专门检索当前年份和上一年度资料。
 
 ### 2. 默认只看近 3 年
 
@@ -228,8 +240,6 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 
 如果是高风险组，最低要求如下：
 - `BG` 建设背景/建设意义/国内外发展现状及前景：不少于 12 条有效来源，并覆盖政策官方、行业或技术趋势、国内现状、国外现状或代表性产品、痛点或发展前景
-- `TI` 技术指标/验收口径：不少于 10 条有效来源
-- `IN` 创新点比较基线：不少于 8 条有效来源，且必须包含外部方案或技术路线对比
 
 不得把全文来源总数、其他调研组来源数或事实条数加到某一组来源数中。`research-sources.md` 的状态栏必须按各组实际来源逐行统计；若 `BG` 只有 5 条来源，就只能写 `BG组5条，未达标`，不得写 `BG组已达12条`。未达标组不得在 `progress.md`、`stage-gates.md` 或终端中标记为“调研门禁完成”。
 
@@ -254,9 +264,6 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 常见调研组包括：
 - `BG`：建设背景、建设意义、国内外发展现状及前景、国内发展现状、国外发展与应用现状、痛点分析、发展前景、必要性
 - `RC`：项目建设方案、总体目标、项目研发内容、技术路线、应用推广、产学研用合作、开源策略
-- `IN`：创新点对比基线、竞品路线、差异化表达
-- `TA`：成果形态、交付件、验收件、知识产权口径
-- `TI`：技术指标、行业基准、验收口径、合理区间
 
 如果用户只要求其中一部分，只激活对应调研组，不要无谓扩大范围。
 
@@ -331,9 +338,6 @@ allowed-tools: Read Write Edit Bash mcp__miro-google-search__google_search mcp__
 硬性分工：
 - 子代理 A：`BG`（政策、现状、趋势）
 - 子代理 B：`RC`（项目建设方案、技术路线、推广与协同）
-- 子代理 C：`IN`（创新比较基线）
-- 子代理 D：`TA`（成果形态与交付口径）
-- 子代理 E：`TI`（指标区间与验收口径）
 
 并行时必须执行“文件独占”：
 - 每个子代理优先写入 `workspace/plan/<project-slug>/research-drafts/<group>/sources.md`
@@ -484,17 +488,26 @@ research 任务单文件名应使用 `research-<group>.md`，例如 `research-BG
 7. 每个调研组形成调研结论摘要
 8. 只有进入 `research-evidence.md`、`research-notes.md` 和 `facts-ledger.md` 的内容，才允许被后续章节 skill 使用
 
-## 与五个章节 skill 的关系
+## 与两个章节 skill 的关系
 
 本 skill 负责“先把资料搜深、筛新、落账”。
 
-五个章节 skill 负责：
+两个章节 skill 负责：
+- 读取 `source-materials.md` 和 `project-brief.md` 中用户提示词提供的项目资料
 - 读取本 skill 产出的调研台账
 - 优先读取 `research-evidence.md` 中的来源证据卡，再读取摘要和事实台账
 - 按各自规则写成正式公文表述
 
-五个章节 skill 不应从零开始各搜各的。
+两个章节 skill 不应从零开始各搜各的。
 如果写作时发现某个子问题仍缺最新资料，应先回到本 skill 补调研，再继续写。
+
+用户提示词中的项目资料是项目事实主源。项目名称、单位、经费、团队、周期、任务、成果和指标应从 `source-materials.md` 与 `project-brief.md` 进入 `facts-ledger.md`，备注写明 `来源：用户提示词`；联网调研只补充公共政策、行业背景、国内外现状、公开案例和趋势判断，不得覆盖用户已给定的项目事实。
+
+后续章节 skill 的证据清单必须同时包含两类依据：
+- `用户给定项目事实`：来自 `source-materials.md`、`project-brief.md`、`facts-ledger.md` 中的 USER 系列记录。
+- `外部调研补充依据`：来自 `research-evidence.md`、`research-notes.md`、`facts-ledger.md` 中公开来源记录。
+
+如果调研台账只有外部来源，没有 USER 系列项目事实记录，不能放行写作；这说明长 prompt 没有被证据化，子代理容易忽略用户提供的项目资料。
 
 ## 完成判定
 
@@ -511,6 +524,7 @@ research 任务单文件名应使用 `research-<group>.md`，例如 `research-BG
 - 若使用了 `research-drafts/` 并行草稿，主控代理已完成合并并把 canonical 总账写回 `research-sources.md / research-evidence.md / research-notes.md / facts-ledger.md`
 - 每个调研组形成 300 至 600 字调研结论摘要
 - `facts-ledger.md` 已沉淀出可入正文的事实
+- 若存在长 prompt，`facts-ledger.md` 已包含 USER 系列项目事实记录，`research-notes.md` 已包含按章节整理的用户提示词项目资料摘记
 - `progress.md` 已明确记录“调研门禁完成”
 
 若任一激活组来源数量或证据卡不达标，`progress.md` 必须写成“调研门禁未完成：XX组缺少N条来源/证据卡”，下一步只能回到本 skill 补调研，不能放行章节写作或装配。

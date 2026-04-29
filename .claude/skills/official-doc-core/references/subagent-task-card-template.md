@@ -1,6 +1,6 @@
 # 子代理任务单模板（Claude Code 并行）
 
-> 适用范围：`official-doc-research` 与五个正文 skill 的并行子任务。
+> 适用范围：`official-doc-research` 与两个正文 skill 的并行子任务。
 >
 > 目标：让子代理“可并行但不越权”，并保证与主流程同一套规则。
 
@@ -14,23 +14,21 @@
 project-slug：
 子代理角色：
 本章目标字数：（writing 必填；research 可写 `无`）
+本章最低字数：（writing 必填；research 可写 `无`；低于该值不得提交完成）
 
 【专项 skill 调用要求】(写作阶段必填，必须出现在任务单前部)
-- 若本任务命中五个正文专项 skill，写明必须显式加载的 skill 清单与顺序
+- 若本任务命中两个正文专项 skill，写明必须显式加载的 skill 清单与顺序
 - 若本任务为非专项章节，明确写：`无，本任务不需要显式加载专项写作 skill`
 
 【显式 skill 调用指令】(写作阶段必填，必须出现在任务单前部)
 - 若运行环境支持 slash 方式显式调用 skill，必须写出可直接执行的原样命令，例如：
   - `/official-doc-project-background`
   - `/official-doc-research-content`
-  - `/official-doc-innovation`
-  - `/official-doc-technical-achievements`
-  - `/official-doc-technical-indicators`
 - 若同一任务同时命中多个专项 skill，按实际执行顺序逐行列出命令
 - 若本任务为非专项章节，明确写：`无，本任务不需要显式加载专项写作 skill`
 - 不得把“去读某个 SKILL.md 文件”冒充为显式调用指令
 
-【主控已预载专项 skill】(命中五个正文专项内容的 writing 必填，必须出现在任务单前部)
+【主控已预载专项 skill】(命中两个正文专项内容的 writing 必填，必须出现在任务单前部)
 - 写明主控在派发前已显式加载的专项 skill 清单与顺序
 - 若本任务为非专项章节，明确写：`无，本任务不需要主控预载专项写作 skill`
 - 若当前任务命中正文专项内容但本区块为空，子代理应视为主控未完成预处理，不得直接开工
@@ -42,14 +40,20 @@ project-slug：
 - 若当前任务单里看不到本区块，或是否需要专项 skill 仍不明确，立即停止并要求主控重发任务单
 - 若运行环境会显示 `Skill(...)`、`Successfully loaded skill`、slash 命令回显或等价事件，子代理必须把该事件原文抄录到回执中；不得只用“已加载”“已执行”这类转述替代事件原文
 
-【本节证据清单】(命中五个正文专项内容的 writing 必填，必须出现在文件清单前)
+【本节证据清单】(命中两个正文专项内容的 writing 必填，必须出现在文件清单前)
 - 证据点 1：来源于 `research-evidence.md` / `research-notes.md` / `facts-ledger.md` 的哪条记录，支撑什么判断
 - 证据点 2：来源于哪条记录，支撑什么比较、机制、成果或指标口径
 - 证据点 3：若本节需要，可继续补充政策、场景、差距、验收边界等证据
 - 若当前任务为非专项章节，明确写：`无，本任务不需要正文专项证据清单`
 - 若当前任务命中正文专项内容但本区块为空，子代理不得开工，应要求主控先补齐证据清单再重发
 
-【本节写作规则摘要】(命中五个正文专项内容的 writing 必填，必须出现在文件清单前)
+【本章可用项目资料】(writing 必填，必须出现在文件清单前)
+- 从 `source-materials.md` / `project-brief.md` 摘录本章可直接使用的用户提示词资料，例如项目基本信息、任务、团队、经费、成果、指标、风险、进度和写作硬约束
+- 必须区分 `用户提示词已给定事实` 与 `外部调研补充依据`
+- 若用户 prompt 明确禁止参照外部模板文件，必须在本区块写明：`不得打开、参照或模仿外部模板文件`
+- 若本章无可用项目资料，写明 `无，但需说明原因`；不得让子代理自行忽略 `source-materials.md`
+
+【本节写作规则摘要】(命中两个正文专项内容的 writing 必填，必须出现在文件清单前)
 - 由主控根据已预载的专项 skill、`attachment-writing-patterns.md` 和 `00-section-plan.md` 提炼当前小节适用的编号规则、句式骨架、禁止项
 - 不得照抄整份 `SKILL.md`，只保留当前小节实际要执行的 3 到 6 条硬规则
 - 若当前任务为非专项章节，明确写：`无，本任务不需要正文专项写作规则摘要`
@@ -72,6 +76,7 @@ project-slug：
 
 【必读规则文件】(至少 4 项，必填，必须写出实际路径)
 - workspace/plan/<project-slug>/project-brief.md
+- workspace/plan/<project-slug>/source-materials.md
 - workspace/outputs/<project-slug>/00-section-plan.md
 - .claude/skills/official-doc-core/references/attachment-writing-patterns.md
 - 对应专项 skill（例如 .claude/skills/official-doc-research-content/SKILL.md）
@@ -102,7 +107,7 @@ project-slug：
   - skill 加载确认原文：
   - 一致性结论：匹配 / 不匹配 / 本任务免加载 / 缺失
 - 修改文件清单
-- 当前完成字数 / 目标字数（writing 必填）
+- 当前完成字数 / 目标字数 / 最低字数 / 是否达标（writing 必填；必须基于 `python scripts/count_chars.py <本章文件>` 或等效统计）
 - 未解决阻断项清单
 - 需要主控代理仲裁的问题
 ```
@@ -110,6 +115,7 @@ project-slug：
 主控代理派发写作子代理时，不得把以上字段压缩成“任务编号 + 文件清单 + 目标描述”的简版 prompt。
 在 Claude Code 这类界面中，子代理可见的 Prompt 前部必须直接看到 `【专项 skill 调用要求】`、`【显式 skill 调用指令】`、`【主控已预载专项 skill】` 和 `【开工第一步】` 四个区块；如果看不到，说明任务单没有真正生效。
 若任务命中正文专项内容，`【本节证据清单】` 与 `【本节写作规则摘要】` 也必须在文件清单前可见；若被省略到隐藏上下文、主控计划或只读文件后部，视为任务单不合格。
+所有 writing 任务都必须包含 `【本章可用项目资料】`，并把 `source-materials.md` 列入必读文件；否则子代理容易只消费调研资料而忽略用户提示词中的项目事实，视为任务单不合格。
 若任务单中缺少 `【任务级留痕要求】` 或 `【提交物】` 区块，视为任务单不合格；因为这意味着子代理没有被明确要求把执行结果回写到 `agent-skill-trace.md`。
 
 最低合格样式应接近：
@@ -120,6 +126,7 @@ project-slug：
 project-slug：ship-ai-design
 子代理角色：第一章正文写作
 本章目标字数：1500-2000字
+本章最低字数：1500字
 
 【专项 skill 调用要求】
 - 必须显式加载：official-doc-project-background
@@ -138,19 +145,16 @@ project-slug：ship-ai-design
 
 若实际落盘的 `agent-prompts/*.md` 看起来更像普通需求说明，例如只有“任务标识 / 内容要求 / 禁止编造内容”，而没有以上硬区块，则应视为主控没有按模板派发。
 
-## 2. 五个正文章节额外约束（必填）
+## 2. 两个正文章节额外约束（必填）
 
 若任务涉及以下章节，子代理必须先读取对应 skill：
 - 背景与必要性：`official-doc-project-background`
 - 项目建设方案：`official-doc-research-content`
-- 创新点：`official-doc-innovation`
-- 技术成果：`official-doc-technical-achievements`
-- 技术指标：`official-doc-technical-indicators`
 
-若任务命中上述五类内容，且运行环境支持技能显式调用界面（如 Claude Code 的 skill 调用），子代理必须先执行 `【显式 skill 调用指令】` 中列出的 slash 命令，再开始读取台账和写作。仅把对应 `SKILL.md` 文件放进“必读规则文件”，不算完成 skill 调用。
+若任务命中上述两类内容，且运行环境支持技能显式调用界面（如 Claude Code 的 skill 调用），子代理必须先执行 `【显式 skill 调用指令】` 中列出的 slash 命令，再开始读取台账和写作。仅把对应 `SKILL.md` 文件放进“必读规则文件”，不算完成 skill 调用。
 
-若任务是非专项章节写作，例如工作基础、困难评估、进度安排、经费预算、研究结论等，任务单应在 `【专项 skill 调用要求】` 中明确写 `无`，此时子代理不需要显式加载五个正文专项 skill。若 `技术路线` 属于 `项目建设方案` 章或与建设目标、项目研发内容、应用推广、产学研用合作、开源策略同章出现，则应加载 `official-doc-research-content`。
-若任务命中正文专项内容，主控代理还必须先显式加载对应正文 skill，再从 `research-evidence.md`、`research-notes.md`、`facts-ledger.md` 中为当前小节整理最少可用证据点，并写进 `【本节证据清单】`；不能把“自己去台账里找材料”完全甩给子代理。
+若任务是非专项章节写作，例如工作基础、困难评估、进度安排、经费预算、研究结论等，任务单应在 `【专项 skill 调用要求】` 中明确写 `无`，此时子代理不需要显式加载两个正文专项 skill。若 `技术路线` 属于 `项目建设方案` 章或与建设目标、项目研发内容、应用推广、产学研用合作、开源策略同章出现，则应加载 `official-doc-research-content`。
+若任务命中正文专项内容，主控代理还必须先显式加载对应正文 skill，再从 `source-materials.md` 中摘录用户提示词提供的项目资料，从 `research-evidence.md`、`research-notes.md`、`facts-ledger.md` 中为当前小节整理最少可用证据点，并分别写进 `【本章可用项目资料】` 和 `【本节证据清单】`；不能把“自己去台账里找材料”完全甩给子代理。
 同理，主控还必须把当前小节适用的编号规则、句式骨架和禁止项压缩成 `【本节写作规则摘要】`，而不是只告诉子代理“去读 skill”。
 
 主控代理派发时，不得只给“阶段 / 角色 / 可编辑文件 / 只读文件”后就省略该区块，也不得把 skill 要求只放在隐藏上下文或主控自己的计划里。写作子代理的可见 Prompt 中看不到 `【专项 skill 调用要求】`、`【显式 skill 调用指令】` 与 `【开工第一步】`，即视为任务单无效。
@@ -160,19 +164,13 @@ project-slug：ship-ai-design
 常见动态判定方式：
 - 当前任务包含“建设背景 / 建设意义 / 国内外发展现状及前景 / 国内或国外现状 / 痛点分析 / 发展前景 / 必要性”，加载 `official-doc-project-background`
 - 当前任务包含“项目建设方案 / 总体目标 / 建设目标 / 项目解决的主要问题 / 项目研发内容 / 技术路线 / 应用推广方案 / 产学研用合作方式 / 攻关成果开源策略 / 产业链供应链韧性及安全保障”，加载 `official-doc-research-content`
-- 当前任务包含“创新点 / 差异化优势 / 特色亮点”，追加 `official-doc-innovation`
-- 当前任务包含“技术成果 / 交付成果 / 成果形式”，加载 `official-doc-technical-achievements`
-- 当前任务包含“技术指标 / 量化目标 / 预期成效 / 验收指标”，加载 `official-doc-technical-indicators`
-
-若同一任务同时覆盖“项目建设方案 + 创新点”或“技术成果 + 技术指标/预期成效”，先加载当前任务中排在前面的主内容 skill，再加载后续补充 skill。
+若同一任务同时覆盖背景与项目建设方案，先加载当前任务中排在前面的主内容 skill，再加载后续补充 skill。
 
 若任务单没有写清“需要显式加载哪些专项 skill”、没有给出对应 `【显式 skill 调用指令】`，或没有明确写“本任务不需要专项写作 skill”，子代理应视为任务单不合格并停止开工，而不是自行猜测。
 
 且必须执行 `attachment-writing-patterns.md` 的硬门禁：
 - 背景：覆盖 `对象 / 现状 / 问题 / 影响 / 项目切入 / 能力或前景` 至少 4 项
 - 项目建设方案：覆盖 `目标 / 问题 / 任务 / 路线 / 输出 / 应用或保障` 至少 4 项
-- 创新：覆盖 `对象 / 问题 / 动作 / 机制 / 输出 / 验证` 至少 4 项
-- 成果/指标：覆盖各自要素至少 5 项
 
 ## 3. 子代理提交前自检（建议）
 

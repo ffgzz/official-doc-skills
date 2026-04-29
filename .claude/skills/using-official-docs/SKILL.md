@@ -1,6 +1,6 @@
 ---
 name: using-official-docs
-description: 正式中文项目公文写作的主入口和总调度器。凡用户已经提供了较完整的长 prompt、章节要求、原始资料并要求生成、重跑、续写、检查或装配项目可行性报告、立项申请书、项目建议书、攻关任务书、技术总结等正式公文，都必须使用本 skill；若用户只有主题或零散材料，应先转入 official-doc-prompt-builder 完成前置问询与 prompt 组装。本入口负责调用 official-doc-core、official-doc-research、专项写作、review、revise、assemble，自己绝不直接联网搜索或起草五类共性章节。
+description: 正式中文项目公文写作的主入口和总调度器。凡用户已经提供了较完整的长 prompt、章节要求、原始资料并要求生成、重跑、续写、检查或装配项目可行性报告、立项申请书、项目建议书、攻关任务书、技术总结等正式公文，都必须使用本 skill；若用户只有主题或零散材料，应先转入 official-doc-prompt-builder 完成前置问询与 prompt 组装。本入口负责调用 official-doc-core、official-doc-research、专项写作、review、revise、assemble，自己绝不直接联网搜索或起草两类共性章节。
 allowed-tools: Read Write Edit Bash
 ---
 
@@ -15,11 +15,11 @@ allowed-tools: Read Write Edit Bash
 - 初始化或复用工作区与 plan 台账
 - 先调用 `official-doc-core`
 - 先调用 `official-doc-research` 完成独立调研门禁
-- 按“内容关键词”而不是“固定章名”路由到五个专项章节 skill
+- 按“内容关键词”而不是“固定章名”路由到两个专项章节 skill
 - 统筹后续 `table -> figure -> review -> revise -> assemble`
 
 它不再负责：
-- 读取外部模板目录
+- 读取、打开或模仿外部样稿目录
 - 依赖材料包驱动流程
 - 走旧的固定模板路由
 
@@ -113,6 +113,33 @@ allowed-tools: Read Write Edit Bash
 
 `official-doc-core` 只校验这些文件，不负责首次写入。
 
+### 0.6 提示词资料吸收门禁
+
+当用户提供的是长 prompt，主入口必须把它当成本项目的首要资料源，而不是只抽一个摘要。
+
+初始化 plan 时必须完成以下动作：
+- 将用户原始 prompt 或 `workspace/intake/<project-slug>/compiled-prompt.txt` 的完整内容保存到 `workspace/plan/<project-slug>/source-materials.md`，并标注为 `用户提示词原文`。
+- 从 prompt 中抽取 `项目事实资料`、`章节结构`、`字数要求`、`图表要求`、`禁用事项`、`缺失信息处理规则`、`外部资料使用边界`，分别写入 `project-brief.md`。
+- 将提示词中的项目事实按章节映射，写入 `source-materials.md` 的 `章节资料映射` 区块。每章至少列出：可直接使用的项目事实、可引用的指标/金额/时间/团队/任务、需要外部调研补充的公共事实、不得编造的信息。
+- 将提示词中的项目事实同步升入 `facts-ledger.md`，来源编号可使用 `USER-PROMPT` 或 `USER-001` 系列，来源类型写 `用户提示词`，事实状态写 `已核验`，备注必须写明 `用户给定项目事实，非公开外部核验；不得被联网调研覆盖`。
+- 将提示词中的写作硬约束同步写入 `project-brief.md` 和 `00-section-plan.md`，包括总字数、章节字数、重点章节、图表清单、禁止外部模板、只基于提示词内项目资料、缺失信息处理方式。
+- 字数要求必须拆成可执行字段，不得只抄一句自然语言。凡 prompt 出现 `全文总字数控制在X至Y`、`建议X至Y`、`最低不得少于Z`、`约X` 等表达，必须在 `project-brief.md` 写明 `总字数下限 / 总字数上限 / 统计口径`，并在 `00-section-plan.md` 对应章节写明 `目标字数区间 / 最低字数 / 是否硬门槛`。如果只有“建议X至Y”但没有最低值，默认将 X 作为本章最低下限；如果同时有“最低不得少于Z”，以 Z 作为硬下限、X-Y 作为目标区间。
+- 若 prompt 明确写明“不要参照外部模板文件”“项目资料已全部在提示词中提供”，必须在 `project-brief.md` 和 `research-plan.md` 中写成硬约束，后续 research / writing 子代理不得再打开或模仿外部模板文件。
+- `00-section-plan.md` 的每章记录必须包含目标字数区间、最低字数、是否硬门槛、允许二级节、必需图表/表格、是否命中专项 skill、资料来源口径、可用项目资料摘要。
+- `source-materials.md` 中的项目事实优先级高于联网调研。联网调研只能补充政策、行业趋势、国内外现状和公开案例，不得覆盖用户已给出的项目名称、单位、团队、经费、周期、任务、成果和指标。
+
+如果 `source-materials.md` 只有一句摘要、没有完整 prompt 或没有项目资料分组，视为初始化不合格，不得进入 `official-doc-research` 或正文写作。
+
+如果 `facts-ledger.md` 中没有从用户提示词升格出的项目事实，或 `00-section-plan.md` 中没有每章可用项目资料摘要，视为提示词资料吸收不合格。此时不得派发 writing 子代理，也不得让子代理自行从长 prompt 里临时猜材料。
+
+### 0.65 prompt 内部冲突处理
+
+长 prompt 可能同时包含“必须采用的章节结构”和“重点章节写作规范”。主入口必须在初始化阶段做一次结构冲突检查：
+- 如果正式章节结构漏列了后文写作规范中明确要求写的小节，应先判断该小节是否属于同一章的必写内容。
+- 若后文写作规范、字数分配、图表要求或项目资料明显要求该小节出现，应把它并入 `00-section-plan.md` 的允许小节，并在备注写明 `由 prompt 后文写作规范补充`。
+- 若两个位置要求互相冲突且无法合理合并，应在 `project-brief.md` 和 `progress.md` 标记 `结构冲突待确认`，只向用户问一个会影响正文结构的问题；不得擅自删除后文更具体的写作要求。
+- 写作子代理只服从合并后的 `00-section-plan.md`，不再直接按 prompt 原文各处自行判断。
+
 ### 0.75 文档级编号方案由主入口确定
 
 主入口必须在解析 brief 时确定全文编号方案，并写入：
@@ -124,7 +151,7 @@ allowed-tools: Read Write Edit Bash
 - 项目指南、攻关任务书、任务清单型材料：一级任务 `1.`，二级要求 `（1）`，三级动作 `（a）`。
 - 项目建设方案中的项目研发内容需要深度拆成任务/子任务时：章级编号仍服从全文方案，章节内部可采用 `任务1 / 子任务1-1 / （1）` 等写法。
 
-后续五个专项 skill 不得自行决定编号。若某章已经采用 `1.1` 技术分解，同级条目不得再改用 `（1）`；若全文二级标题采用 `（一）`，其他章节二级标题也必须沿用。
+后续两个专项 skill 不得自行决定编号。若某章已经采用 `1.1` 技术分解，同级条目不得再改用 `（1）`；若全文二级标题采用 `（一）`，其他章节二级标题也必须沿用。
 
 ### 0.8 章节计划是正式稿契约
 
@@ -138,7 +165,7 @@ allowed-tools: Read Write Edit Bash
 
 如果用户给出的章次跳号，例如只有第一、二、三、四、六、七章，主入口不得把“章节数量”写成 7 章；应写成“用户提供 6 个章节，原始标记跳过第五章，按用户顺序保留”。review 需要检查这种不连续是否来自用户 brief，而不是装配遗漏。
 
-正文写作不得新增 `00-section-plan.md` 中没有登记的二级节。字数不足时，必须加深已登记小节的论证链、技术机制、表图说明和验证口径，不能追加 `技术创新与突破`、`应用前景`、`总结与展望` 等计划外小节来凑字数。
+正文写作不得新增 `00-section-plan.md` 中没有登记的二级节。字数不足时，必须加深已登记小节的论证链、技术机制、表图说明和验证口径，不能追加 `应用前景`、`总结与展望` 等计划外小节来凑字数。
 
 正文写作也不得用连续 `### 10.`、`### 11.`、`### 12.` 等流水号标题扩写。主入口、专项 skill 和 revise 都必须把扩写内容并入已登记二级节的自然段或少量必要三级标题中；普通章节不得出现 `远景展望`、`历史意义`、`社会责任`、`一带一路`、`人才培养` 等与 brief 无关的泛化标题。
 
@@ -170,7 +197,7 @@ allowed-tools: Read Write Edit Bash
 - 最终装配与是否可交付判定
 
 硬性派发方式：
-- 调研阶段：按 `BG / RC / IN / TA / TI` 分组派发；至少为所有激活组分别派发 research 子代理。
+- 调研阶段：按 `BG / RC` 分组派发；至少为所有激活组分别派发 research 子代理。
 - 写作阶段：按章节文件派发；每个 writing 子代理独占一个 `workspace/outputs/<project-slug>/chXX-*.md`。
 
 只有在以下特殊情况时，主入口才可以不派发对应子代理：
@@ -185,6 +212,7 @@ allowed-tools: Read Write Edit Bash
 每个子代理任务单必须包含：
 - `project-slug`
 - `本章目标字数`（writing 必填）
+- `本章最低字数`（writing 必填；低于该值不得提交完成）
 - `【专项 skill 调用要求】`
 - `【显式 skill 调用指令】`
 - `【主控已预载专项 skill】`
@@ -201,11 +229,11 @@ allowed-tools: Read Write Edit Bash
 尤其是写作子代理，`【专项 skill 调用要求】`、`【显式 skill 调用指令】`、`【主控已预载专项 skill】`、`【开工第一步】`、`【本节证据清单】`、`【本节写作规则摘要】` 六个区块必须出现在子代理可见 Prompt 的前部，不能藏在文件清单后面，也不能只留在主控代理自己的计划里。
 此外，`【任务级留痕要求】` 与 `【提交物】` 两个区块也必须出现在实际任务单中；否则子代理没有被明确要求把 skill 执行结果回写给主控。
 
-若运行环境支持 skill 显式调用（如 Claude Code），主入口派发命中五类正文专项内容的写作子代理时，必须把需要显式加载的 skill 写成精确 skill 名，并在 `【显式 skill 调用指令】` 中给出可直接执行的显式调用命令，优先使用 `/official-doc-project-background`、`/official-doc-research-content`、`/official-doc-innovation`、`/official-doc-technical-achievements`、`/official-doc-technical-indicators` 这类 slash 指令。子代理开工前必须真的执行这些显式调用。仅把对应 `SKILL.md` 路径列入“必读规则文件”不算完成调用。
-若当前写作子代理负责的是非专项章节，主入口应在 `【专项 skill 调用要求】` 中明确写 `无，本任务不需要显式加载专项写作 skill`，而不是强行要求调用五个正文专项 skill。
+若运行环境支持 skill 显式调用（如 Claude Code），主入口派发命中两类正文专项内容的写作子代理时，必须把需要显式加载的 skill 写成精确 skill 名，并在 `【显式 skill 调用指令】` 中给出可直接执行的显式调用命令，优先使用 `/official-doc-project-background`、`/official-doc-research-content` 这类 slash 指令。子代理开工前必须真的执行这些显式调用。仅把对应 `SKILL.md` 路径列入“必读规则文件”不算完成调用。
+若当前写作子代理负责的是非专项章节，主入口应在 `【专项 skill 调用要求】` 中明确写 `无，本任务不需要显式加载专项写作 skill`，而不是强行要求调用两个正文专项 skill。
 若当前写作子代理负责的是非专项章节，`【显式 skill 调用指令】` 中必须明确写 `无，本任务不需要显式加载专项写作 skill`，不得伪造 slash 调用。
 
-主入口自己也不能跳过这一层。凡命中五类正文专项内容的写作任务，主入口在派发子代理前必须先显式加载对应正文 skill，由主控先完成当前小节的规则提炼和证据抽取，再把任务派出去。不要把“首次加载正文 skill”的动作完全交给子代理。若主控本身未先加载对应正文 skill，就直接派发写作子代理，视为派发前置步骤不完整。
+主入口自己也不能跳过这一层。凡命中两类正文专项内容的写作任务，主入口在派发子代理前必须先显式加载对应正文 skill，由主控先完成当前小节的规则提炼和证据抽取，再把任务派出去。不要把“首次加载正文 skill”的动作完全交给子代理。若主控本身未先加载对应正文 skill，就直接派发写作子代理，视为派发前置步骤不完整。
 因此，命中正文专项内容的 writing 任务中，`【主控已预载专项 skill】` 不得写成 `否`、`无` 或“需要子代理自行加载”。只有主控已经先加载过对应专项 skill，才允许派发该任务。
 
 若主入口在子代理 UI 的可见 Prompt 中看不到 `【专项 skill 调用要求】`、`【显式 skill 调用指令】`、`【主控已预载专项 skill】`、`【开工第一步】`，或命中正文专项内容时看不到 `【本节证据清单】`、`【本节写作规则摘要】`，应立即取消本次派发并按模板重发，不能假定子代理会自行补全。
@@ -218,6 +246,8 @@ allowed-tools: Read Write Edit Bash
 - 任务编号
 - 独占文件
 - 本章目标字数
+- 本章最低字数
+- 当前统计字数与达标结论
 - 专项 skill 调用要求
 - 主控已预载专项 skill
 - 本节证据清单摘要
@@ -231,6 +261,8 @@ allowed-tools: Read Write Edit Bash
   - `任务编号：...`
   - `独占文件：workspace/outputs/<project-slug>/ch03-...md`
   - `本章目标字数：...`
+  - `本章最低字数：...`
+  - `当前统计字数：... / 达标：是或否`
   - `任务单要求加载的专项 skill：...`
   - `主控已预载专项 skill：...`
   - `子代理实际显式加载的专项 skill：...`
@@ -285,9 +317,6 @@ allowed-tools: Read Write Edit Bash
 动态判定原则：
 - 命中建设背景、建设意义、国内外发展现状及前景、国内/国外现状、痛点分析、发展前景、必要性，加载 `official-doc-project-background`
 - 命中项目建设方案、总体目标、建设目标、项目解决的主要问题、项目研发内容、技术路线、应用推广方案、产学研用合作方式、攻关成果开源策略、产业链供应链韧性及安全保障，加载 `official-doc-research-content`
-- 命中创新点、差异化优势、特色亮点，加载 `official-doc-innovation`
-- 命中技术成果、成果形式、交付成果，加载 `official-doc-technical-achievements`
-- 命中技术指标、量化目标、验收指标、预期成效，加载 `official-doc-technical-indicators`
 
 若同一任务同时命中多个 skill，加载顺序必须按该任务内部的小节顺序和内容主次确定，而不是按固定章节号写死。
 
@@ -298,7 +327,7 @@ allowed-tools: Read Write Edit Bash
 
 抽取要求：
 - 背景类二级节：至少整理 3 个证据点。完整背景章应按 `建设背景 / 建设意义 / 国内外发展现状及前景` 分配证据，其中建设背景覆盖政策/官方、行业或技术趋势、现实短板，建设意义覆盖技术/产业/生态中的至少两类，国内外发展现状及前景覆盖国内现状、国外现状或代表性产品、痛点或差距、发展前景中的至少三类。
-- 项目建设方案、创新点、成果、指标：每个待写条目至少整理 2 个证据点。项目建设方案证据要覆盖“目标/问题/任务/路线/输出/应用或保障”中的至少两类，创新点、成果、指标继续覆盖“问题/比较”与“机制/输出/验证”中的至少两类。
+- 项目建设方案：每个待写条目至少整理 2 个证据点，证据要覆盖“目标/问题/任务/路线/输出/应用或保障”中的至少两类。
 - 证据点必须写明“支撑什么判断”，不能只抄来源标题。
 
 若当前小节抽不出足够证据点，主入口不得派发写作，应先回到 `official-doc-research` 补调研。不能把“证据不足”的任务直接扔给写作子代理，指望它边写边补。
@@ -333,7 +362,7 @@ allowed-tools: Read Write Edit Bash
 
 就忽略专项 skill。
 
-### 2. 五个专项 skill 是“规则库”，不是“固定章模板”
+### 2. 两个专项 skill 是“规则库”，不是“固定章模板”
 
 调用专项 skill 的目的，是套用其中对应小节的写法规则。
 
@@ -342,22 +371,17 @@ allowed-tools: Read Write Edit Bash
 - 用户如果在某一章要求写 `技术层面`、`产业层面`、`生态层面` 的建设意义，要调用 `official-doc-project-background`
 - 用户如果在某一章要求写 `国内发展现状`、`国外发展与应用现状`、`痛点分析` 和 `发展前景`，仍然调用 `official-doc-project-background`
 - 用户如果在某一章要求写 `项目建设方案`、`总体目标`、`项目研发内容`、`技术路线`、`应用推广方案`、`产学研用合作方式`、`攻关成果开源策略`，调用 `official-doc-research-content`
-- 用户如果某一章标题是 `项目建设方案`，且正文要求里还写了 `创新点` 或 `技术创新`，那么同一章要同时调用 `official-doc-research-content` 和 `official-doc-innovation`
-- 用户如果在某一章 `预期目标` 小节里要求写 `预期技术成果`，调用 `official-doc-technical-achievements`
-- 用户如果同一章里还要求写 `技术指标`、`量化目标`、`预期成效`，还要调用 `official-doc-technical-indicators`
 
 ### 3. 一个章节可以命中多个专项 skill
 
 不要强行“一章只对应一个 skill”。
 
 允许的常见组合：
-- `official-doc-project-background` + `official-doc-innovation`
-- `official-doc-research-content` + `official-doc-innovation`
-- `official-doc-technical-achievements` + `official-doc-technical-indicators`
+当前只保留两类正文专项 skill：`official-doc-project-background` 与 `official-doc-research-content`。若同一章同时包含背景与项目建设方案内容，按小节顺序依次加载这两个 skill。
 
-### 4. 五个专项 skill 必须先过 `official-doc-research`
+### 4. 两个专项 skill 必须先过 `official-doc-research`
 
-凡命中以下五类内容，必须先经过独立调研门禁，再进入正文写作：
+凡命中以下两类内容，必须先经过独立调研门禁，再进入正文写作：
 - `workspace/plan/<project-slug>/research-sources.md`
 - `workspace/plan/<project-slug>/research-evidence.md`
 - `workspace/plan/<project-slug>/facts-ledger.md`
@@ -367,14 +391,11 @@ allowed-tools: Read Write Edit Bash
 不得直接凭常识硬编：
 - 项目背景
 - 项目建设方案
-- 创新点
-- 主要技术成果
-- 主要技术指标
 
 `official-doc-research` 必须先做这些事：
 - 按内容拆出激活调研组，而不是只按整章粗搜
 - 默认只保留近 3 年资料；更早资料只能作为 `历史基线` 或 `基础规范`
-- 每个激活调研组至少完成 4 轮检索；`BG`、`TI` 等高风险组还必须追加近年更新检索
+- 每个激活调研组至少完成 4 轮检索；`BG` 等高风险组还必须追加近年更新检索
 - 每个激活调研组达到最低来源保留量后，才能放行正文写作
 
 `research-sources.md` 至少记录：
@@ -435,9 +456,6 @@ allowed-tools: Read Write Edit Bash
 只要某一章或某一小节命中以下任一专项类型：
 - `official-doc-project-background`
 - `official-doc-research-content`
-- `official-doc-innovation`
-- `official-doc-technical-achievements`
-- `official-doc-technical-indicators`
 
 主入口 skill 和 `official-doc-core` 都不得直接：
 - 自己开始网络搜索该部分内容
@@ -526,6 +544,9 @@ allowed-tools: Read Write Edit Bash
    - 每章所需图表
    - 每章字数
    - 全文字数
+   - 用户提示词中的完整项目资料
+   - 用户提示词中的外部资料使用边界，例如是否禁止参照模板文件
+   - 缺失信息、待补信息和不得编造的信息
 2. 由主入口初始化或复用工作区：
    - 调用 `scripts/init_workspace.ps1`
    - 创建或复用 `workspace/plan/<project-slug>/`
@@ -544,21 +565,24 @@ allowed-tools: Read Write Edit Bash
    - `research-evidence.md`
    - `research-notes.md`
    - `facts-ledger.md`
+   - `source-materials.md`
    - `progress.md`
    - `agent-skill-trace.md`
    - `workspace/outputs/<project-slug>/00-section-plan.md`
-   - `00-section-plan.md` 的章节表必须包含 `用户章节标记 / 正式输出标题 / 章节标题 / 命中 skill / 编号层级要求 / 当前状态 / 备注`，备注中必须写清允许出现的二级节
+   - `00-section-plan.md` 的章节表必须包含 `用户章节标记 / 正式输出标题 / 章节标题 / 命中 skill / 编号层级要求 / 目标字数区间 / 最低字数 / 是否硬门槛 / 必需表图 / 可用项目资料摘要 / 当前状态 / 备注`，备注中必须写清允许出现的二级节
+   - `source-materials.md` 必须保存完整用户 prompt，并分组摘录项目基本信息、行业背景、研发内容、单位分工、团队基础、风险、成果成效、进度、经费、经济社会效益和写作硬约束
+   - `project-brief.md` 必须显式写入全文和章节字数、图表清单、禁止外部模板、只基于提示词内项目资料等硬约束
 4. 单独调用一次 `official-doc-core`
-5. 若命中五类共性章节，先调用一次 `official-doc-research`，建立调研计划、完成多轮检索并落账
+5. 若命中两类共性章节，先调用一次 `official-doc-research`，建立调研计划、完成多轮检索并落账
 6. 对每一章按关键词做路由判断
 6.5. 在 Claude Code 运行环境中，凡命中 `0.95` 的正常项目条件，必须仅在“调研组 / 正文章节”两个范围内派发子代理；每个子代理必须有独占写入范围
    - research 阶段必须按所有激活调研组派发子代理；不得由主控直接把多组检索合并完成后再宣称“调研完成”
    - 写作子代理的任务单必须直接使用 `subagent-task-card-template.md` 原字段；不能只保留“任务编号 / 文件清单 / 目标描述”的简版
    - 主入口在派发每个 research / writing 子代理前，必须先把实例化任务单写入 `workspace/plan/<project-slug>/agent-prompts/<task-id>.md`
-   - writing 子代理任务单必须写明 `本章目标字数`；主控合并前必须核对当前章是否达到目标字数或合理区间，明显偏短时不得记为“已完成”
+   - writing 子代理任务单必须写明 `本章目标字数区间` 与 `本章最低字数`；主控合并前必须核对当前章是否达到最低字数，低于下限时不得记为“已完成”
    - 命中正文专项内容的 writing 任务中，主入口必须先在主会话显式加载对应正文 skill，再生成任务单；若当前 `agent-prompts/*.md` 中出现 `【主控已预载专项 skill】：否`，说明流程错误
-   - 命中正文专项内容的写作子代理，主入口必须先显式加载对应正文 skill，再整理当前小节的证据清单和规则摘要，分别写进 `【本节证据清单】` 与 `【本节写作规则摘要】`；证据不足时不得派发写作
-   - 写作子代理的可见 Prompt 前部必须出现 `【专项 skill 调用要求】`、`【主控已预载专项 skill】`、`【开工第一步】`，以及（命中正文专项内容时）`【本节证据清单】`、`【本节写作规则摘要】`；若预览里看不到，主入口必须立即重发任务单
+   - 命中正文专项内容的写作子代理，主入口必须先显式加载对应正文 skill，再从 `source-materials.md` 和调研台账整理当前小节的项目资料清单、证据清单和规则摘要，分别写进 `【本章可用项目资料】`、`【本节证据清单】` 与 `【本节写作规则摘要】`；资料或证据不足时不得派发写作
+   - 写作子代理的可见 Prompt 前部必须出现 `【专项 skill 调用要求】`、`【主控已预载专项 skill】`、`【开工第一步】`，以及（命中正文专项内容时）`【本章可用项目资料】`、`【本节证据清单】`、`【本节写作规则摘要】`；若预览里看不到，主入口必须立即重发任务单
    - 写作子代理的实际任务单还必须包含 `【任务级留痕要求】` 与 `【提交物】`，明确要求子代理输出 `【专项 skill 留痕回执】` 供主控写入 `agent-skill-trace.md`
    - 写作子代理要不要加载专项 skill，必须按当前任务命中的内容类型动态判定，不能按固定章节号、固定文件名或当前项目结构写死
    - 在支持 skill 调用的环境中，命中专项内容的写作子代理必须先显式加载对应 skill，再开始读写文件；未命中专项内容的写作子代理应明确声明“本任务不需要显式加载专项写作 skill”
@@ -567,7 +591,7 @@ allowed-tools: Read Write Edit Bash
    - 正常项目调研任务中，`agent-prompts/` 下必须存在 research 任务单文件，且 `research-drafts/` 下必须存在对应激活组的草稿；若两者都缺失，只能说明主入口没有真正派发 research 子代理，应回退
    - 若 research / writing 任一阶段应派子代理却没有落下 `agent-prompts/*.md`，主入口不得继续到 `review / revise / assemble`，必须先把流程状态写成失败并回到本 skill 重跑派发
    - `review`、`revise`、`assemble` 三个阶段禁止派发子代理；这些阶段只能由主控代理直接执行
-7. 命中五类共性章节时，先显式加载专项 skill，再由该 skill 读取调研台账并写作，并把正文写入 `workspace/outputs/<project-slug>/`
+7. 命中两类共性章节时，先显式加载专项 skill，再由该 skill 读取调研台账并写作，并把正文写入 `workspace/outputs/<project-slug>/`
    - 在 Claude Code 的正常多章节写作中，这里的“由该 skill ...写作”唯一允许的解释是：主控先显式加载对应正文 skill，由该 skill 的规则生成合格子代理任务单并派发 writing 子代理，由 writing 子代理实际完成该章正文落盘。主控不得把“我已经加载了 skill”当成自己直接写完整章的许可
    - 专项 skill 必须服从 `00-section-plan.md` 中的编号方案，不得自行改用另一套标题编号
    - 专项 skill 不得新增 `00-section-plan.md` 未登记的二级节；如需扩写，只能加深既有小节
@@ -575,7 +599,7 @@ allowed-tools: Read Write Edit Bash
    - 专项 skill 必须消费主入口提供的本节证据清单，把证据转化为正文中的事实、差距、机制、成果和验收口径；不得只读取台账却把正文写成空泛扩写
    - 若由子代理写作，该子代理也必须显式加载当前任务实际命中的专项 skill；“父代理已经加载过”不能替代子代理自己的 skill 调用
    - 若当前章节写出来仍明显违背对应专项 skill 的编号方案、句式门禁或论证链要求，应优先怀疑“子代理未按任务单调用专项 skill”，而不是直接把该散件当成合格初稿
-8. 未命中五类时，主入口按 brief 路由该章，并把正文写入 `workspace/outputs/<project-slug>/`
+8. 未命中两类时，主入口按 brief 路由该章，并把正文写入 `workspace/outputs/<project-slug>/`
    - 若本轮属于正常多章节写作，此处唯一允许的做法仍然是：主入口负责路由、生成任务单和最终合并，由 writing 子代理实际写章。主控不得以“非专项章节”作为自己直接写完整章的理由
    - 非专项章节同样必须服从正式输出标题和二级节清单，不得用 `第一章` 体例替代 `一、` 体例，不得用 `11.1` 等十进制标题下钻
    - 非专项章节若需要三级标题，必须写成 `1.`、`2.`、`3.`，不得写成 `1 `、`2 ` 这类无点号写法
@@ -596,7 +620,7 @@ allowed-tools: Read Write Edit Bash
 15. 在进入 `official-doc-review` 之前，主入口必须先做一次流程前置核验：
    - 若本轮属于正常项目调研，`agent-prompts/` 中必须已有 research 任务单文件
    - 若本轮属于正常多章节写作，`agent-prompts/` 中必须已有 writing 任务单文件，且 `agent-skill-trace.md` 不得为空
-   - 若本轮 revise 触及五类正文专项章节，`progress.md` 中必须已经写入 `本轮 revise 加载的正文 skill`
+   - 若本轮 revise 触及两类正文专项章节，`progress.md` 中必须已经写入 `本轮 revise 加载的正文 skill`
    - 缺任一项都不得进入 `official-doc-review`
 
 只有在以下两种情况下才允许不继续推进：
@@ -622,7 +646,7 @@ allowed-tools: Read Write Edit Bash
 正式正文、图示说明稿、formal-draft 中不得出现：
 - `【来源：...】`
 - `来源：原始资料`
-- `BG-1-01`、`RC-1-01`、`IN-1-01`、`TA-...`、`TI-...`
+- `BG-1-01`、`RC-1-01`
 - `检索与资料映射说明`
 
 主入口在写作合并、revise 合并和 assemble 前都必须检查这些污染项。只要仍然存在，就不得判定为“可装配正式稿”或“可正式交付稿”。
@@ -631,10 +655,13 @@ allowed-tools: Read Write Edit Bash
 
 若 brief、`project-brief.md` 或 `00-section-plan.md` 已给出全书总字数或章节字数，主入口必须把它们视为硬门槛，而不是“尽量接近”的建议值。
 
-- 派发 writing 子代理时，任务单必须写明本章目标字数或合理区间
-- 主控合并章节时，若当前章明显低于目标字数，应优先回到该章继续补深度，而不是直接进入 review / assemble
+- 初始化时必须把每个字数要求拆成机器可检查字段：`目标区间`、`最低下限`、`上限`、`统计口径`。不得把“第一章建议9000至12000、最低8000”只写成备注。
+- 派发 writing 子代理时，任务单必须写明 `本章目标字数区间`、`本章最低字数`、`低于最低字数不得提交完成`。如果当前章未给单独目标，必须按总字数和章节轻重在 `00-section-plan.md` 中分配一个下限后再派发。
+- 主控合并章节时，必须运行 `python scripts/count_chars.py <章节文件>` 或等效统计，并把 `当前字数 / 最低字数 / 是否达标` 写入 `progress.md`。当前章低于最低字数时，不得记为“已完成”，必须回到该章继续补深度。
+- 进入 review 前，必须对全部章节散件逐章统计；任一章低于 `00-section-plan.md` 的最低字数，或全文当前统计低于 `project-brief.md` 的总字数下限，不得进入 review。
+- 进入 assemble 前，必须对将装配的散件或 `formal-draft.md` 重新统计；任一章低于下限或全文低于总下限，均不得装配。
 - revise 若因补字数扩写章节，也只能在既定章节和小节内补充事实依据、机制、输出、验收和边界，不能用计划外标题凑字数
-- 若总字数未达标，不得把当前稿件写成“可装配正式稿”或“可正式交付稿”
+- 若总字数或任一章节最低字数未达标，不得把当前稿件写成“可装配正式稿”或“可正式交付稿”。不得用“模型输出限制”“后续可继续扩写”“建议值不是硬指标”等理由放行。
 
 ### 继续推进
 
@@ -720,7 +747,7 @@ allowed-tools: Read Write Edit Bash
 - `实施任务`
 - `主要攻关内容`
 - `专题设置`
-- `关键技术`（若位于项目建设方案章内，按技术路线或研发任务处理；若同时要求创新点，另调 `official-doc-innovation`）
+- `关键技术`（若位于项目建设方案章内，按技术路线或研发任务处理）
 - `技术关键`（同上）
 - `核心技术`（同上）
 
@@ -730,45 +757,6 @@ allowed-tools: Read Write Edit Bash
 - `技术路线和实施方案`
 - `应用推广与产学研用合作`
 - `项目任务设置`
-
-### C. `official-doc-innovation`
-
-命中任一关键词就要调用：
-- `创新点`
-- `项目创新点`
-- `技术创新`
-- `主要创新`
-- `创新性`
-- `特色亮点`
-- `创新突破`
-- `差异化优势`
-
-### D. `official-doc-technical-achievements`
-
-命中任一关键词就要调用：
-- `主要技术成果`
-- `预期技术成果`
-- `技术成果`
-- `成果形式`
-- `交付成果`
-- `预期成果`
-- `研究成果`
-- `形成成果`
-- `应用成果`
-
-### E. `official-doc-technical-indicators`
-
-命中任一关键词就要调用：
-- `主要技术指标`
-- `技术指标`
-- `考核指标`
-- `性能指标`
-- `应用指标`
-- `效能指标`
-- `量化目标`
-- `验收指标`
-- `预期成效`
-- `预期目标中的量化部分`
 
 ## 强制判定样例
 
@@ -802,16 +790,6 @@ allowed-tools: Read Write Edit Bash
 ### 样例 4
 
 若用户写：
-- 某一章标题为 `预期目标`
-- 需要写 `预期技术成果`、`预期成效`
-
-则必须调用：
-- `official-doc-technical-achievements`
-- `official-doc-technical-indicators`
-
-### 样例 5
-
-若用户写：
 - 某一章标题为 `概述`
 - 小节包括 `建设背景`、`国内外发展现状及前景`、`痛点分析`
 
@@ -820,7 +798,7 @@ allowed-tools: Read Write Edit Bash
 
 即使章名不是 `项目背景`，也不能漏调。
 
-### 样例 6
+### 样例 5
 
 若用户写：
 - 某一章标题为 `技术路线和实施方案`
@@ -831,29 +809,14 @@ allowed-tools: Read Write Edit Bash
 
 即使章名看起来像实施方案，也要按内容命中。
 
-### 样例 7
+### 样例 6
 
 若用户写：
-- 某一章标题为 `关键技术及创新点`
-- 另一章标题为 `预期目标`
-- 前者要求写 `差异化优势`
-- 后者要求写 `预期技术成果`、`量化目标`
-
-则必须调用：
-- 命中 `创新点 / 差异化优势` 的那一章：`official-doc-innovation`
-- 命中 `预期技术成果 / 量化目标` 的那一章：`official-doc-technical-achievements` + `official-doc-technical-indicators`
-
-### 样例 8
-
-若用户写：
-- `请围绕船舶智能设计平台，写建设背景、技术/产业/生态层面的建设意义、国内外发展现状及前景、项目建设方案、创新点、预期技术成果和主要技术指标`
+- `请围绕船舶智能设计平台，写建设背景、技术/产业/生态层面的建设意义、国内外发展现状及前景、项目建设方案`
 
 即使用户没有明确写“第几章”，也必须按内容命中以下 skill：
 - `official-doc-project-background`
 - `official-doc-research-content`
-- `official-doc-innovation`
-- `official-doc-technical-achievements`
-- `official-doc-technical-indicators`
 
 ## 章级执行规则
 
@@ -892,8 +855,7 @@ allowed-tools: Read Write Edit Bash
 - 不得要求用户提供旧式材料包才能启动流程
 - 不得因为用户章名较泛就跳过专项 skill
 - 不得把专项 skill 理解成“整章固定模板”
-- 不得把 `预期技术成果` 误判成项目建设方案内的 `预期成果`；只有位于 `项目建设方案/总体目标` 内部的 `预期成果` 才按 `official-doc-research-content` 写概括性成果
-- 不得把 `预期成效`、`量化目标` 漏掉 `official-doc-technical-indicators`
+- 不得把已删除的创新、成果、指标专项 skill 继续写入路由、任务单或回修记录
 - 不得在识别出专项章节后，由 `using-official-docs` 或 `official-doc-core` 直接跳过 `official-doc-research`
 - 不得在未先通过 `official-doc-research` 的情况下直接搜索或起草背景、现状、痛点、必要性资料
 - 不得在章节正文写完后就停住，不继续判断表图、review、revise、assemble
@@ -909,8 +871,8 @@ allowed-tools: Read Write Edit Bash
 - 是否按小节内容而非章名做了路由
 - 是否已在 `project-brief.md` 和 `00-section-plan.md` 中记录全文编号方案
 - 各章同层级编号是否一致，是否避免了 `（1）` 与 `1.1` 在同层级混用
-- 是否允许一章多 skill 叠加
-- 五个专项内容是否都要求先过调研门禁再写
+- 是否允许背景和项目建设方案两个 skill 在同一章按小节叠加
+- 两个专项内容是否都要求先过调研门禁再写
 - 非专项章节是否仍由主入口负责统筹
 - 是否已自动推进请求的表格和图示
 - 是否已自动推进 `review -> revise -> assemble`
@@ -919,7 +881,4 @@ allowed-tools: Read Write Edit Bash
 如果用户明明写了以下内容，但没有触发对应 skill，就说明路由失败：
 - `建设背景`、`建设意义`、`国内外发展现状及前景`、`痛点分析`、`发展前景` 没触发 `official-doc-project-background`
 - `项目建设方案`、`总体目标`、`项目研发内容`、`技术路线`、`应用推广方案`、`产学研用合作方式`、`攻关成果开源策略` 没触发 `official-doc-research-content`
-- `创新点`、`差异化优势` 没触发 `official-doc-innovation`
-- `预期技术成果`、`交付成果` 没触发 `official-doc-technical-achievements`
-- `技术指标`、`预期成效`、`量化目标` 没触发 `official-doc-technical-indicators`
 

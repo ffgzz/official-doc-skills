@@ -13,8 +13,6 @@ allowed-tools: Read Write Edit Bash
 > - 先修 Must Fix
 > - 先补搜索和依赖关系，再修措辞
 > - 先统一全文编号方案，再处理单章措辞
-> - `技术成果` 必须由项目研发内容或建设任务回推
-> - `技术指标` 必须补齐阈值、单位、验证口径
 > - 浅层章节必须先重建论证链，再扩写正文
 > - 项目建设方案、成果、指标必须改回附件式“针对问题 -> 研究/构建 -> 实现 -> 形成/验证”的正式写法
 > - 正文必须改回正式公文自然段，不能保留答题卡式 AI 痕迹
@@ -38,6 +36,7 @@ allowed-tools: Read Write Edit Bash
 
 - `workspace/review/<project-slug>/review.md`
 - `workspace/plan/<project-slug>/project-brief.md`
+- `workspace/plan/<project-slug>/source-materials.md`
 - `workspace/outputs/<project-slug>/00-section-plan.md`
 - `workspace/plan/<project-slug>/research-sources.md`
 - `workspace/plan/<project-slug>/research-evidence.md`
@@ -50,8 +49,9 @@ allowed-tools: Read Write Edit Bash
 1. 读取对应 `workspace/review/<project-slug>/review.md`
 2. 按严重级别区分 Must Fix / Should Fix
 3. 逐项定位受影响文件
-4. 核对 `workspace/plan/<project-slug>/facts-ledger.md` 中相关事实口径
-5. 若修复来源或补调研，核对并补齐 `workspace/plan/<project-slug>/research-evidence.md`
+4. 核对 `workspace/plan/<project-slug>/source-materials.md` 中用户提示词给出的项目资料
+5. 核对 `workspace/plan/<project-slug>/facts-ledger.md` 中相关事实口径
+6. 若修复来源或补调研，核对并补齐 `workspace/plan/<project-slug>/research-evidence.md`
 
 ## 强制规则
 
@@ -63,19 +63,19 @@ allowed-tools: Read Write Edit Bash
 - 若 Must Fix 包含高优先表图缺失，必须优先补表 / 补图，再回修正文引用
 - 若 Must Fix 包含章节配比失衡，必须优先修正章节展开深度，再处理措辞润色
 - 若 review 指出“正式稿中的信息比散件文件更空”或“已知事实被回退成 `【待补】`”，必须优先修复该回退问题，再做其他润色
-- 若 review 指出总字数不达标，必须先判断是整体过长还是过短，再按章节轻重规则定向压缩或补足
+- 若 review 指出“用户提示词项目资料未消费”或“提示词资料未证据化”，必须先回到 `source-materials.md`、`project-brief.md` 和 `facts-ledger.md` 抽取 USER 系列项目事实，再修正文；不得只补外部调研资料。
+- 若 review 指出总字数或章节最低字数不达标，必须先读取 `project-brief.md` 和 `00-section-plan.md`，列出 `总字数缺口`、`逐章缺口`、`重点章节缺口`，再按章节轻重规则定向压缩或补足。不得只补一个总论段来冲总字数。
 - 若 review 指出正文存在列表化、加粗小标签或机械过渡词，必须优先改回自然段表述，再进入装配
 - 若 review 指出内容深度不足，不得只加套话或同义改写；必须先补齐“核心判断、事实依据、差距问题、技术机制、输出结果、边界条件”六项论证链，再重写对应段落
 - 若 review 指出标题编号混乱，必须先按 `00-section-plan.md` 的全文编号方案统一标题层级；不得在回修时把同一层级继续混用 `（1）` 和 `1.1`
 - 若 review 指出正式报告型稿件使用了 `# 第一章`、`# 第二章` 等标题，必须改为 `00-section-plan.md` 的正式输出标题，如 `# 一、概述`、`# 二、项目现状和发展趋势`
 - 若 review 指出存在计划外二级节，不能继续保留并润色；必须删除该二级标题，或将其中确有必要的内容并入 `00-section-plan.md` 已登记的小节
 - 若 review 指出普通章节使用 `#### 11.1`、`#### 13.2` 等十进制标题，必须改为当前层级方案下的 `#### （1）`、`#### （2）` 或自然段，不得让项目研发内容内部的任务编号污染其他章节
-- 若 review 指出总字数不达标，补写只能加深已登记章节和小节的事实依据、技术机制、输出成果、测试验证、应用边界，不得靠新增计划外章节或二级节凑字数
+- 若 review 指出总字数或章节最低字数不达标，补写只能加深已登记章节和小节的事实依据、技术机制、输出成果、测试验证、应用边界，不得靠新增计划外章节或二级节凑字数。补写后必须运行 `python scripts/count_chars.py <受影响文件或formal-draft>`，并在 `progress.md` 记录 `修前字数 / 修后字数 / 最低字数 / 是否达标`。
 - 若 review 指出项目建设方案、项目研发内容、技术路线、成果或指标不像附件公文写法，必须按 `attachment-writing-patterns.md` 的段落骨架重写，不得只替换几个词
-- 若 review 指出五类正文章节“调研未消费”“文风过泛/过满”“编号方案未执行”，默认动作不是局部润色，而是先为受影响小节重新抽取证据清单，再回到对应正文 skill 重写该小节
+- 若 review 指出两类正文章节“调研未消费”“文风过泛/过满”“编号方案未执行”，默认动作不是局部润色，而是先为受影响小节重新抽取证据清单，再回到对应正文 skill 重写该小节
 - 若 review 指出调研组来源数量或证据卡未达标，不能只改正文，应先回到 `official-doc-research` 补齐来源、证据卡、摘记和事实台账；补齐前不得把 Must Fix 关闭
-- 若 review 指出 `**子任务...**`、`**创新点...**` 等加粗伪标题，必须改为规范 Markdown 标题层级或自然段引导句，并重新运行 `style_check.ps1`
-- 若 review 指出创新点过短或像摘要，必须按“比较基线 -> 现有局限 -> 本项目机制 -> 差异成立原因 -> 工程价值”补足，不得继续压缩成一句话
+- 若 review 指出 `**子任务...**`、`**技术描述...**` 等加粗伪标题，必须改为规范 Markdown 标题层级或自然段引导句，并重新运行 `style_check.ps1`
 - 若 review 指出普通章节存在连续 `### 11.`、`### 12.`、`### 13.` 等流水号标题、重复标题、泛化展望标题，必须先合并或删除标题，再把有效内容并入 `00-section-plan.md` 允许的小节自然段中；不得保留标题后只润色正文
 - 若 review 或脚本命中“术语污染/错词”（如 `C广告matic`），必须统一修正为规范术语并全稿排查同类错写
 - 若 review 或脚本命中“复杂度/公式残句”（如 `在的时间复杂度内`、`复杂度降至约，其中`），必须改成完整可读工程表述；无法严谨给公式时改为保守文字说明
@@ -84,19 +84,16 @@ allowed-tools: Read Write Edit Bash
 
 ## 专项回修路由
 
-回修或扩充五类正文内容时，`official-doc-revise` 不能独立发挥，必须先读取并执行对应正文 skill 的规则，再改文件：
+回修或扩充两类正文内容时，`official-doc-revise` 不能独立发挥，必须先读取并执行对应正文 skill 的规则，再改文件：
 
 - 建设背景、建设意义、国内外发展现状及前景、国内/国外现状、痛点分析、发展前景、必要性、产业链安全、自主可控：读取并遵守 `.claude/skills/official-doc-project-background/SKILL.md`
 - 项目建设方案、总体目标、建设目标、项目解决的主要问题、项目研发内容、预期成果、产业链供应链韧性及安全保障、技术路线、应用推广方案、产学研用合作方式、攻关成果开源策略、任务设置、任务分解、实施内容：读取并遵守 `.claude/skills/official-doc-research-content/SKILL.md`
-- 创新点、技术创新、差异化优势、特色亮点：读取并遵守 `.claude/skills/official-doc-innovation/SKILL.md`
-- 技术成果、预期技术成果、交付成果、成果形式、应用成果：读取并遵守 `.claude/skills/official-doc-technical-achievements/SKILL.md`
-- 技术指标、主要指标、考核指标、量化目标、验收指标、预期成效：读取并遵守 `.claude/skills/official-doc-technical-indicators/SKILL.md`
 
-若同一段同时属于多类内容，例如 `关键技术及创新点`、`预期技术成果及成效`，必须同时读取相关 skill，并按更严格的规则处理。回修结论中应说明本次使用了哪些专项规则。
+若同一段同时属于背景和项目建设方案两类内容，必须同时读取相关 skill，并按更严格的规则处理。回修结论中应说明本次使用了哪些专项规则。
 
-注意：写作阶段曾经加载过对应正文 skill，不代表 revise 阶段可以继承使用。`official-doc-revise` 命中五类正文专项内容时，当前回修阶段必须由主控代理重新显式加载对应正文 skill，不能把“前一轮写正文时已经加载过”当成当前回修的有效前提。
+注意：写作阶段曾经加载过对应正文 skill，不代表 revise 阶段可以继承使用。`official-doc-revise` 命中两类正文专项内容时，当前回修阶段必须由主控代理重新显式加载对应正文 skill，不能把“前一轮写正文时已经加载过”当成当前回修的有效前提。
 
-只要本轮 revise 修改了五类正文专项章节中的任一文件，主控就必须在 `workspace/plan/<project-slug>/progress.md` 明确追加一条独立留痕，字段至少包括：
+只要本轮 revise 修改了两类正文专项章节中的任一文件，主控就必须在 `workspace/plan/<project-slug>/progress.md` 明确追加一条独立留痕，字段至少包括：
 
 - `本轮 revise 加载的正文 skill`
 - `对应受影响文件 / 小节`
@@ -107,19 +104,19 @@ allowed-tools: Read Write Edit Bash
 若 `progress.md` 中缺少上述留痕，不得把这次专项回修判为完成，也不得进入 assemble / final review。
 主控在结束 revise 之前，必须亲自检查 `progress.md` 中是否已经出现一条实际的 `本轮 revise 加载的正文 skill` 记录；若没有，不得把 revise 标记为完成，也不得把问题推迟到“下轮再补”。
 
-若本轮 revise 是“扩写”而不是“修错”，但受影响文件仍命中五类正文专项内容，上述重载要求仍然成立。不得把“只是补字数/补几段”当成绕过对应正文 skill 的理由。
+若本轮 revise 是“扩写”而不是“修错”，但受影响文件仍命中两类正文专项内容，上述重载要求仍然成立。不得把“只是补字数/补几段”当成绕过对应正文 skill 的理由。
 
-若 review 指出的问题属于以下任一类型，且受影响文件命中五类正文专项内容，`official-doc-revise` 不得只做自由改句，必须按“专项重写”处理：
+若 review 指出的问题属于以下任一类型，且受影响文件命中两类正文专项内容，`official-doc-revise` 不得只做自由改句，必须按“专项重写”处理：
 
 - 标题编号混乱，且需要把内容重新并入既定小节
 - 调研已存在，但正文没有真正消费证据
 - 段落明显泛、满、口号化，需要压重写
-- 项目建设方案、创新点、成果、指标的骨架不成立
+- 项目建设方案的骨架不成立
 
 “专项重写”的最低要求是：
 
 1. 先重新显式加载对应正文 skill。
-2. 再从 `research-evidence.md`、`research-notes.md`、`facts-ledger.md` 为受影响小节重新抽取证据清单。
+2. 再从 `source-materials.md`、`project-brief.md`、`research-evidence.md`、`research-notes.md`、`facts-ledger.md` 为受影响小节重新抽取证据清单，且必须区分 `用户给定项目事实` 与 `外部调研补充依据`。
 3. 提炼当前小节适用的编号规则、句式骨架和禁止项。
 4. 按该 skill 的句式骨架和编号规则重写。
 5. 若抽不出足够证据点，不得继续润色，应先回到 `official-doc-research` 补证。
@@ -139,7 +136,7 @@ allowed-tools: Read Write Edit Bash
 8. 清除正文中的内部来源标记、检索说明残留和计划外污染小节。
 9. 运行 `style_check.ps1`，若命中硬失败项继续回修。
 
-若本轮 revise 修改了五类正文专项章节，而结束时 `progress.md` 仍未出现上述记录，则说明并未真正按专项回修流程执行。此时不得写“已完成回修”“Must Fix清零”，而应直接判定 revise 未完成。
+若本轮 revise 修改了两类正文专项章节，而结束时 `progress.md` 仍未出现上述记录，则说明并未真正按专项回修流程执行。此时不得写“已完成回修”“Must Fix清零”，而应直接判定 revise 未完成。
 
 ## 回修阶段不派子代理
 

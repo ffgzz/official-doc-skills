@@ -8,6 +8,7 @@ allowed-tools: Read Write Edit Bash
 
 > 当前表格流程只依据：
 > - `project-brief.md`
+> - `source-materials.md`
 > - `00-section-plan.md`
 > - 当前章节正文
 > - `facts-ledger.md`、`research-sources.md` 与 `research-evidence.md`
@@ -27,10 +28,13 @@ allowed-tools: Read Write Edit Bash
 ## 使用前必做
 
 1. 读取 `workspace/plan/<project-slug>/project-brief.md`
-2. 读取 `workspace/outputs/<project-slug>/00-section-plan.md`
-3. 读取当前章节正文
-4. 核对 `workspace/plan/<project-slug>/facts-ledger.md`
-5. 如表格涉及行业对比或公开指标，再核对 `research-sources.md` 和 `research-evidence.md`
+2. 读取 `workspace/plan/<project-slug>/source-materials.md`
+3. 读取 `workspace/outputs/<project-slug>/00-section-plan.md`
+4. 读取当前章节正文
+5. 核对 `workspace/plan/<project-slug>/facts-ledger.md`
+6. 如表格涉及行业对比或公开指标，再核对 `research-sources.md` 和 `research-evidence.md`
+
+若用户提示词已经给出表格所需的任务、单位、成员、经费、进度、成果或指标，必须优先使用 `source-materials.md` 与 USER 系列事实记录。不得因为公开来源没有这些内部项目事实，就把已给定信息回退成 `【待补】`。
 
 ## 选择逻辑
 

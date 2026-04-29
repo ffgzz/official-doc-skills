@@ -8,6 +8,7 @@ allowed-tools: Read Write Edit Bash
 
 > 当前图示流程只依据：
 > - `project-brief.md`
+> - `source-materials.md`
 > - `00-section-plan.md`
 > - 当前章节正文
 > - 已登记的研究来源、调研证据档案与事实台账
@@ -30,10 +31,13 @@ allowed-tools: Read Write Edit Bash
 ## 使用前必做
 
 1. 读取 `workspace/plan/<project-slug>/project-brief.md`
-2. 读取 `workspace/outputs/<project-slug>/00-section-plan.md`
-3. 读取当前章节正文
-4. 核对正文里该图的引用位置和术语
-5. 核对 `research-sources.md`、`research-evidence.md` 与 `facts-ledger.md` 中是否已有可支撑该图结构的依据
+2. 读取 `workspace/plan/<project-slug>/source-materials.md`
+3. 读取 `workspace/outputs/<project-slug>/00-section-plan.md`
+4. 读取当前章节正文
+5. 核对正文里该图的引用位置和术语
+6. 核对 `research-sources.md`、`research-evidence.md` 与 `facts-ledger.md` 中是否已有可支撑该图结构的依据
+
+若图示表达的是项目技术路线、系统架构、任务分解、单位分工、应用推广或进度安排，应优先从 `source-materials.md` 和 USER 系列事实记录中抽取节点、层级、模块和流向；外部调研只能补充行业趋势或通用方法，不得替换用户已给出的项目链路。
 
 ## 选择逻辑
 
