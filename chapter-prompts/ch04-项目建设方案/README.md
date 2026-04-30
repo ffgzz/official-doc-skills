@@ -25,6 +25,8 @@
 15. `08-成果管理与内部受控复用策略.md`
 16. `reference-materials/<project-slug>/` 下与第四章有关的全部资料
 
+若当前任务是整本生成，且已在整本开始阶段完成 `README.md` 与 `writing-rules/00-03` 的全局预读，则进入第四章时只需重新执行第 6 至 16 步，不必再次全量重读通用规则。
+
 文档主题继承自 `产业链项目指南/完整科研项目模板.docx`。
 正式输出目录：`generated-drafts/<project-slug>/ch04-项目建设方案/`
 

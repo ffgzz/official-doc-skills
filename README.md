@@ -2,28 +2,36 @@
 
 本仓库的默认工作流已经从“长 Prompt + Skill 总调度”切换为“按章节 Prompt 模板逐章生成”。
 
-唯一结构基准是 [产业链项目指南/完整科研项目模板.docx](产业链项目指南/完整科研项目模板.docx)。一级章命名和顺序必须服从该 DOCX，不再按截图里的通用章名替换。
+唯一结构基准是 [产业链项目指南/完整科研项目模板.docx](产业链项目指南/完整科研项目模板.docx)。一级章命名和顺序必须服从该 DOCX。
 
 ## 当前主流程
 
 1. 先读本文件。
-2. 将项目输入资料放到 `reference-materials/<project-slug>/`。
-3. 运行 `scripts/init_generation_tree.ps1 -ProjectSlug <project-slug>` 初始化输出目录。
-4. 读取 `writing-rules/` 下的通用规则和对应章节规则。
-5. 读取 `chapter-prompts/` 下对应章节 Prompt。
-6. 按 Prompt 要求逐章写入 `generated-drafts/<project-slug>/` 同路径文件。
-7. 需要整稿时，运行 `scripts/assemble_generated_markdown.ps1 -ProjectSlug <project-slug>`。
+2. 再读根目录 `chapter-boundaries.md`，先建立全书章节边界和统一口径。
+3. 将项目输入资料放到 `reference-materials/<project-slug>/`。
+4. 运行 `scripts/init_generation_tree.ps1 -ProjectSlug <project-slug>` 初始化输出目录。
+5. 若是整本任务，先一次性读取 `writing-rules/00-03` 这 4 个通用规则。
+6. 进入逐章循环：每次只读取当前章节对应的章节规则、章节 Prompt、章节相关参考资料。
+7. 按 Prompt 要求写完当前章节，再进入下一章，不要在起步阶段一次性加载所有章节资料。
+8. 需要整稿时，运行 `scripts/assemble_generated_markdown.ps1 -ProjectSlug <project-slug>`。
 
-短提示词现在只负责说明：
+整本任务默认执行口径：
+
+1. `README.md`、`chapter-boundaries.md` 与 `writing-rules/00-03` 只在整本开始时预读一次。
+2. 进入某一章时，只重新读取该章专属 `writing-rules/chXX...`、该章 `chapter-prompts/chXX...`、该章相关 `reference-materials`。
+3. 写完当前章后，再切到下一章，避免把所有章节资料一次性压入上下文。
+4. 第四章按 `ch04-项目建设方案/README.md -> 01 -> 02 -> ... -> 08` 的顺序逐个子文件处理。
+
+提示词现在只负责说明：
 
 - 项目主题或项目名称
 - `project-slug`
 - 要生成的目标章节
 - 额外约束，例如字数、风格、是否允许外部调研
 
-短提示词不再承担整份长 Prompt 的全部上下文。
+提示词不再承担整份长 Prompt 的全部上下文。
 
-如果目标是整本生成，短提示词通常只需要额外说明：
+如果目标是整本生成，提示词通常只需要额外说明：
 
 - 主要参考资料路径
 - 要求生成“完整公文”
@@ -58,6 +66,7 @@
 当用户要求“一次生成完整公文”时，默认不需要在外部提示词重复以下内容，因为仓库规则已经固定：
 
 - 必须先读 `README.md`
+- 必须再读 `chapter-boundaries.md`
 - 必须同时遵守 `writing-rules/` 和 `chapter-prompts/`
 - 必须按章节顺序逐章生成
 - 第四章必须按子目录拆分生成
@@ -101,8 +110,8 @@ flowchart TB
 
 **表8-1 项目总投资估算表**
 
-| 科目 | 金额 | 备注 |
-|------|------|------|
+| 科目   | 金额   | 备注           |
+| ------ | ------ | -------------- |
 | 设备费 | 待补充 | 以正式批复为准 |
 ````
 
@@ -129,7 +138,7 @@ flowchart TB
 
 ## 极简整本提示词
 
-以下是一版可直接复用的整本生成短提示词：
+以下是一版可直接复用的整本生成提示词：
 
 ```text
 请按仓库 README.md 的默认工作流执行。
@@ -144,17 +153,18 @@ project-slug: zs-test
 
 ## 目录树
 
-以下目录树对新主流程文件完整展开；对 legacy 样稿和 legacy 脚本只做折叠展示。
+以下目录树对新主流程文件完整展开：
 
 ```text
 .
 ├─ README.md
+├─ chapter-boundaries.md
 ├─ CLAUDE.md
 ├─ NOTES.md
 ├─ 产业链项目指南/
 │  ├─ 完整科研项目模板.docx                  # 一级章结构唯一基准
 │  └─ 其他样稿与参考模板                       # legacy 参考样稿，不是主流程输入
-├─ chapter-prompts/
+├─ chapter-prompts/                       # 章节提示词
 │  ├─ ch01-项目背景及必要性.md
 │  ├─ ch02-项目单位基本情况.md
 │  ├─ ch03-项目团队工作基础.md
@@ -174,7 +184,7 @@ project-slug: zs-test
 │  ├─ ch08-资金筹措及投资估算.md
 │  ├─ ch09-财务经济效益测算.md
 │  └─ ch10-项目综合风险因素分析.md
-├─ writing-rules/
+├─ writing-rules/                             # 每一章的写作规则
 │  ├─ 00-总流程与资料边界.md
 │  ├─ 01-公文文风与句式规则.md
 │  ├─ 02-编号与结构规则.md
@@ -197,21 +207,11 @@ project-slug: zs-test
 │  ├─ ch08-资金筹措及投资估算.md
 │  ├─ ch09-财务经济效益测算.md
 │  └─ ch10-项目综合风险因素分析.md
-├─ reference-materials/
-│  └─ .gitkeep                                  # 占位文件，实际资料放在 reference-materials/<project-slug>/
-├─ generated-drafts/
-│  └─ .gitkeep                                  # 占位文件，正式输出放在 generated-drafts/<project-slug>/
+├─ reference-materials/                         # 参考资料
+├─ generated-drafts/                            # 生成文稿的位置
 ├─ scripts/
-│  ├─ init_generation_tree.ps1                  # 根据chapter-prompts镜像初始化生成目录
-│  ├─ assemble_generated_markdown.ps1           # 按模板顺序装配整稿 Markdown
-│  ├─ init_workspace.ps1                        # legacy 脚本，服务旧 workspace 流程
-│  └─ 其他校验脚本
-├─ .claude/skills/                              # legacy skill 体系
-├─ workspace/                                   # legacy 产物目录
-├─ plan-template/                               # legacy 台账模板
-├─ prompt.txt                                   # legacy 长 Prompt 示例
-├─ prompt2.md                                   # legacy 长 Prompt 示例
-└─ prompt3.txt                                  # legacy 长 Prompt 示例
+│  ├─ init_generation_tree.ps1                  # 根据chapter-prompts初始化生成目录
+│  ├─ assemble_generated_markdown.ps1           # 按模板顺序装配整稿
 ```
 
 ## 目录职责
@@ -231,6 +231,23 @@ project-slug: zs-test
 - 哪些部分需要深度调研
 - 本章有哪些强制图表、条件性图表、分别放在哪个位置
 - 进入本章前必须先读取哪些 `writing-rules/` 文件
+
+### `chapter-boundaries.md`
+
+这里存放的是全书级的章节边界总览，不是某一章的正文模板。
+
+它负责：
+
+- 说明每一章、每一节的主任务和非主任务
+- 规定高重复内容的主归属章节
+- 说明高重叠章节之间如何分工
+- 要求同一术语、同一对象、同一成果口径在全书保持一致
+
+默认读取方式：
+
+- 每次任务开始时，读完 `README.md` 后立刻读取本文件
+- 整本任务中只预读一次
+- 单章任务中也必须读取一次
 
 ### `writing-rules/`
 
@@ -257,7 +274,7 @@ reference-materials/<project-slug>/
 
 建议把以下内容都放在这里：
 
-- 用户短提示词整理稿
+- 用户提示词整理稿
 - 项目简介
 - 单位介绍
 - 预算材料
